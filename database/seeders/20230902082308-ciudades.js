@@ -3651,7 +3651,6 @@ module.exports = {
         updatedAt: '2022-06-05 12:00:01+00',
       }
     ];
-
     await queryInterface.bulkInsert('ciudades', ciudades, {});
   },
 
