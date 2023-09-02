@@ -1,89 +1,104 @@
 'use strict';
 
 module.exports = {
-  async up (queryInterface, Sequelize) {
-    // Se ejecuta cuando hacemos el seed...
-    await queryInterface.bulkInsert('carreras', [
+  async up(queryInterface, Sequelize) {
+    const carreras = [
       {
-        nombre_carrera: "Tecnicatura en informatica",
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        id: 1,
+        nombre_carrera: 'Tecnicatura en informatica',
+        createdAt: '2022-06-05 12:00:00+00',
+        updatedAt: '2022-06-05 12:00:00+00',
       },
       {
-        nombre_carrera: "Licenciatura en informatica",
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        id: 2,
+        nombre_carrera: 'Licenciatura en informatica',
+        createdAt: '2022-06-05 12:00:00+00',
+        updatedAt: '2022-06-05 12:00:00+00',
       },
       {
-        nombre_carrera: "Tecnicatura en laboratorio",
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        id: 3,
+        nombre_carrera: 'Tecnicatura en laboratorio',
+        createdAt: '2022-06-05 12:00:00+00',
+        updatedAt: '2022-06-05 12:00:00+00',
       },
       {
-        nombre_carrera: "Licenciatura en biotecnologia",
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        id: 4,
+        nombre_carrera: 'Licenciatura en biotecnologia',
+        createdAt: '2022-06-05 12:00:00+00',
+        updatedAt: '2022-06-05 12:00:00+00',
       },
       {
-        nombre_carrera: "Tecnicatura universitaria en gestion ambiental",
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        id: 5,
+        nombre_carrera: 'Tecnicatura universitaria en gestion ambiental',
+        createdAt: '2022-06-05 12:00:00+00',
+        updatedAt: '2022-06-05 12:00:00+00',
       },
       {
-        nombre_carrera: "Tecnicatura universitaria en tecnologia de los alimentos",
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        id: 6,
+        nombre_carrera: 'Tecnicatura universitaria en tecnologia de los alimentos',
+        createdAt: '2022-06-05 12:00:00+00',
+        updatedAt: '2022-06-05 12:00:00+00',
       },
       {
-        nombre_carrera: "Tecnicatura universitaria en viverismo",
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        id: 7,
+        nombre_carrera: 'Tecnicatura universitaria en viverismo',
+        createdAt: '2022-06-05 12:00:00+00',
+        updatedAt: '2022-06-05 12:00:00+00',
       },
       {
-        nombre_carrera: "Profesorado universitario de letras",
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        id: 8,
+        nombre_carrera: 'Profesorado universitario de letras',
+        createdAt: '2022-06-05 12:00:00+00',
+        updatedAt: '2022-06-05 12:00:00+00',
       },
       {
-        nombre_carrera: "Profesorado universitario en educacion fisica",
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        id: 9,
+        nombre_carrera: 'Profesorado universitario en educacion fisica',
+        createdAt: '2022-06-05 12:00:00+00',
+        updatedAt: '2022-06-05 12:00:00+00',
       },
       {
-        nombre_carrera: "Profesorado universitario de ingles",
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        id: 10,
+        nombre_carrera: 'Profesorado universitario de ingles',
+        createdAt: '2022-06-05 12:00:00+00',
+        updatedAt: '2022-06-05 12:00:00+00',
       },
       {
-        nombre_carrera: "Profesorado universitario de matematica",
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        id: 11,
+        nombre_carrera: 'Profesorado universitario de matematica',
+        createdAt: '2022-06-05 12:00:00+00',
+        updatedAt: '2022-06-05 12:00:00+00',
       },
       {
-        nombre_carrera: "Profesorado universitario de biologia",
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        id: 12,
+        nombre_carrera: 'Profesorado universitario de biologia',
+        createdAt: '2022-06-05 12:00:00+00',
+        updatedAt: '2022-06-05 12:00:00+00',
       },
       {
-        nombre_carrera: "Tecnicatura universitaria en programacion",
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        id: 13,
+        nombre_carrera: 'Tecnicatura universitaria en programacion',
+        createdAt: '2022-06-05 12:00:00+00',
+        updatedAt: '2022-06-05 12:00:00+00',
       },
       {
-        nombre_carrera: "Tecnicatura universitaria en redes y operaciones informaticas",
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        id: 14,
+        nombre_carrera: 'Tecnicatura universitaria en redes y operaciones informaticas',
+        createdAt: '2022-06-05 12:00:00+00',
+        updatedAt: '2022-06-05 12:00:00+00',
       },
       {
-        nombre_carrera: "Tecnicatura universitaria en diseño industrial",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      }
-    ])
+        id: 15,
+        nombre_carrera: 'Tecnicatura universitaria en diseño industrial',
+        createdAt: '2022-06-05 12:00:00+00',
+        updatedAt: '2022-06-05 12:00:00+00',
+      },
+    ];
+
+    await queryInterface.bulkInsert('carreras', carreras, {});
   },
 
-  async down (queryInterface, Sequelize) {
-    // Esto se ejecuta cuando se de deshace el seed.
+  async down(queryInterface, Sequelize) {
     await queryInterface.bulkDelete('carreras', null, {});
-  }
+  },
 };
