@@ -1754,13 +1754,6 @@ module.exports = {
         updatedAt: '2022-06-05 12:00:01+00',
       },
       {
-        id: 20077,
-        nombre: 'Goya',
-        fk_id_provincia: 20,
-        createdAt: '2022-06-05 12:00:01+00',
-        updatedAt: '2022-06-05 12:00:01+00',
-      },
-      {
         id: 22182,
         nombre: 'San Fernando del Valle de Catamarca',
         fk_id_provincia: 22,
