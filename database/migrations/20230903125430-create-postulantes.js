@@ -10,10 +10,6 @@ module.exports = {
       fk_id_tipo_documento: {
         type: Sequelize.INTEGER,
       },
-     
-      fk_id_estudios: {
-        type: Sequelize.INTEGER,
-      },
       fk_id_carrera: {
         type: Sequelize.INTEGER,
       },
