@@ -314,8 +314,10 @@ export const updatePostulante = async (req, res) => {
           cant_materias: req.body.cantMaterias,
           alumno_unahur: req.body.alumnoUnahur,
           presentacion: req.body.presentacion,
+          cv: req.body.cv,
+          foto: req.body.foto
         },
-          { fields: ["fk_id_tipo_documento", "fk_id_usuario","fk_id_estudios","fk_id_carrera","fk_id_estado","nombre","apellido","nacionalidad","fecha_nac","pais","fk_id_provincia","fk_id_ciudad","calle","nro","piso","depto","cp","telefono","cant_materias","alumno_unahur","presentacion"] }
+          { fields: ["fk_id_tipo_documento", "fk_id_usuario","fk_id_estudios","fk_id_carrera","fk_id_estado","nombre","apellido","nacionalidad","fecha_nac","pais","fk_id_provincia","fk_id_ciudad","calle","nro","piso","depto","cp","telefono","cant_materias","alumno_unahur","presentacion","foto","cv"] }
       )
       .then(() => res.sendStatus(200))
       .catch((error) => {
