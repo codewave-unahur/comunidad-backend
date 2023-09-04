@@ -10,9 +10,6 @@ module.exports = {
       fk_id_estudio: {
         type: Sequelize.INTEGER
       },
-      fk_id_estado: {
-        type: Sequelize.INTEGER
-      },
       fecha_vigencia: {
         type: Sequelize.DATE
       },
