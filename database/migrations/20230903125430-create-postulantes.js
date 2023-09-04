@@ -7,9 +7,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      fk_id_tipo_documento: {
-        type: Sequelize.INTEGER,
-      },
       nombre: {
         type: Sequelize.STRING,
       },
