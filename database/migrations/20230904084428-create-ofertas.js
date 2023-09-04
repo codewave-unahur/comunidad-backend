@@ -7,9 +7,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      fk_id_estudio: {
-        type: Sequelize.INTEGER
-      },
       fecha_vigencia: {
         type: Sequelize.DATE
       },
