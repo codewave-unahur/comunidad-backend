@@ -7,9 +7,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      fk_id_idioma: {
-        type: Sequelize.INTEGER,
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
