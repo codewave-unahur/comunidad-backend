@@ -6,7 +6,7 @@ module.exports = {
       'ofertas', 
       'fk_id_empresa', 
       {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         //allowNull: false,
       references: {
         model: 'empresas', // Nombre de la tabla que se referencia (en minúsculas y en plural)
