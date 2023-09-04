@@ -7,12 +7,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      fk_id_jornada: {
-        type: Sequelize.INTEGER
-      },
-      fk_id_contrato: {
-        type: Sequelize.INTEGER
-      },
       fk_id_estudio: {
         type: Sequelize.INTEGER
       },
