@@ -1,5 +1,5 @@
 import express  from "express";
-import routes from './routes';
+import index_routes from './routes/index.js';
 import cors from "cors";
 const { sequelize } = require('../database/models');
 const app = express();
@@ -7,7 +7,7 @@ const app = express();
 app.set('port', process.env.PORT || 3000);
 app.use(express.json());
 app.use(cors());
-app.use('/', routes);
+app.use('/', index_routes);
 
 app.listen(app.get('port'), () => {
   console.log('Servidor conectado al puerto', app.get('port')),
