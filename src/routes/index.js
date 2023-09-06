@@ -1,5 +1,4 @@
 import express from 'express';
-
 import usuarios from './usuarios';
 import postulantes from './postulantes'
 import ofertas from './ofertas'
