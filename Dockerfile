@@ -1,5 +1,5 @@
 # Development stage
-FROM node:16 as development
+FROM node:18 as development
 WORKDIR /comunidad-backend-v3
 
 # Copia el archivo package.json
