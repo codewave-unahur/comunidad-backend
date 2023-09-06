@@ -1,7 +1,13 @@
 # Development stage
 FROM node:16 as development
-WORKDIR /comunidad-backend-v3/src/app.js
-COPY package*.json tsconfig.json ./
+WORKDIR /comunidad-backend-v3
+
+# Copia el archivo package.json
+COPY package*.json ./
 RUN npm install
+
+# Copia la carpeta de código fuente
 COPY ./src ./src
+
+# Define el comando para iniciar la aplicación en modo desarrollo
 CMD [ "npm", "run", "start" ]
