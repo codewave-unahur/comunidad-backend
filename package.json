@@ -16,6 +16,7 @@
   "dependencies": {
     "@google-cloud/storage": "^6.5.2",
     "bcrypt": "^5.0.1",
+    "caniuse-lite": "^1.0.30001527",
     "consign": "^0.1.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
