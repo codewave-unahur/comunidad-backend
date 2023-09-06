@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
+  "type": "module",
   "scripts": {
     "babel-node": "babel-node src/app.js",
     "start": "nodemon --exec npm run babel-node src/app.js",
