@@ -41,7 +41,7 @@ var _idiomasOfertas = _interopRequireDefault(require("./idiomasOfertas"));
 
 var _uploadFiles = _interopRequireDefault(require("./uploadFiles"));
 
-const _tiposDeDocumentos = _interopRequireDefault(require("./tiposDeDocumentos"));
+var _tiposDeDocumentos = _interopRequireDefault(require("./tiposDocumentos"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
