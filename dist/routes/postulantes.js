@@ -21,8 +21,8 @@ router.get('/', (0, _utils.withErrorHandling)(_postulantes.getConFiltros));
 router.get('/idUsuario/:id', (0, _utils.withErrorHandling)(_postulantes.getPorIdUsuario));
 router.get('/dni/:id', (0, _utils.withErrorHandling)(_postulantes.getPorId));
 router.post('/', (0, _utils.withErrorHandling)(_postulantes.postPostulante));
-router.delete('/dni/:id', (0, _utils.withErrorHandling)(_postulantes.deletePostulante));
-router.put('/dni/:id', (0, _utils.withErrorHandling)(_postulantes.updatePostulante));
+router.delete('/dni/:id', _validador.validateToken, (0, _utils.withErrorHandling)(_postulantes.deletePostulante));
+router.put('/dni/:id', _validador.validateToken, (0, _utils.withErrorHandling)(_postulantes.updatePostulante));
 var _default = router;
 exports.default = _default;
 //# sourceMappingURL=postulantes.js.map

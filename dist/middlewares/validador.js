@@ -11,15 +11,24 @@ require('dotenv').config('../../.env');
 
 const secret = process.env.SECRET;
 
-const validateToken = async (req, res, next) => {
-  const accessToken = req.body.authorization;
-  if (!accessToken) res.send('acceso denegado');
+const validateToken = (req, res, next) => {
+  const accessToken = req.query.authorization;
+
+  if (!accessToken) {
+    return res.status(401).send('Acceso denegado: Falta token de autorización');
+  }
+
   jwt.verify(accessToken, secret, (err, user) => {
     if (err) {
-      res.send('acceso denegado, token expirado');
-    } else {
-      next();
+      if (err.name === 'TokenExpiredError') {
+        return res.status(401).send('Acceso denegado: Token expirado');
+      }
+
+      return res.status(401).send('Acceso denegado: Token no válido');
     }
+
+    req.user = user;
+    next();
   });
 };
 

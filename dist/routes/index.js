@@ -39,7 +39,9 @@ var _idiomasPostulantes = _interopRequireDefault(require("./idiomasPostulantes")
 
 var _idiomasOfertas = _interopRequireDefault(require("./idiomasOfertas"));
 
-var _uploadFiles = _interopRequireDefault(require("./uploadFiles"));
+var _files = _interopRequireDefault(require("./files"));
+
+var _tiposDocumentos = _interopRequireDefault(require("./tiposDocumentos"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -61,7 +63,8 @@ router.use('/idiomas', _idiomas.default);
 router.use('/nivelesIdiomas', _nivelesIdiomas.default);
 router.use('/idiomasPostulantes', _idiomasPostulantes.default);
 router.use('/idiomasOfertas', _idiomasOfertas.default);
-router.use('/uploadFiles', _uploadFiles.default);
+router.use('/files', _files.default);
+router.use('/tiposDocumento', _tiposDocumentos.default);
 var _default = router;
 exports.default = _default;
 //# sourceMappingURL=index.js.map

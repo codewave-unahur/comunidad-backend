@@ -8,8 +8,6 @@ var _cors = _interopRequireDefault(require("cors"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//var cors = require('cors');
-//import sequelize from "../database/models";
 const {
   sequelize
 } = require('../database/models');

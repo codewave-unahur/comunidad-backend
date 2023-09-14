@@ -78,7 +78,7 @@ const getPorIdOferta = async (req, res) => {
     include: [{
       as: "Postulante",
       model: models.postulantes,
-      attributes: ["id", "nombre", "apellido", "fk_id_usuario", "telefono"]
+      attributes: ["id", "nombre", "apellido", "fk_id_usuario", "telefono", "foto", "cv"]
     }, {
       as: "Oferta",
       model: models.ofertas,
@@ -126,7 +126,8 @@ const postPostulaciones = async (req, res) => {
   models.postulaciones.create({
     fk_id_postulante: req.body.postulante,
     fk_id_oferta: req.body.oferta,
-    fk_id_empresa: req.body.empresa
+    fk_id_empresa: req.body.empresa,
+    contactado: "f"
   }).then(postulaciones => res.status(201).send({
     id: postulaciones.id
   })).catch(error => {
@@ -192,9 +193,10 @@ const updatePostulaciones = async (req, res) => {
   const onSuccess = postulaciones => postulaciones.update({
     fk_id_postulante: req.body.postulante,
     fk_id_oferta: req.body.oferta,
-    fk_id_empresa: req.body.empresa
+    fk_id_empresa: req.body.empresa,
+    contactado: req.body.contactado
   }, {
-    fields: ["fk_id_postulante", "fk_id_oferta", "fk_id_empresa"]
+    fields: ["fk_id_postulante", "fk_id_oferta", "fk_id_empresa", "contactado"]
   }).then(() => res.sendStatus(200)).catch(error => {
     if (error == "SequelizeUniqueConstraintError: Validation error") {
       res.status(400).send("Bad request: Algun tipo de error de validacion de campos");

@@ -19,7 +19,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const router = _express.default.Router();
 
-router.get('/', (0, _utils.withErrorHandling)(_files.uploadFiles));
+router.post('/logo', _validador.validateToken, _multer.multer.single("uploadLogo"), (0, _utils.withErrorHandling)(_files.uploadLogo));
+router.post('/cv/', _validador.validateToken, _multer.multer.single("uploadCV"), (0, _utils.withErrorHandling)(_files.uploadCV));
+router.post('/foto/', _validador.validateToken, _multer.multer.single("uploadFoto"), (0, _utils.withErrorHandling)(_files.uploadFoto));
+router.get('/', (0, _utils.withErrorHandling)(_files.getFiles));
 var _default = router;
 exports.default = _default;
 //# sourceMappingURL=files.js.map

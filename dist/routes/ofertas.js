@@ -21,9 +21,9 @@ router.get('/', (0, _utils.withErrorHandling)(_ofertas.getConFiltros));
 router.get('/all/', (0, _utils.withErrorHandling)(_ofertas.getPeladas));
 router.get('/idOferta/:id', (0, _utils.withErrorHandling)(_ofertas.getPorId));
 router.get('/cuit/:id', (0, _utils.withErrorHandling)(_ofertas.getOfertasPorIdEmpresa));
-router.post('/', (0, _utils.withErrorHandling)(_ofertas.postOfertas));
-router.delete('/idOferta/:id', (0, _utils.withErrorHandling)(_ofertas.deleteOferta));
-router.put('/idOferta/:id', (0, _utils.withErrorHandling)(_ofertas.updateOfertas));
+router.post('/', _validador.validateToken, (0, _utils.withErrorHandling)(_ofertas.postOfertas));
+router.delete('/idOferta/:id', _validador.validateToken, (0, _utils.withErrorHandling)(_ofertas.deleteOferta));
+router.put('/idOferta/:id', _validador.validateToken, (0, _utils.withErrorHandling)(_ofertas.updateOfertas));
 var _default = router;
 exports.default = _default;
 //# sourceMappingURL=ofertas.js.map

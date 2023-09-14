@@ -51,7 +51,7 @@ const getConFiltros = async (req, res) => {
     include: [{
       as: "Empresa",
       model: models.empresas,
-      attributes: ["id", "nombre_empresa"]
+      attributes: ["id", "nombre_empresa", "descripcion"]
     }, {
       as: "Estudio",
       model: models.estudios,
@@ -83,7 +83,7 @@ const getConFiltros = async (req, res) => {
         }
       }]
     },
-    order: [ordenarPor]
+    order: [[ordenarPor, 'DESC']]
   }).then(ofertas => res.send({
     ofertas,
     totalPaginas: Math.ceil(ofertas.count / limite)
@@ -101,7 +101,7 @@ const getPeladas = async (req, res) => {
     include: [{
       as: "Empresa",
       model: models.empresas,
-      attributes: ["id", "nombre_empresa"]
+      attributes: ["id", "nombre_empresa", "descripcion"]
     }, {
       as: "Estudio",
       model: models.estudios,
@@ -140,7 +140,7 @@ const findOferta = (id, {
     include: [{
       as: "Empresa",
       model: models.empresas,
-      attributes: ["id", "nombre_empresa"]
+      attributes: ["id", "nombre_empresa", "descripcion"]
     }, {
       as: "Estudio",
       model: models.estudios,
@@ -178,16 +178,33 @@ const getPorId = async (req, res) => {
 
 exports.getPorId = getPorId;
 
-const findOfertaPorIdEmpresa = (fk_id_empresa, {
-  onSuccess,
-  onNotFound,
-  onError
-}) => {
-  models.ofertas.findAll({
+const getOfertasPorIdEmpresa = async (req, res) => {
+  let buscarTitulo = req.query.buscarTitulo;
+  let pagina = req.query.pagina;
+  let limite = req.query.limite;
+  let fk_id_empresa = req.params.id;
+
+  if (typeof buscarTitulo === "undefined") {
+    buscarTitulo = "_";
+  } else {
+    buscarTitulo = buscarTitulo.replace(/\s/g, "%");
+  }
+
+  if (typeof pagina === "undefined") {
+    pagina = 0;
+  }
+
+  if (typeof limite === "undefined") {
+    limite = 30;
+  }
+
+  models.ofertas.findAndCountAll({
+    limit: limite,
+    offset: pagina * limite,
     include: [{
       as: "Empresa",
       model: models.empresas,
-      attributes: ["id", "nombre_empresa"]
+      attributes: ["id", "nombre_empresa", "descripcion"]
     }, {
       as: "Estudio",
       model: models.estudios,
@@ -210,17 +227,17 @@ const findOfertaPorIdEmpresa = (fk_id_empresa, {
       attributes: ["id", "nombre_estado"]
     }],
     where: {
-      fk_id_empresa
+      fk_id_empresa,
+      [Op.and]: [{
+        titulo_oferta: {
+          [Op.iLike]: `%${buscarTitulo}%`
+        }
+      }]
     }
-  }).then(ofertas => ofertas ? onSuccess(ofertas) : onNotFound()).catch(() => onError());
-};
-
-const getOfertasPorIdEmpresa = async (req, res) => {
-  findOfertaPorIdEmpresa(req.params.id, {
-    onSuccess: ofertas => res.send(ofertas),
-    onNotFound: () => res.sendStatus(404),
-    onError: () => res.sendStatus(500)
-  });
+  }).then(ofertas => res.send({
+    ofertas,
+    totalPaginas: Math.ceil(ofertas.count / limite)
+  })).catch(() => res.sendStatus(500));
 };
 
 exports.getOfertasPorIdEmpresa = getOfertasPorIdEmpresa;
