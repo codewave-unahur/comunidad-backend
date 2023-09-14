@@ -7,6 +7,8 @@ docker/postgres/data
 # Parametros
 .env
 
+dist/*
+
 # Otros archivos
 #red-seeker-365622-b037b7220de8.json
 
