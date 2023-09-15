@@ -46,23 +46,21 @@ const findToken = (id) => {
 export const requestPasswordReset = async (usuario) => {
   const user = await findUsuario(usuario);
   if (!user) throw new Error("Email does not exist");
-  
-  let token = await findToken(user.id);
-  console.log(token);
-  console.log("asdasdsa");
-  console.log(token);
-  if (token) await token.destroy();
-  console.log("ooooooooooooooooooo");
+
+  // se rompe let token = await findToken(user.id);
+  //if (token) await token.destroy();
+
   let resetToken = crypto.randomBytes(32).toString("hex");
   const hash = await bcrypt.hash(resetToken, Number(bcryptSalt));
-  console.log("aaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+  /* 
   await models.tokens.create({
     userId: user.id,
     token: hash,
     createdAt: Date.now(),
-  }).save();
-
-  const link = `${clientURL}:${puerto}/passwordReset?token=${resetToken}&id=${user._id}`;
+  });
+  */
+  const link = `${clientURL}:${puerto}/passwordReset?token=${"resetToken"}&id=${user._id}`;
 
   sendEmail(
     user.usuario,
