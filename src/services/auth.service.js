@@ -83,7 +83,7 @@ const resetPassword = async (userId, token, password) => {
   const user = await User.findById({ id: userId });
 
   sendEmail(
-    user.email,
+    user.usuario,
     "Password Reset Successfully",
     {
       usuario: user.usuario,
