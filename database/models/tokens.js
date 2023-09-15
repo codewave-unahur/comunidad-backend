@@ -5,29 +5,20 @@ const {
   } = require('sequelize');
   
 module.exports = (sequelize, DataTypes) => {
-    class tokens extends Model {
-        static associate(models) {
-            tokens.belongsTo(models.usuarios
-                ,{
+    class tokens extends Model{
+        static associate(models){
+            tokens.belongsTo(models.usuarios,
+              {
                     as: 'usuario',
                     foreignKey: 'userId'
-                })
+              }
+            )
         }
     }
     tokens.init({
-        userId: {
-          type: DataTypes.INTEGER,
-          allowNull: false,
-        },
-        token: {
-          type: DataTypes.STRING,
-          allowNull: false,
-        },
-        createdAt: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: DataTypes.NOW,
-          }
+        userId: DataTypes.INTEGER,
+        token: DataTypes.STRING,
+        createdAt: DataTypes.DATE
     },
     {
         sequelize,

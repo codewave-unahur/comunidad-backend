@@ -4,6 +4,7 @@ module.exports = {
     await queryInterface.createTable('tokens', {
       token: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       createdAt: {
         type: Sequelize.DATE,
