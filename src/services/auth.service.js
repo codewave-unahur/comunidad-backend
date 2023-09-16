@@ -47,8 +47,8 @@ export const requestPasswordReset = async (usuario) => {
   const user = await findUsuario(usuario);
   if (!user) throw new Error("Email does not exist");
 
-  // se rompe let token = await findToken(user.id);
-  //if (token) await token.destroy();
+  let token = await findToken(user.id);
+  if (token) await token.destroy();
 
   let resetToken = crypto.randomBytes(32).toString("hex");
   const hash = await bcrypt.hash(resetToken, Number(bcryptSalt));
