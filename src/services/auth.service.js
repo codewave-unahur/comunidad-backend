@@ -53,14 +53,19 @@ export const requestPasswordReset = async (usuario) => {
   let resetToken = crypto.randomBytes(32).toString("hex");
   const hash = await bcrypt.hash(resetToken, Number(bcryptSalt));
 
-  /* 
-  await models.tokens.create({
+  models.tokens.create({
     userId: user.id,
     token: hash,
     createdAt: Date.now(),
+    updatedAt: Date.now(),
+  }).then((token) => {
+    // `token` contendrá el registro creado con el `id` autoincremental asignado por la base de datos
+    console.log('Token creado con ID:', token.id);
+  }).catch((error) => {
+    console.error('Error al crear el token:', error);
   });
-  */
-  const link = `${clientURL}:${puerto}/passwordReset?token=${"resetToken"}&id=${user._id}`;
+  
+  const link = `${clientURL}:${puerto}/passwordReset?token=${resetToken}&id=${user.id}`;
 
   sendEmail(
     user.usuario,
