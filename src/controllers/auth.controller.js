@@ -6,7 +6,7 @@ const {
   
   const signUpController = async (req, res, next) => {
     const signupService = await signup(req.body);
-    return res.json(signupService);
+    return res.status(200).json(signupService);
   };
   
   const resetPasswordRequestController = async (req, res, next) => {

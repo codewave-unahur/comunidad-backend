@@ -12,32 +12,46 @@ const bcryptSalt = process.env.BCRYPT_SALT;
 const clientURL = process.env.CLIENT_URL;
 const puerto = process.env.PORT;
 
-
-export const signup = async (data) => {
-    // el usuario es el email..
-  let user = await getUsuarioPorEmail({ usuario: data.usuario });
-  if (user) {
-    throw new Error("Email already exist", 422);
-  }
-  user = new User(data);
-  const token = JWT.sign({ id: user.id }, JWTSecret);
-  await user.save();
-
-  return (data = {
-    userId: user.id,
-    usuario: user.usuario,
-    token: token,
-  });
-};
-
 const findUsuario = (email) => {
   return models.usuarios
     .findOne({ where: { usuario: email } })
     .then((usuario) => (usuario ? usuario : false));
 };
 
+export const signup = async (req, res) => {
+  const usuario = await req.usuario;
+  // en caso de que se use este metodo, hay que hasear la password..
+  const password = await req.password;
+    // el usuario es el email..
+  let user = await findUsuario(req.usuario);
+  if (user) {
+    throw new Error("Ya existe el correo electrónico", 422);
+  }
+  const token = JWT.sign({ id: user.id }, JWTSecret);
+  //Aca me da entender que se guardaria en la tabla de usuarios...
+  //await user.save();
+  // Entonces creo un usuario nuevo que no exista en la base.
+  console.log("Password",password)
+  models.usuarios
+      .create(
+        {
+          id: req.id,
+          usuario: usuario,
+          password: password,
+          fk_id_grupo: "1",
+          estado: "0",
+        }
+      );
+      // me lo agrega con las password hasheada pero nose de onde lo saca... <.<
+  console.log("Password",password)
+  return ({
+    id: req.id,
+    usuario: usuario,
+    token: token,
+  });
+};
+
 const findToken = (id) => {
-  console.log("asdasdsadsad");
   return models.tokens
     .findOne({ where: { userId: id } })
     .then((token) => (token ? token : false));
@@ -45,7 +59,7 @@ const findToken = (id) => {
 
 export const requestPasswordReset = async (usuario) => {
   const user = await findUsuario(usuario);
-  if (!user) throw new Error("Email does not exist");
+  if (!user) throw new Error("El correo electrónico no existe.");
 
   let token = await findToken(user.id);
   if (token) await token.destroy();
@@ -69,7 +83,7 @@ export const requestPasswordReset = async (usuario) => {
 
   sendEmail(
     user.usuario,
-    "Password Reset Request",
+    "Solicitud de restablecimiento de contraseña",
     {
       usuario: user.usuario,
       link: link,
@@ -79,11 +93,17 @@ export const requestPasswordReset = async (usuario) => {
   return { link };
 };
 
-export const resetPassword = async (userId, token, password) => {
-  let passwordResetToken = await Token.findOne({ userId });
+const findUsuarioPorId = (id,onSuccess) => {
+  return models.usuarios
+    .findOne({ where: { id: id } })
+    .then((usuarios) => (usuarios ? onSuccess(usuarios) : false));
+};
 
+export const resetPassword = async (userId, token, password) => {
+  let passwordResetToken = await findToken(userId);
+   
   if (!passwordResetToken) {
-    throw new Error("Invalid or expired password reset token");
+    throw new Error("Token de restablecimiento de contraseña no válido o caducado");
   }
 
   console.log(passwordResetToken.token, token);
@@ -91,18 +111,44 @@ export const resetPassword = async (userId, token, password) => {
   const isValid = await bcrypt.compare(token, passwordResetToken.token);
 
   if (!isValid) {
-    throw new Error("Invalid or expired password reset token");
+    throw new Error("Token de restablecimiento de contraseña no válido o caducado");
   }
 
-  const hash = await bcrypt.hash(password, Number(bcryptSalt));
+  const hashPassword = await bcrypt.hash(password, Number(bcryptSalt));
 
+  // Cambiar esto
+  /* 
   await User.updateOne(
     { id: userId },
     { $set: { password: hash } },
     { new: true }
   );
+  */
 
-  const user = await User.findById({ id: userId });
+  const onSuccess = (usuario) =>
+  usuario
+  .update({
+    password: hashPassword,
+  }).then(() => {
+      return ({
+        sendStatus:200
+      })
+      }
+    )
+  .catch((error) => {
+    if (error == "SequelizeUniqueConstraintError: Validation error") {
+      return({
+        status:400,
+        mensaje :("Bad request: Algun tipo de error de validacion de campos")
+      });
+       
+    } else {
+      return(
+        `Error al intentar actualizar la base de datos: ${error}`
+      );
+    }
+  });
+  const user = findUsuarioPorId(userId, onSuccess);
 
   sendEmail(
     user.usuario,
@@ -113,8 +159,8 @@ export const resetPassword = async (userId, token, password) => {
     "./template/resetPassword.handlebars"
   );
 
-  await passwordResetToken.deleteOne();
+  await passwordResetToken.destroy();
 
-  return { message: "Password reset was successful" };
+  return { message: "El restablecimiento de contraseña fue exitoso" };
 };
 

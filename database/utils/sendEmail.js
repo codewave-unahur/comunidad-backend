@@ -5,13 +5,14 @@ const path = require("path");
 
 const sendEmail = async (email, subject, payload, template) => {
   try {
-    // create reusable transporter object using the default SMTP transport
+    // Crea un objeto transportador reutilizable utilizando el transporte SMTP predeterminado.
     const transporter = nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
       port: 465,
       auth: {
+        // Naturalmente, reemplace ambas con sus credenciales reales o una contraseña específica de la aplicación.
         user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD, // naturally, replace both with your real credentials or an application-specific password
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
 
@@ -26,7 +27,7 @@ const sendEmail = async (email, subject, payload, template) => {
       };
     };
 
-    // Send email
+    // Envia el email..
     transporter.sendMail(options(), (error, info) => {
       if (error) {
         return error;
