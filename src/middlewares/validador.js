@@ -3,6 +3,9 @@ require('dotenv').config('../../.env');
 const secret = process.env.SECRET;
 
 export const validateToken = (req, res, next) => {
+  if (req.url.includes("signin")|| req.url.includes("signup")){
+    next()
+  } else {
   const accessToken = req.query.authorization;
 
   if (!accessToken) {
@@ -18,5 +21,5 @@ export const validateToken = (req, res, next) => {
     }
     req.user = user;
     next();
-  });
+  })};
 };

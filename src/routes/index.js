@@ -17,9 +17,11 @@ import idiomasPostulantes from './idiomasPostulantes';
 import idiomasOfertas from './idiomasOfertas';
 import files  from './files';
 import tiposDocumentos from './tiposDocumentos';
+import {validateToken} from '../middlewares/validador';
 
 const router = express.Router();
 
+router.use(validateToken);
 router.use('/usuarios', usuarios);
 router.use('/postulantes', postulantes);
 router.use('/ofertas', ofertas);
