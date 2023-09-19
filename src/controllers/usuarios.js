@@ -28,7 +28,6 @@ export const signUp = async (req, res) => {
   if (passwordLength >= minPasswordLength) {
     models.usuarios
       .create({
-        id: 13,
         usuario: usuario,
         password: hashPassword,
         fk_id_grupo: "1",
