@@ -10,6 +10,7 @@ const expireTime = process.env.EXPIRE;
 //Creamos un usuario
 export const signUp = async (req, res) => {
   //Nos traemos el usuario desde el body
+  const id = await req.body.id;
   const usuario = await req.body.usuario;
   const password = await req.body.password;
 
@@ -27,6 +28,7 @@ export const signUp = async (req, res) => {
   if (passwordLength >= minPasswordLength) {
     models.usuarios
       .create({
+        id: 13,
         usuario: usuario,
         password: hashPassword,
         fk_id_grupo: "1",

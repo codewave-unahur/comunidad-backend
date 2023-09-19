@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'usuarios',
   });
-
+  
   usuarios.beforeCreate(async (usuario, options) => {
     if (usuario.changed("password")) {
       const hash = await bcrypt.hash(usuario.password, Number(bcryptSalt));

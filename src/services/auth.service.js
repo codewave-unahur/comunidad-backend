@@ -12,6 +12,9 @@ const bcryptSalt = process.env.BCRYPT_SALT;
 const clientURL = process.env.CLIENT_URL;
 const puerto = process.env.PORT;
 
+const templaterequestResetPassword = require('../../database/utils/template/requestResetPassword.handlebars');
+const templateresetPassword = require('../../database/utils/template/resetPassword.handlebars');
+
 const findUsuario = (email) => {
   return models.usuarios
     .findOne({ where: { usuario: email } })
@@ -42,7 +45,7 @@ export const signup = async (req, res) => {
           estado: "0",
         }
       );
-      // me lo agrega con las password hasheada pero nose de onde lo saca... <.<
+      // me lo agrega con las password hasheada pero nose de donde lo saca... <.<
   console.log("Password",password)
   return ({
     id: req.id,
@@ -88,7 +91,7 @@ export const requestPasswordReset = async (usuario) => {
       usuario: user.usuario,
       link: link,
     },
-    "./template/requestResetPassword.handlebars"
+    templaterequestResetPassword
   );
   return { link };
 };
@@ -115,15 +118,6 @@ export const resetPassword = async (userId, token, password) => {
   }
 
   const hashPassword = await bcrypt.hash(password, Number(bcryptSalt));
-
-  // Cambiar esto
-  /* 
-  await User.updateOne(
-    { id: userId },
-    { $set: { password: hash } },
-    { new: true }
-  );
-  */
 
   const onSuccess = (usuario) =>
   usuario
@@ -152,11 +146,11 @@ export const resetPassword = async (userId, token, password) => {
 
   sendEmail(
     user.usuario,
-    "Password Reset Successfully",
+    "Restablecimiento de contraseña exitoso",
     {
       usuario: user.usuario,
     },
-    "./template/resetPassword.handlebars"
+    templateresetPassword,
   );
 
   await passwordResetToken.destroy();
