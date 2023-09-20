@@ -1,19 +1,12 @@
 const JWT = require("jsonwebtoken");
-const User = require("../../database/models/usuarios.js");
 const models = require("../../database/models");
-
-const Token = require("../../database/models/tokens.js");
 const sendEmail = require("../../database/utils/sendEmail.js");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
-
 const JWTSecret = process.env.SECRET;
 const bcryptSalt = process.env.BCRYPT_SALT;
 const clientURL = process.env.CLIENT_URL;
 const puerto = process.env.PORT;
-
-const templaterequestResetPassword = require('../../database/utils/template/requestResetPassword.handlebars');
-const templateresetPassword = require('../../database/utils/template/resetPassword.handlebars');
 
 const findUsuario = (email) => {
   return models.usuarios
@@ -21,6 +14,7 @@ const findUsuario = (email) => {
     .then((usuario) => (usuario ? usuario : false));
 };
 
+//Esto abria que ver porque ya esta definada esta funcion en usuario, lo que si capaz se puede rescatar algo sino queda descartado...
 export const signup = async (req, res) => {
   const usuario = await req.usuario;
   // en caso de que se use este metodo, hay que hasear la password..
@@ -31,10 +25,7 @@ export const signup = async (req, res) => {
     throw new Error("Ya existe el correo electrónico", 422);
   }
   const token = JWT.sign({ id: user.id }, JWTSecret);
-  //Aca me da entender que se guardaria en la tabla de usuarios...
-  //await user.save();
-  // Entonces creo un usuario nuevo que no exista en la base.
-  console.log("Password",password)
+
   models.usuarios
       .create(
         {
@@ -91,70 +82,65 @@ export const requestPasswordReset = async (usuario) => {
       usuario: user.usuario,
       link: link,
     },
-    templaterequestResetPassword
+    '../../database/utils/template/requestResetPassword.handlebars'
   );
   return { link };
 };
 
-const findUsuarioPorId = (id,onSuccess) => {
-  return models.usuarios
-    .findOne({ where: { id: id } })
-    .then((usuarios) => (usuarios ? onSuccess(usuarios) : false));
+
+const findUsuarioPorId = async (id) => {
+  try {
+    const usuario = await models.usuarios.findOne({ where: { id } });
+    return usuario;
+  } catch (error) {
+    console.error(`Error al buscar usuario por ID: ${error}`);
+    throw error;
+  }
 };
 
 export const resetPassword = async (userId, token, password) => {
-  let passwordResetToken = await findToken(userId);
-   
-  if (!passwordResetToken) {
-    throw new Error("Token de restablecimiento de contraseña no válido o caducado");
-  }
+  try {
+    const passwordResetToken = await findToken(userId);
 
-  console.log(passwordResetToken.token, token);
-
-  const isValid = await bcrypt.compare(token, passwordResetToken.token);
-
-  if (!isValid) {
-    throw new Error("Token de restablecimiento de contraseña no válido o caducado");
-  }
-
-  const hashPassword = await bcrypt.hash(password, Number(bcryptSalt));
-
-  const onSuccess = (usuario) =>
-  usuario
-  .update({
-    password: hashPassword,
-  }).then(() => {
-      return ({
-        sendStatus:200
-      })
-      }
-    )
-  .catch((error) => {
-    if (error == "SequelizeUniqueConstraintError: Validation error") {
-      return({
-        status:400,
-        mensaje :("Bad request: Algun tipo de error de validacion de campos")
-      });
-       
-    } else {
-      return(
-        `Error al intentar actualizar la base de datos: ${error}`
-      );
+    if (!passwordResetToken) {
+      throw new Error("Token de restablecimiento de contraseña no válido o caducado");
     }
-  });
-  const user = findUsuarioPorId(userId, onSuccess);
 
-  sendEmail(
-    user.usuario,
-    "Restablecimiento de contraseña exitoso",
-    {
-      usuario: user.usuario,
-    },
-    templateresetPassword,
-  );
+    console.log(passwordResetToken.token, token);
 
-  await passwordResetToken.destroy();
+    const isValid = await bcrypt.compare(token, passwordResetToken.token);
 
-  return { message: "El restablecimiento de contraseña fue exitoso" };
+    if (!isValid) {
+      throw new Error("Token de restablecimiento de contraseña no válido o caducado");
+    }
+
+    const hashPassword = await bcrypt.hash(password, Number(bcryptSalt));
+
+    const usuario = await findUsuarioPorId(userId);
+
+    if (!usuario) {
+      throw new Error("Usuario no encontrado");
+    }
+
+    await usuario.update({ password: hashPassword });
+
+    console.log(`Contraseña actualizada para el usuario: ${usuario.usuario}`);
+
+    await sendEmail(
+      usuario.usuario,
+      "Restablecimiento de contraseña exitoso",
+      {
+        usuario: usuario.usuario,
+      },
+      '../../database/utils/template/resetPassword.handlebars',
+    );
+
+    await passwordResetToken.destroy();
+
+    return { message: "El restablecimiento de contraseña fue exitoso" };
+  } catch (error) {
+    console.error(`Error en resetPassword: ${error.message}`);
+    throw error;
+  }
 };
 

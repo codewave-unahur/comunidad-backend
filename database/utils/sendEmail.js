@@ -11,11 +11,12 @@ const sendEmail = async (email, subject, payload, template) => {
       port: process.env.EMAIL_PORT,
       auth: {
         // Naturalmente, reemplace ambas con sus credenciales reales o una contraseña específica de la aplicación.
-        user: "ivorrajosemaria@gmail.com",
-        pass: "rpmp incg qqmg epox",
+        user: process.env.EMAIL_USERNAME,
+        pass: 'dyqr fowb hfem jwvr',
       },
     });
 
+    // Parece que el payload y el template estan mal...
     const source = fs.readFileSync(path.join(__dirname, template), "utf8");
     const compiledTemplate = handlebars.compile(source);
     const options = () => {
@@ -24,6 +25,7 @@ const sendEmail = async (email, subject, payload, template) => {
         to: email,
         subject: subject,
         html: compiledTemplate(payload),
+        //text: 'Solicitó restablecer su contraseña.'
       };
     };
 
