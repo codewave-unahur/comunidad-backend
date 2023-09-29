@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     tokens.init({
         userId: DataTypes.INTEGER,
         token: DataTypes.STRING,
-        createdAt: DataTypes.DATE
+        createdAt: DataTypes.DATE,
+        updatedAt: DataTypes.DATE,
     },
     {
         sequelize,

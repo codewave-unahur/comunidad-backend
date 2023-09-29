@@ -53,6 +53,7 @@ const findToken = (id) => {
 
 export const requestPasswordReset = async (usuario) => {
   const user = await findUsuario(usuario);
+  // importar otra liberia para devolver un httpError para futuro.
   if (!user) throw new Error("El correo electrónico no existe.");
 
   let token = await findToken(user.id);
@@ -102,6 +103,7 @@ export const resetPassword = async (userId, token, password) => {
   try {
     const passwordResetToken = await findToken(userId);
 
+     // importar otra liberia para devolver un httpError para futuro.
     if (!passwordResetToken) {
       throw new Error("Token de restablecimiento de contraseña no válido o caducado");
     }
@@ -110,6 +112,7 @@ export const resetPassword = async (userId, token, password) => {
 
     const isValid = await bcrypt.compare(token, passwordResetToken.token);
 
+     // importar otra liberia para devolver un httpError para futuro.
     if (!isValid) {
       throw new Error("Token de restablecimiento de contraseña no válido o caducado");
     }
@@ -118,6 +121,7 @@ export const resetPassword = async (userId, token, password) => {
 
     const usuario = await findUsuarioPorId(userId);
 
+     // importar otra liberia para devolver un httpError para futuro.
     if (!usuario) {
       throw new Error("Usuario no encontrado");
     }
