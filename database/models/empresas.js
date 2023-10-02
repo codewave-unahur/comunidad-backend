@@ -55,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
     web: DataTypes.STRING,
     nombre_representante: DataTypes.STRING,
     email_representante: DataTypes.STRING,
-    logo: DataTypes.STRING
+    logo: DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'empresas',
