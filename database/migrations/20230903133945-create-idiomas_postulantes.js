@@ -4,6 +4,7 @@ module.exports = {
     await queryInterface.createTable('idiomas_postulantes', {
       id: {
         allowNull: false,
+        autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },

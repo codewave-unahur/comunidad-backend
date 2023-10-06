@@ -1,15 +1,34 @@
 const models = require("../../database/models");
 
 export const getAll = async (req, res) => {
+  try {
+    const idiomas_postulantes = await models.idiomas_postulantes.findAll({
+      attributes: ["id", "fk_id_idioma", "fk_id_postulante", "fk_id_nivel"],
+      include: [
+        {
+          as: "Postulante",
+          model: models.postulantes,
+          attributes: ["id", "nombre", "apellido", "fk_id_usuario", "telefono"],
+          include: [
+            {
+              as: "Usuario",
+              model: models.usuarios,
+              attributes: ["id", "usuario", "estado"],
+            },
+          ],
+        },
+      ],
+    });
 
-  models.idiomas_postulantes
-    .findAll({
-      attributes: ["id","fk_id_idioma","fk_id_postulante","fk_id_nivel"]
-    }).then(idiomas_postulantes => res.send({
-      idiomas_postulantes
-      
-    })).catch(() => res.sendStatus(500));
+    res.send({
+      idiomas_postulantes,
+    });
+  } catch (error) {
+    console.error("Error en la consulta:", error);
+    res.status(500).send("Error interno en el servidor");
+  }
 };
+
 
 
 export const postIdiomasPostulantes = async (req, res) => {
@@ -32,12 +51,9 @@ export const postIdiomasPostulantes = async (req, res) => {
     });
 };
 
-const findPorId = (
-  fk_id_postulante,
-  { onSuccess, onNotFound, onError }
-) => {
-  models.idiomas_postulantes
-    .findOne({
+const findPorId = async (fk_id_postulante, { onSuccess, onNotFound, onError }) => {
+  try {
+    const idiomas_postulantes = await models.idiomas_postulantes.findOne({
       include: [
         {
           as: "Idioma",
@@ -56,17 +72,26 @@ const findPorId = (
         },
       ],
       where: { fk_id_postulante },
-    })
-    .then((idiomas_postulantes) =>
-      idiomas_postulantes ? onSuccess(idiomas_postulantes) : onNotFound()
-    )
-    .catch(() => onError());
+    });
+
+    if (idiomas_postulantes) {
+      onSuccess(idiomas_postulantes);
+    } else {
+      onNotFound();
+    }
+  } catch (error) {
+    console.error("Error in findPorId:", error);
+    onError();
+  }
 };
 
-export const getPorId = async (req, res) => {
-  findPorId(req.params.id, {
+export const getPorIdPostulante = async (req, res) => {
+  const { id: idPostulante } = req.params;
+
+  findPorId(idPostulante, {
     onSuccess: (idiomas_postulantes) => res.send(idiomas_postulantes),
-    onNotFound: () => res.sendStatus(401),
+    onNotFound: () => res.sendStatus(404),
     onError: () => res.sendStatus(400),
   });
 };
+
