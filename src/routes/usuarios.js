@@ -3,7 +3,8 @@ import {
   getAll,
   signIn,
   signUp,
-  deleteUsuario
+  deleteUsuario,
+  forgotPass
 } from '../controllers/usuarios';
 import { withErrorHandling } from './utils';
 import { validateToken } from '../middlewares/validador';
@@ -14,5 +15,5 @@ router.get('/', withErrorHandling(getAll));
 router.post('/signin', withErrorHandling(signIn));
 router.post('/signup', withErrorHandling(signUp));
 //router.delete('/:id', withErrorHandling(deleteUsuario));
-
+router.put('/pass/:id', withErrorHandling(forgotPass));
 export default router;
