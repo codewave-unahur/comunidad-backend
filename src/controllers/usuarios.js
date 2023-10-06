@@ -135,28 +135,24 @@ export const deleteUsuario = async (req, res) => {
   });
 };
 
-export const forgotPass = async (req, res) => {
-  //Con bcrypt generamos el salt y hasheamos la contraseña.
-  const salt = await bcrypt.genSalt();
-  const hashPassword = await bcrypt.hash(req.body.password, salt);
+export const updateUsuario = async (req, res) => {
+  const usuarioEdit = req.body.usuario;
 
   const onSuccess = (usuario) =>
-  usuario
-  .update({
-    password: hashPassword,
-  }).then(() => res.sendStatus(200))
-  .catch((error) => {
-    if (error == "SequelizeUniqueConstraintError: Validation error") {
-      res
-        .status(400)
-        .send("Bad request: Algun tipo de error de validacion de campos");
-    } else {
-      console.log(
-        `Error al intentar actualizar la base de datos: ${error}`
-      );
-      res.sendStatus(500);
-    }
-  });
+    usuario
+      .update({
+        usuario: usuarioEdit,
+      })
+      .then(() => res.sendStatus(200))
+      .catch((error) => {
+        if (error.name === "SequelizeUniqueConstraintError") {
+          res.status(400).send("Bad request: Algun tipo de error de validacion de campos");
+        } else {
+          console.log(`Error al intentar actualizar la base de datos: ${error}`);
+          res.sendStatus(500);
+        }
+      });
+
   findUsuarioPorId(req.params.id, {
     onSuccess,
     onNotFound: () => res.sendStatus(404),

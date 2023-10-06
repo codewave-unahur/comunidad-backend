@@ -4,7 +4,7 @@ export const getAll = async (req, res) => {
 
   models.estudios
     .findAll({
-        attributes: ["id","nombre_estudio","estado_estudio"]
+        attributes: ["id","nombre_estudio_estado"]
     }).then(estudios => res.send({
       estudios
       

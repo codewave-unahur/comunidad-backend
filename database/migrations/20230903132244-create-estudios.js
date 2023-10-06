@@ -8,10 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      nombre_estudio: {
-        type: Sequelize.STRING,
-      },
-      estado_estudio: {
+      nombre_estudio_estado: {
         type: Sequelize.STRING,
       },
       createdAt: {
