@@ -18,6 +18,7 @@ import idiomasOfertas from './idiomasOfertas';
 import files  from './files';
 import tiposDocumentos from './tiposDocumentos';
 import password from './password.js';
+import aptitudesPostulantes from './aptitudesPostulantes.js';
 import {validateToken} from '../middlewares/validador';
 
 const router = express.Router();
@@ -41,6 +42,7 @@ router.use('/idiomasPostulantes', idiomasPostulantes);
 router.use('/idiomasOfertas', idiomasOfertas);
 router.use('/files', files);
 router.use('/tiposDocumento', tiposDocumentos);
-router.use('/password',password)
+router.use('/password',password);
+router.use('/aptitudes_postulantes', aptitudesPostulantes);
 
 export default router;

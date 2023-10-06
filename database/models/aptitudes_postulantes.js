@@ -10,7 +10,14 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      aptitudes_postulantes.belongsTo(models.aptitudes ,{
+          as : 'Aptitud',  // nombre de mi relacion
+          foreignKey: 'fk_id_aptitud'     // campo con el que voy a igualar
+        });
+      aptitudes_postulantes.belongsTo(models.postulantes, {
+        as: 'Postulante',
+        foreignKey: 'fk_id_usuario',
+      });  
     }
   }
   aptitudes_postulantes.init({
