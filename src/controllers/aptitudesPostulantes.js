@@ -5,7 +5,8 @@ export const createAptitudPostulante = async (req, res) => {
     models.aptitudes_postulantes
       .create({
         fk_id_aptitud: req.body.idAptitud,     
-        fk_id_usuario: req.body.idUsuario,      
+        fk_id_usuario: req.body.idUsuario,
+        fk_id_idioma_nivel: req.body.idIdioma,      
       })
       .then(
         (aptitudes_postulantes) => res.status(201).send({ id: aptitudes_postulantes.id }))
@@ -24,7 +25,7 @@ export const createAptitudPostulante = async (req, res) => {
 export const getAll = async (req, res) => {
     try {
       const aptitudes_postulantes = await models.aptitudes_postulantes.findAll({
-        attributes: ["id", "fk_id_aptitud", "fk_id_usuario"],
+        attributes: ["id", "fk_id_aptitud", "fk_id_usuario","fk_id_idioma_nivel"],
         include: [
             {
                 model: models.postulantes,
