@@ -2,11 +2,11 @@ const models = require("../../database/models");
 
 export const getAll = async (req, res) => {
 
-  models.idiomas
+  models.niveles_idiomas
     .findAll({
-        attributes: ["id","nombre_idioma"]
-    }).then(idioma => res.send({
-      idioma
+        attributes: ["id","nivel"]
+    }).then(nivele_idioma => res.send({
+      nivele_idioma
       
     })).catch(() => res.sendStatus(500));
 };

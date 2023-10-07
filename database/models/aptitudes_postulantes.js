@@ -16,14 +16,19 @@ module.exports = (sequelize, DataTypes) => {
       });
       aptitudes_postulantes.belongsTo(models.idiomas ,{
         as : 'Idioma',  // nombre de mi relacion
-        foreignKey: 'fk_id_idioma_nivel'     // campo con el que voy a igualar
+        foreignKey: 'fk_id_idioma'     // campo con el que voy a igualar
+      });
+      aptitudes_postulantes.belongsTo(models.niveles_idiomas ,{
+        as : 'Idioma',  // nombre de mi relacion
+        foreignKey: 'fk_id_nivel'     // campo con el que voy a igualar
       });
     }
   }
   aptitudes_postulantes.init({
     fk_id_aptitud: DataTypes.INTEGER,
     fk_id_usuario: DataTypes.INTEGER,
-    fk_id_idioma_nivel: DataTypes.INTEGER
+    fk_id_idioma: DataTypes.INTEGER,
+    fk_id_nivel: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'aptitudes_postulantes',

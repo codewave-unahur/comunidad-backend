@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
   aptitudes_ofertas.init({
     fk_id_aptitud: DataTypes.INTEGER,
     fk_id_oferta: DataTypes.INTEGER,
-    fk_id_idioma_nivel: DataTypes.INTEGER
+    fk_id_idioma: DataTypes.INTEGER,
+    fk_id_nivel: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'aptitudes_ofertas',

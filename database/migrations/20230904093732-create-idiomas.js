@@ -10,9 +10,6 @@ module.exports = {
       nombre_idioma: {
         type: Sequelize.STRING,
       },
-      nivel: {
-        type: Sequelize.STRING,
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

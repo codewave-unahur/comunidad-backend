@@ -12,6 +12,7 @@ import postulacionesId from './postulacionesId'
 import provincias from './provincias';
 import ciudades from './ciudades';
 import idiomas from './idiomas';
+import nivelesIdiomas from './nivelesIdiomas';
 import files  from './files';
 import tiposDocumentos from './tiposDocumentos';
 import password from './password.js';
@@ -34,6 +35,7 @@ router.use('/postulacionesId', postulacionesId);
 router.use('/provincias', provincias);
 router.use('/ciudades', ciudades);
 router.use('/idiomas', idiomas);
+router.use('/nivelesIdiomas', nivelesIdiomas);
 router.use('/files', files);
 router.use('/tiposDocumento', tiposDocumentos);
 router.use('/password',password);
