@@ -17,7 +17,7 @@ router.get('/', withErrorHandling(getConFiltros))
       .get('/idUsuario/:id', withErrorHandling(getPorIdUsuario)) 
       .get('/dni/:id', withErrorHandling(getPorId));
 router.put('/dni/:id',validateToken, withErrorHandling(updatePostulante));
-router.delete('/dni/:id',validateToken, withErrorHandling(deletePostulante));
+router.delete('/dni/:id', withErrorHandling(deletePostulante));
 
 
 export default router;

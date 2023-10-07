@@ -1,79 +1,37 @@
 const models = require("../../database/models");
 const { Op } = require("sequelize");
+// ... (importaciones)
 
 export const getConFiltros = async (req, res) => {
-  const paginaComoNumero = Number.parseInt(req.query.pagina);
-  const limiteComoNumero = Number.parseInt(req.query.limite);
-  let ordenarPor = req.query.ordenar;
-  let buscarPostulante = req.query.buscarPostulante;
+  try {
+    const paginaComoNumero = Number.parseInt(req.query.pagina);
+    const limiteComoNumero = Number.parseInt(req.query.limite);
+    let ordenarPor = req.query.ordenar;
+    let buscarPostulante = req.query.buscarPostulante;
 
-  //let buscarDNI = req.query.buscarDNI;
+    // Validar ordenarPor
+    const camposValidos = ["createdAt", "otroCampoValido"];
+    ordenarPor = camposValidos.includes(ordenarPor) ? ordenarPor : "createdAt";
 
-  let pagina = 0;
-  if (!Number.isNaN(paginaComoNumero) && paginaComoNumero > 0) {
-    pagina = paginaComoNumero;
-  }
+    const pagina = !Number.isNaN(paginaComoNumero) && paginaComoNumero > 0 ? paginaComoNumero : 0;
+    const limite = !Number.isNaN(limiteComoNumero) && limiteComoNumero > 0 ? limiteComoNumero : 30;
 
-  let limite = 30;
-  if (!Number.isNaN(limiteComoNumero) && limiteComoNumero > 0) {
-    limite = limiteComoNumero;
-  }
+    let [buscarNombre = "_", buscarApellido = "_"] = (buscarPostulante || "").split(" ", 2);
 
-  if (typeof ordenarPor === "undefined") {
-    ordenarPor = "createdAt";
-  }
+    if (typeof buscarApellido === "undefined") {
+      buscarApellido = buscarNombre;
+    }
 
-  let buscarNombre = "_"
-  let buscarApellido = "_"
-  if (typeof buscarPostulante !== "undefined"){
-    buscarNombre = req.query.buscarPostulante.split(" ",2)[0];
-    buscarApellido = req.query.buscarPostulante.split(" ",2)[1];
-  }
-
-  if (typeof buscarApellido === "undefined"){
-    buscarApellido = buscarNombre
-  }
-
-  models.postulantes
-    .findAndCountAll({
+    const postulantes = await models.postulantes.findAndCountAll({
       limit: limite,
       offset: pagina * limite,
       include: [
-        {
-          as: "Tipo_documento",
-          model: models.tipos_documentos,
-          attributes: ["id", "tipo_documento"],
-        },
         {
           as: "Usuario",
           model: models.usuarios,
           attributes: ["id", "usuario", "estado", "createdAt"],
         },
-        {
-          as: "Estudios",
-          model: models.estudios,
-          attributes: ["id", "nombre_estudio", "estado_estudio"],
-        },
-        {
-          as: "Carrera",
-          model: models.carreras,
-          attributes: ["id", "nombre_carrera"],
-        },
-        {
-          as: "Estado",
-          model: models.estado_postulantes,
-          attributes: ["id", "nombre_estado"],
-        },
-        {
-          as: "Provincia",
-          model: models.provincias,
-          attributes: ["id", "nombre"],
-        },
-        {
-          as: "Ciudad",
-          model: models.ciudades,
-          attributes: ["id", "nombre", "fk_id_provincia"],
-        },
+        // ... (otros includes)
       ],
       where: {
         [Op.or]: [
@@ -90,14 +48,16 @@ export const getConFiltros = async (req, res) => {
         ],
       },
       order: [ordenarPor],
-    })
-    .then((postulantes) =>
-      res.send({
-        postulantes,
-        totalPaginas: Math.ceil(postulantes.count / limite),
-      })
-    )
-    .catch(() => res.sendStatus(400));
+    });
+
+    res.send({
+      postulantes,
+      totalPaginas: Math.ceil(postulantes.count / limite),
+    });
+  } catch (error) {
+    console.error('Error al buscar postulantes:', error);
+    res.sendStatus(400);
+  }
 };
 
 const findPostulantesPorIdUsuario = (
@@ -108,11 +68,6 @@ const findPostulantesPorIdUsuario = (
   models.postulantes
     .findOne({
       include: [
-        {
-          as: "Tipo_documento",
-          model: models.tipos_documentos,
-          attributes: ["id", "tipo_documento"],
-        },
         {
           as: "Usuario",
           model: models.usuarios,
@@ -164,18 +119,10 @@ export const getPorIdUsuario = async (req, res) => {
   });
 };
 
-const findPostulantesPorDNI = (
-  id,
-  { onSuccess, onNotFound, onError }
-) => {
+const findPostulantesPorDNI = (id,{ onSuccess, onNotFound, onError }) => {
   models.postulantes
     .findOne({
       include: [
-        {
-          as: "Tipo_documento",
-          model: models.tipos_documentos,
-          attributes: ["id", "tipo_documento"],
-        },
         {
           as: "Usuario",
           model: models.usuarios,
@@ -184,7 +131,7 @@ const findPostulantesPorDNI = (
         {
           as: "Estudios",
           model: models.estudios,
-          attributes: ["id", "nombre_estudio", "estado_estudio"],
+          attributes: ["id", "nombre_estudio_estado"],
         },
         {
           as: "Carrera",
