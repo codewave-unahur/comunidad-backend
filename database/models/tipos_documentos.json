@@ -1,30 +1,33 @@
-[
-  {
-    "id": 1,
-    "tipo_documento": "DNI"
-  },
-  {
-    "id": 2,
-    "tipo_documento": "Pasaporte"
-  },
-  {
-    "id": 3,
-    "tipo_documento": "Carné de conducir"
-  },
-  {
-    "id": 4,
-    "tipo_documento": "Cédula de identidad"
-  },
-  {
-    "id": 5,
-    "tipo_documento": "Tarjeta de residencia"
-  },
-  {
-    "id": 6,
-    "tipo_documento": "LC"
-  },
-  {
-    "id": 7,
-    "tipo_documento": "LE"
-  }
-]
+{
+  "tipos_documentos": [
+    {
+      "id": 1,
+      "tipo_documento": "DNI"
+    },
+    {
+      "id": 2,
+      "tipo_documento": "Pasaporte",
+      "updatedAt": "10/7/2023, 1:40:12 PM"
+    },
+    {
+      "id": 3,
+      "tipo_documento": "Carné de conducir"
+    },
+    {
+      "id": 4,
+      "tipo_documento": "Cédula de identidad"
+    },
+    {
+      "id": 5,
+      "tipo_documento": "Tarjeta de residencia"
+    },
+    {
+      "id": 6,
+      "tipo_documento": "LC"
+    },
+    {
+      "id": 7,
+      "tipo_documento": "LE"
+    }
+  ]
+}
