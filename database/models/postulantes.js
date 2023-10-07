@@ -56,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
         );
         postulantes.hasMany(models.aptitudes_postulantes, {
           foreignKey: "fk_id_usuario",
-          as: "AptitudesPostulantes",
+          as: "Aptitudes",
         });
     }
   }

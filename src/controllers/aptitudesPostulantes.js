@@ -42,7 +42,7 @@ export const getAll = async (req, res) => {
                 ,]
             },
             {
-                as: "Aptitud",
+                as: "Aptitudes",
                 model: models.aptitudes,
                 attributes: ["id", "nombre_aptitud", "descripcion"],
             },
@@ -76,7 +76,7 @@ const findAptitudesPorIdUsuario = (fk_id_usuario, { onSuccess, onNotFound, onErr
             ,]
         },
         {
-            as: "Aptitud",
+            as: "Aptitudes",
             model: models.aptitudes,
             attributes: ["id", "nombre_aptitud", "descripcion"],
         },
