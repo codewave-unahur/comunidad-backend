@@ -228,7 +228,7 @@ export const postPostulante = async (req, res) => {
   models.postulantes
     .create({
       id: req.body.documento,
-      fk_id_tipo_documento: req.body.tipoDocumento,
+      tipo_documento: req.body.tipoDocumento,
       fk_id_usuario: req.body.idUsuario,
       fk_id_estudios: req.body.estudios,
       fk_id_carrera: req.body.carrera,
@@ -297,7 +297,7 @@ export const updatePostulante = async (req, res) => {
   postulantes
       .update(
         {
-          fk_id_tipo_documento: req.body.tipoDocumento,
+          tipo_documento: req.body.tipoDocumento,
           fk_id_usuario: req.body.idUsuario,
           fk_id_estudios: req.body.estudios,
           fk_id_carrera: req.body.carrera,
@@ -321,7 +321,7 @@ export const updatePostulante = async (req, res) => {
           cv: req.body.cv,
           foto: req.body.foto
         },
-          { fields: ["fk_id_tipo_documento", "fk_id_usuario","fk_id_estudios","fk_id_carrera","fk_id_estado","nombre","apellido","nacionalidad","fecha_nac","pais","fk_id_provincia","fk_id_ciudad","calle","nro","piso","depto","cp","telefono","cant_materias","alumno_unahur","presentacion","cv","foto"] }
+          { fields: ["tipo_documento", "fk_id_usuario","fk_id_estudios","fk_id_carrera","fk_id_estado","nombre","apellido","nacionalidad","fecha_nac","pais","fk_id_provincia","fk_id_ciudad","calle","nro","piso","depto","cp","telefono","cant_materias","alumno_unahur","presentacion","cv","foto"] }
       )
       .then(() => res.sendStatus(200))
       .catch((error) => {

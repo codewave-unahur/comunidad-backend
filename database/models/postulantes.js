@@ -5,13 +5,6 @@ module.exports = (sequelize, DataTypes) => {
     
     static associate(models) {
       // define association here
-      postulantes.belongsTo(
-        models.tipos_documentos, // modelo al que pertenece
-        {
-          as: "Tipo_documento", // nombre de mi relacion
-          foreignKey: "fk_id_tipo_documento", // campo con el que voy a igualar
-        }
-      ),
         postulantes.belongsTo(
           models.usuarios, // modelo al que pertenece
           {
@@ -62,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   postulantes.init(
     {
-      fk_id_tipo_documento: DataTypes.INTEGER,
+      tipo_documento: DataTypes.STRING,
       fk_id_usuario: DataTypes.INTEGER,
       fk_id_estudios: DataTypes.INTEGER,
       fk_id_carrera: DataTypes.INTEGER,

@@ -5,7 +5,7 @@ module.exports = {
     await queryInterface.bulkInsert('postulantes', [
       {
         id: 41232451,
-        fk_id_tipo_documento: 1,
+        tipo_documento: "DNI",
         fk_id_usuario: 514,
         fk_id_estudios: 5,
         fk_id_carrera: 2,
@@ -33,7 +33,7 @@ module.exports = {
       },
       {
         id: 41744111,
-        fk_id_tipo_documento: 1,
+        tipo_documento: "DNI",
         fk_id_usuario: 469,
         fk_id_estudios: 7,
         fk_id_carrera: 2,
@@ -61,7 +61,7 @@ module.exports = {
       },
       {
         id: 12783917,
-        fk_id_tipo_documento: 1,
+        tipo_documento: "DNI",
         fk_id_usuario: 516,
         fk_id_estudios: 8,
         fk_id_carrera: 2,
@@ -89,7 +89,7 @@ module.exports = {
       },
       {
         id: 25647424,
-        fk_id_tipo_documento: 1,
+        tipo_documento: "DNI",
         fk_id_usuario: 472,
         fk_id_estudios: 7,
         fk_id_carrera: 2,
@@ -117,7 +117,7 @@ module.exports = {
       },
       {
         id: 42781646,
-        fk_id_tipo_documento: 1,
+        tipo_documento: "DNI",
         fk_id_usuario: 473,
         fk_id_estudios: 7,
         fk_id_carrera: 2,
@@ -145,7 +145,7 @@ module.exports = {
       },
       {
         id: 12341234,
-        fk_id_tipo_documento: 1,
+        tipo_documento: "DNI",
         fk_id_usuario: 511,
         fk_id_estudios: 6,
         fk_id_carrera: 4,
@@ -173,7 +173,7 @@ module.exports = {
       },
       {
         id: 41744112,
-        fk_id_tipo_documento: 1,
+        tipo_documento: "DNI",
         fk_id_usuario: 513,
         fk_id_estudios: 1,
         fk_id_carrera: 2,

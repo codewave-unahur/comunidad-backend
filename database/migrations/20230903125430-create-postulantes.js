@@ -22,6 +22,9 @@ module.exports = {
       pais: {
         type: Sequelize.STRING,
       },
+      tipo_documento: {
+        type: Sequelize.STRING,
+      },
       fk_id_provincia: {
         type: Sequelize.INTEGER,
       },

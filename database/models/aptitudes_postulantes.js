@@ -15,11 +15,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'fk_id_usuario',
       });
       aptitudes_postulantes.belongsTo(models.idiomas ,{
-        as : 'Idioma',  // nombre de mi relacion
+        as : 'Idioma del postulante',  // nombre de mi relacion
         foreignKey: 'fk_id_idioma'     // campo con el que voy a igualar
       });
       aptitudes_postulantes.belongsTo(models.niveles_idiomas ,{
-        as : 'Idioma',  // nombre de mi relacion
+        as : 'Idioma del ofertante',  // nombre de mi relacion
         foreignKey: 'fk_id_nivel'     // campo con el que voy a igualar
       });
     }

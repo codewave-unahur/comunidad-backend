@@ -8,13 +8,13 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       aptitudes.hasMany(models.aptitudes_postulantes// modelo al que pertenece
       ,{
-        as : 'Aptitudes',  // nombre de mi relacion
+        as : 'Aptitudes del postulante',  // nombre de mi relacion
         foreignKey: 'fk_id_aptitud'     // campo con el que voy a igualar
       }
     );
     aptitudes.hasMany(models.aptitudes_ofertas// modelo al que pertenece
     ,{
-      as : 'Aptitudes',  // nombre de mi relacion
+      as : 'Aptitudes de oferta',  // nombre de mi relacion
       foreignKey: 'fk_id_aptitud'     // campo con el que voy a igualar
     }
   );

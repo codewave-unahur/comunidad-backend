@@ -33,7 +33,7 @@ export const getAll = async (req, res) => {
                 as: "Postulante",
                 attributes: ["id","nombre","apellido","nacionalidad","fecha_nac","pais","fk_id_provincia","fk_id_ciudad",
                 "calle","nro","piso","depto","cp","telefono","cant_materias","alumno_unahur","presentacion","cv","foto",
-                "fk_id_usuario","fk_id_estudios","fk_id_carrera","fk_id_estado","fk_id_tipo_documento"],
+                "fk_id_usuario","fk_id_estudios","fk_id_carrera","fk_id_estado","tipo_documento"],
                 include:[
                     {
                         model: models.usuarios,
@@ -67,7 +67,7 @@ const findAptitudesPorIdUsuario = (fk_id_usuario, { onSuccess, onNotFound, onErr
             as: "Postulante",
             attributes: ["id","nombre","apellido","nacionalidad","fecha_nac","pais","fk_id_provincia","fk_id_ciudad",
             "calle","nro","piso","depto","cp","telefono","cant_materias","alumno_unahur","presentacion","cv","foto",
-            "fk_id_usuario","fk_id_estudios","fk_id_carrera","fk_id_estado","fk_id_tipo_documento"],
+            "fk_id_usuario","fk_id_estudios","fk_id_carrera","fk_id_estado","tipo_documento"],
             include:[
                 {
                     model: models.usuarios,
