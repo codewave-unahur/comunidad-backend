@@ -1,7 +1,6 @@
 const models = require("../../database/models");
 
 export const getAll = async (req, res) => {
-
   models.carreras
     .findAll({
         attributes: ["id","nombre_carrera"]
