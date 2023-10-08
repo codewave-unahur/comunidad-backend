@@ -1,23 +1,23 @@
 import express from 'express';
 import {
-  getConFiltros,
-  getPorId,
+  getOfertasPorFiltros,
+  getIdOferta,
   getOfertasPorIdEmpresa,
-  postOfertas,
+  createOferta,
   deleteOferta,
   updateOfertas,
-  getPeladas
+  getOfertas
 } from '../controllers/ofertas';
 import { withErrorHandling } from './utils';
-import { validateToken } from '../middlewares/validador';
 
 const router = express.Router();
 
-router.get('/', withErrorHandling(getConFiltros));
-router.get('/all/', withErrorHandling(getPeladas));
-router.get('/idOferta/:id', withErrorHandling(getPorId));
-router.get('/cuit/:id', withErrorHandling(getOfertasPorIdEmpresa));
-router.post('/',validateToken, withErrorHandling(postOfertas));
-router.delete('/idOferta/:id',validateToken, withErrorHandling(deleteOferta));
-router.put('/idOferta/:id',validateToken, withErrorHandling(updateOfertas));
+router.post('/', withErrorHandling(createOferta));
+router.get('/all/', withErrorHandling(getOfertas))
+      .get('/', withErrorHandling(getOfertasPorFiltros))
+      .get('/idOferta/:id', withErrorHandling(getIdOferta))
+      .get('/cuit/:id', withErrorHandling(getOfertasPorIdEmpresa));
+router.put('/idOferta/:id', withErrorHandling(updateOfertas));
+router.delete('/idOferta/:id', withErrorHandling(deleteOferta));
+
 export default router;
