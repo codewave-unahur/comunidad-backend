@@ -4,7 +4,9 @@ module.exports = {
     await queryInterface.createTable('postulaciones', {
       id: {
         allowNull: false,
+        autoIncrement: true,
         primaryKey: true,
+   
         type: Sequelize.INTEGER,
       },
       fk_id_empresa: {

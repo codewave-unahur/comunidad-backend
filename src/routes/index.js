@@ -8,7 +8,6 @@ import jornadas from './jornadas';
 import contratos from './contratos';
 import estudios from './estudios';
 import carreras from './carreras';
-import postulacionesId from './postulacionesId'
 import provincias from './provincias';
 import ciudades from './ciudades';
 import idiomas from './idiomas';
@@ -31,7 +30,6 @@ router.use('/jornadas', jornadas);
 router.use('/contratos', contratos);
 router.use('/estudios', estudios);
 router.use('/carreras', carreras);
-router.use('/postulacionesId', postulacionesId);
 router.use('/provincias', provincias);
 router.use('/ciudades', ciudades);
 router.use('/idiomas', idiomas);
