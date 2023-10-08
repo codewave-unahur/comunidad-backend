@@ -1,12 +1,12 @@
 import express from 'express';
 import {
-  getAll
+  getAll,
+  getById
 } from '../controllers/nivelesIdiomas';
 import { withErrorHandling } from './utils';
-import { validateToken } from '../middlewares/validador';
 
 const router = express.Router();
 
 router.get('/', withErrorHandling(getAll));
-
+router.get("/niveles/:id", withErrorHandling(getById));
 export default router;
