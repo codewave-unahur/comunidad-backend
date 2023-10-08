@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     
     static associate(models) {
       aptitudes_postulantes.belongsTo(models.aptitudes ,{
-          as : 'Aptitud',  // nombre de mi relacion
+          as : 'Aptitudes del postulante',  // nombre de mi relacion
           foreignKey: 'fk_id_aptitud'     // campo con el que voy a igualar
         });
       aptitudes_postulantes.belongsTo(models.postulantes, {

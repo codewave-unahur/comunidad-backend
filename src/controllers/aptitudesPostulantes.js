@@ -1,11 +1,10 @@
 const models = require("../../database/models");
 
-
 export const createAptitudPostulante = async (req, res) => {
     models.aptitudes_postulantes
       .create({
         fk_id_aptitud: req.body.idAptitud,     
-        fk_id_usuario: req.body.idUsuario,
+        fk_id_usuario: req.body.idPostulante,
         fk_id_idioma: req.body.idIdioma, 
         fk_id_nivel: req.body.idNivel,      
       })
@@ -21,7 +20,6 @@ export const createAptitudPostulante = async (req, res) => {
         }
       });
 };
-
 
 export const getAll = async (req, res) => {
     try {
@@ -43,7 +41,7 @@ export const getAll = async (req, res) => {
                 ,]
             },
             {
-                as: "Aptitudes",
+                as: "Aptitudes del postulante",
                 model: models.aptitudes,
                 attributes: ["id", "nombre_aptitud", "descripcion"],
             },
@@ -77,7 +75,7 @@ const findAptitudesPorIdUsuario = (fk_id_usuario, { onSuccess, onNotFound, onErr
             ,]
         },
         {
-            as: "Aptitudes",
+            as: "Aptitudes del postulante",
             model: models.aptitudes,
             attributes: ["id", "nombre_aptitud", "descripcion"],
         },
@@ -95,4 +93,50 @@ export const getIdUsuario = async (req, res) => {
     onNotFound: () => res.sendStatus(404),
     onError: () => res.sendStatus(500),
   });
+};
+
+export const updateAptitudPostulante = async (req, res) => {
+  const aptitudPostulanteId = req.params.id;
+
+  try {
+    const [updatedRows] = await models.aptitudes_postulantes.update(
+      {
+        fk_id_aptitud: req.body.idAptitud,
+        fk_id_usuario: req.body.idPostulante,
+        fk_id_idioma: req.body.idIdioma,
+        fk_id_nivel: req.body.idNivel,
+      },
+      {
+        where: { fk_id_usuario: aptitudPostulanteId },
+      }
+    );
+
+    if (updatedRows === 0) {
+      res.status(404).send("NOT FOUND");
+    } else {
+      res.status(200).send("OK");
+    }
+  } catch (error) {
+    console.error(`Error al actualizar aptitud_postulante: ${error}`);
+    res.sendStatus(500); // Error interno del servidor
+  }
+};
+
+export const deleteAptitudIdPostulante = async (req, res) => {
+  const aptitudPostulanteId = req.params.id;
+
+  try {
+    const result = await models.aptitudes_postulantes.destroy({
+      where: { fk_id_usuario: aptitudPostulanteId },
+    });
+
+    if (result === 0) {
+      res.status(404).send("NOT FOUND");
+    } else {
+      res.status(200).send("DESTROY");
+    }
+  } catch (error) {
+    console.error(`Error al eliminar aptitud_postulante: ${error}`);
+    res.sendStatus(500); // Error interno del servidor
+  }
 };

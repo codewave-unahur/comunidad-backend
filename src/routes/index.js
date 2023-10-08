@@ -37,6 +37,6 @@ router.use('/nivelesIdiomas', nivelesIdiomas);
 router.use('/files', files);
 router.use('/tiposDocumento', tiposDocumentos);
 router.use('/password',password);
-router.use('/aptitudes_postulantes', aptitudesPostulantes);
+router.use('/aptitudesPostulantes', aptitudesPostulantes);
 
 export default router;
