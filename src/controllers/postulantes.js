@@ -166,7 +166,7 @@ const findPostulantesPorDNI = (id,{ onSuccess, onNotFound, onError }) => {
 export const getPorId = async (req, res) => {
   findPostulantesPorDNI(req.params.id, {
     onSuccess: (postulantes) => res.send(postulantes),
-    onNotFound: () => res.sendStatus(401),
+    onNotFound: () => res.sendStatus(404),
     onError: () => res.sendStatus(400),
   });
 };
