@@ -29,12 +29,17 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'usuarios',
   });
   
+  // Lo comenté porque cuando creas un nuevo usuario y queres logear se rompe todo.
+  //El método beforeCreate es un gancho hook proporcionado de Sequelize de Node.js, 
+  //que se ejecuta justo antes de que un nuevo registro sea creado en la base de datos.
+  // Asi que probablemente se elimine esto.
+  /*
   usuarios.beforeCreate(async (usuario, options) => {
     if (usuario.changed("password")) {
       const hash = await bcrypt.hash(usuario.password, Number(bcryptSalt));
       usuario.password = hash;
     }
   });
-
+  */
   return usuarios;
 };
