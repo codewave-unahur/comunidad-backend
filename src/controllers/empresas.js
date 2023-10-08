@@ -1,8 +1,6 @@
 const models = require("../../database/models");
-const { Op } = require("sequelize");
+const { Op: sequelize } = require("sequelize");
 
-
-//get de empresas
 export const getConFiltros = async (req, res) => {
   let paginaComoNumero = Number.parseInt(req.query.pagina);
   let limiteComoNumero = Number.parseInt(req.query.limite);
@@ -65,13 +63,13 @@ export const getConFiltros = async (req, res) => {
         },
       ],
       where: {
-        [Op.and]: [
+        [sequelize.and]: [
           {
             nombre_empresa: {
-              [Op.iLike]: `%${nombreEmpresa}%`,
+              [sequelize.iLike]: `%${nombreEmpresa}%`,
             },
             fk_id_estado: {
-              [Op.eq]: idEstado
+              [sequelize.eq]: idEstado
             },
           },
         ],
@@ -87,9 +85,9 @@ export const getConFiltros = async (req, res) => {
     .catch(() => res.sendStatus(500));
 };
 
-export const getPeladas = async (req, res) => {
-  let pagina = 0;
-  let limite = 1000;
+export const getEmpresas = async (req, res) => {
+  let pagina = Number.parseInt(req.query.pagina);
+  let limite = Number.parseInt(req.query.limite);
 
   models.empresas
     .findAndCountAll({
