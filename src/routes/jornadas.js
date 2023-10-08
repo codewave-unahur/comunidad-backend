@@ -3,7 +3,6 @@ import {
   getAll
 } from '../controllers/jornadas';
 import { withErrorHandling } from './utils';
-import { validateToken } from '../middlewares/validador';
 
 const router = express.Router();
 
