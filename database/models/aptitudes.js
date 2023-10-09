@@ -4,7 +4,6 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class aptitudes extends Model {
-    
     static associate(models) {
       aptitudes.hasMany(models.aptitudes_postulantes// modelo al que pertenece
       ,{

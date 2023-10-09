@@ -16,6 +16,7 @@ import files  from './files';
 import tiposDocumentos from './tiposDocumentos';
 import password from './password.js';
 import aptitudesPostulantes from './aptitudesPostulantes.js';
+import aptitudes from './aptitudes.js';
 import {validateToken} from '../middlewares/validador';
 
 const router = express.Router();
@@ -38,5 +39,6 @@ router.use('/files', files);
 router.use('/tiposDocumento', tiposDocumentos);
 router.use('/password',password);
 router.use('/aptitudesPostulantes', aptitudesPostulantes);
+router.use('/aptitudes', aptitudes);
 
 export default router;
