@@ -86,7 +86,7 @@ export const deleteAptitud = async (req, res) => {
     if (result === 0) {
       res.status(404).send("NOT FOUND");
     } else {
-      res.status(200).send("DESTROY");
+      res.status(200).send("DESTROYED");
     }
   } catch (error) {
     console.error(`Error al eliminar aptitud: ${error}`);

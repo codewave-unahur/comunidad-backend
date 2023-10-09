@@ -156,7 +156,7 @@ export const updateAptitudOferta = async (req, res) => {
   }
 };
 
-export const deleteAptitudIdPostulante = async (req, res) => {
+export const deleteAptitudIdOferta = async (req, res) => {
   const aptitudOfertaId = req.params.id;
 
   try {
@@ -167,7 +167,26 @@ export const deleteAptitudIdPostulante = async (req, res) => {
     if (result === 0) {
       res.status(404).send("NOT FOUND");
     } else {
-      res.status(200).send("DESTROY");
+      res.status(200).send("DESTROYED");
+    }
+  } catch (error) {
+    console.error(`Error al eliminar aptitud_postulante: ${error}`);
+    res.sendStatus(500);
+  }
+};
+
+export const deleteAptitudId = async (req, res) => {
+  const idAptitud = req.params.id;
+
+  try {
+    const result = await models.aptitudes_ofertas.destroy({
+      where: { id: idAptitud },
+    });
+
+    if (result === 0) {
+      res.status(404).send("NOT FOUND");
+    } else {
+      res.status(200).send("DESTROYED");
     }
   } catch (error) {
     console.error(`Error al eliminar aptitud_postulante: ${error}`);
