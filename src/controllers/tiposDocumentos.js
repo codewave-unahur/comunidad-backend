@@ -68,10 +68,7 @@ export const updateById = (id, data) => {
     const indexForUpdate = models.tipos_documentos.findIndex((doc) => doc.id === parseInt(id, 10));
     // Verifica si no existe...
     if (indexForUpdate === -1) {
-      throw {
-        status: 404,
-        message: `NOT FOUND: ${id}`,
-      };
+      res.status(404).send(`NOT FOUND: ${id}`);
     }
     const updateTipoDoc = {
       ...models.tipos_documentos[indexForUpdate].data,
@@ -82,13 +79,13 @@ export const updateById = (id, data) => {
     saveToDatabase({ tipos_documentos: models.tipos_documentos });
     return updateTipoDoc;
   } catch (error) {
-    throw { status: error?.status || 500, message: error?.message || error };
+    res.status(500).send(error);
   }
 };
 
 // En tu controlador o ruta
 export const updateByIdController = (req, res) => {
-  const { id } = req.params;
+  const id = req.body.id;
   const data = req.body; // Asume que los datos a actualizar están en el cuerpo de la solicitud
 
   try {

@@ -30,17 +30,17 @@ export const getAll = async (req, res) => {
                     model: models.ofertas,
                     as: "Oferta",
                     attributes: [
-                        "id", "titulo_oferta", "fecha_vigencia", "descripcion", "horario_laboral_desde", "horario_laboral_hasta", "edad_desde", "edad_hasta",
+                        "id", "titulo_oferta", "estado", "fecha_vigencia", "descripcion", "horario_laboral_desde", "horario_laboral_hasta", "edad_desde", "edad_hasta",
                         "experiencia_previa_desc", "zona_trabajo", "areas_estudio", "otros_detalles", "beneficios", "remuneracion", "fk_id_empresa", "fk_id_jornada",
-                        "fk_id_contrato","fk_id_carrera", "fk_id_estado", "fk_id_estudio",],
+                        "fk_id_contrato","fk_id_carrera", "fk_id_estudio",],
                     include: [
                         {
                             model: models.empresas,
                             as: "Empresa",
                             attributes: [
-                                "id", "nombre_empresa", "descripcion", "pais", "fk_id_provincia",
+                                "id", "nombre_empresa", "estado", "descripcion", "pais", "fk_id_provincia",
                                 "fk_id_ciudad", "calle", "nro", "piso", "depto", "cp", "telefono", "web", "nombre_representante",
-                                "email_representante", "logo", "fk_id_rubro", "fk_id_estado", "fk_id_usuario"
+                                "email_representante", "logo", "fk_id_rubro", "fk_id_usuario"
                             ],
                         }
                     ],
@@ -80,20 +80,18 @@ const findAptitudesPorIOferta = (idOferta, { onSuccess, onNotFound, onError }) =
                   model: models.ofertas,
                   as: "Oferta",
                   attributes: [
-                  "id", "titulo_oferta", "fecha_vigencia", "descripcion", "horario_laboral_desde", "horario_laboral_hasta", 
+                  "id", "titulo_oferta", "estado", "fecha_vigencia", "descripcion", "horario_laboral_desde", "horario_laboral_hasta", 
                   "edad_desde", "edad_hasta", "experiencia_previa_desc", "zona_trabajo", "areas_estudio", "otros_detalles",
-                  "beneficios", "remuneracion", "fk_id_empresa", "fk_id_jornada", "fk_id_contrato", "fk_id_carrera",
-                  "fk_id_estado", "fk_id_estudio"
+                  "beneficios", "remuneracion", "fk_id_empresa", "fk_id_jornada", "fk_id_contrato", "fk_id_carrera", "fk_id_estudio"
                   ],
                   include: [
                     {
                       model: models.empresas,
                       as: "Empresa",
                       attributes: [
-                      "id", "nombre_empresa", "descripcion", "pais", "fk_id_provincia",
+                      "id", "nombre_empresa", "estado", "descripcion", "pais", "fk_id_provincia",
                       "fk_id_ciudad", "calle", "nro", "piso", "depto", "cp", "telefono", "web", 
-                      "nombre_representante","email_representante", "logo", "fk_id_rubro", 
-                      "fk_id_estado", "fk_id_usuario"
+                      "nombre_representante","email_representante", "logo", "fk_id_rubro", "fk_id_usuario"
                       ],
                     }
                   ],
@@ -124,7 +122,7 @@ const findAptitudesPorIOferta = (idOferta, { onSuccess, onNotFound, onError }) =
 export const getIdOferta = async (req, res) => {
   findAptitudesPorIOferta(req.params.id, {
     onSuccess: (aptitudes) => res.send(aptitudes),
-    onNotFound: () => res.sendStatus(404),
+    onNotFound: () => res.status(404).send("NOT FOUND"),
     onError: () => res.sendStatus(500),
   });
 };
@@ -141,7 +139,7 @@ export const updateAptitudOferta = async (req, res) => {
         fk_id_nivel: req.body.idNivel,
       },
       {
-        where: { fk_id_oferta: aptitudOfertaId },
+        where: { id : aptitudOfertaId },
       }
     );
 

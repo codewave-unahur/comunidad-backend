@@ -7,7 +7,7 @@
     {
       "id": 2,
       "tipo_documento": "Pasaporte",
-      "updatedAt": "10/7/2023, 1:40:12 PM"
+      "updatedAt": "10/10/2023, 12:11:41 PM"
     },
     {
       "id": 3,
@@ -28,6 +28,12 @@
     {
       "id": 7,
       "tipo_documento": "LE"
+    },
+    {
+      "id": 8,
+      "tipo_documento": "Pasaporteeeeeeeeeee",
+      "createdAt": "10/10/2023, 12:12:53 PM",
+      "updatedAt": null
     }
   ]
 }

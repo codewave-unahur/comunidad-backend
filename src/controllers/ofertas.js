@@ -63,8 +63,8 @@ export const getOfertasPorFiltros = async (req, res) => {
         },
         {
           as: "Estado",
-          model: models.estado_ofertas,
-          attributes: ["id", "nombre_estado"],
+          model: models.estados,
+          attributes: ["id", "estado"],
         },
       ],
       where: {
@@ -126,8 +126,8 @@ export const getOfertas = async (req, res) => {
         },
         {
           as: "Estado",
-          model: models.estado_ofertas,
-          attributes: ["id", "nombre_estado"],
+          model: models.estados,
+          attributes: ["id", "estado"],
         },
       ]
     })
@@ -171,8 +171,8 @@ const findOferta = (id, { onSuccess, onNotFound, onError }) => {
         },
         {
           as: "Estado",
-          model: models.estado_ofertas,
-          attributes: ["id", "nombre_estado"],
+          model: models.estados,
+          attributes: ["id", "estado"],
         },
       ],
       where: { id },
@@ -241,8 +241,8 @@ export const getOfertasPorIdEmpresa = async (req, res) => {
         },
         {
           as: "Estado",
-          model: models.estado_ofertas,
-          attributes: ["id", "nombre_estado"],
+          model: models.estados,
+          attributes: ["id", "estado"],
         },
       ],
       where: { fk_id_empresa,

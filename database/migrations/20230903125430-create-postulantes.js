@@ -13,6 +13,9 @@ module.exports = {
       apellido: {
         type: Sequelize.STRING,
       },
+      estado:{
+        type: Sequelize.STRING
+      },
       nacionalidad: {
         type: Sequelize.STRING,
       },

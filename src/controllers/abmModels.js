@@ -44,7 +44,7 @@ export const getAbmById = async (req, res) => {
     if (abmRecord) {
       res.send({ abmRecord });
     } else {
-      res.sendStatus(404);
+      res.status(404).send("NOT FOUND");
     }
   } catch (error) {
     console.error(error);

@@ -27,13 +27,6 @@ module.exports = (sequelize, DataTypes) => {
           }
         ),
         postulantes.belongsTo(
-          models.estado_postulantes, // modelo al que pertenece
-          {
-            as: "Estado", // nombre de mi relacion
-            foreignKey: "fk_id_estado", // campo con el que voy a igualar
-          }
-        ),
-        postulantes.belongsTo(
           models.provincias, // modelo al que pertenece
           {
             as: "Provincia", // nombre de mi relacion

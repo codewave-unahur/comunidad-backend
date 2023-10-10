@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'fk_id_idioma'     // campo con el que voy a igualar
       });
       aptitudes_postulantes.belongsTo(models.niveles_idiomas ,{
-        as : 'Idioma del ofertante',  // nombre de mi relacion
+        as : 'Nivel del postulante',  // nombre de mi relacion
         foreignKey: 'fk_id_nivel'     // campo con el que voy a igualar
       });
     }

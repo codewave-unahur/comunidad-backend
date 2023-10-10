@@ -46,7 +46,7 @@ const findAptitudesId = (id, { onSuccess, onNotFound, onError }) => {
 export const getAptitud = async (req, res) => {
   findAptitudesId(req.params.id, {
     onSuccess: (aptitud) => res.send(aptitud),
-    onNotFound: () => res.sendStatus(404),
+    onNotFound: () => res.status(404).send("NOT FOUND"),
     onError: () => res.sendStatus(500),
   });
 };

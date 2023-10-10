@@ -4,13 +4,13 @@ import {
   getById,
   updateByIdController,
   deleteById,
-  createTipoDocumento 
-} from '../controllers/tiposDocumentos';
+  createdEstado 
+} from '../controllers/estados.js';
 import { withErrorHandling } from './utils';
 
 const router = express.Router();
 
-router.post('/', withErrorHandling(createTipoDocumento));
+router.post('/', withErrorHandling(createdEstado));
 router.get('/', withErrorHandling(getAll))
       .get('/:id', withErrorHandling(getById));
 router.put('/', withErrorHandling(updateByIdController));

@@ -36,12 +36,6 @@ module.exports = (sequelize, DataTypes) => {
         as : 'Contrato',  // nombre de mi relacion
         foreignKey: 'fk_id_contrato'     // campo con el que voy a igualar
       }),
-      ofertas.belongsTo(models.estado_ofertas// modelo al que pertenece
-      ,{
-        as : 'Estado',  // nombre de mi relacion
-        foreignKey: 'fk_id_estado'     // campo con el que voy a igualar
-      })
-
       ofertas.hasMany(models.aptitudes_ofertas// modelo al que pertenece
       ,{
         as : 'Oferta',  // nombre de mi relacion

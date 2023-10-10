@@ -4,7 +4,8 @@ import{
     getAll,
     getIdUsuario,
     updateAptitudPostulante,
-    deleteAptitudIdPostulante 
+    deleteByIdAptitudPostulante,
+    deleteAptitudByIdPostulante 
 } from "../controllers/aptitudesPostulantes.js";
 import { withErrorHandling } from './utils';
 
@@ -14,6 +15,7 @@ router.post("/", withErrorHandling(createAptitudPostulante));
 router.get("/", withErrorHandling(getAll))
       .get("/:id", withErrorHandling(getIdUsuario));
 router.put("/:id", withErrorHandling(updateAptitudPostulante));
-router.delete("/:id", withErrorHandling(deleteAptitudIdPostulante));
+router.delete("/:id", withErrorHandling(deleteByIdAptitudPostulante))
+      .delete("/dni/:id", withErrorHandling(deleteAptitudByIdPostulante));
 
 export default router;

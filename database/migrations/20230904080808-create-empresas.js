@@ -10,6 +10,9 @@ module.exports = {
       nombre_empresa: {
         type: Sequelize.STRING
       },
+      estado:{
+        type: Sequelize.STRING
+      },
       descripcion: {
         type: Sequelize.TEXT
       },

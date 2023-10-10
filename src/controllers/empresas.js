@@ -48,8 +48,8 @@ export const getConFiltros = async (req, res) => {
         },
         {
           as: "Estado",
-          model: models.estado_empresas,
-          attributes: ["id", "nombre_estado"],
+          model: models.estados,
+          attributes: ["id", "estado"],
         },
         {
           as: "Provincia",
@@ -106,8 +106,8 @@ export const getEmpresas = async (req, res) => {
         },
         {
           as: "Estado",
-          model: models.estado_empresas,
-          attributes: ["id", "nombre_estado"],
+          model: models.estados,
+          attributes: ["id", "estado"],
         },
         {
           as: "Provincia",
@@ -146,8 +146,8 @@ const findEmpresas= (id, { onSuccess, onNotFound, onError }) => {
         },
         {
           as: "Estado",
-          model: models.estado_empresas,
-          attributes: ["id", "nombre_estado"],
+          model: models.estados,
+          attributes: ["id", "estado"],
         },
         {
           as: "Provincia",
@@ -190,8 +190,8 @@ const findEmpresasPorIdUsuario = (fk_id_usuario, { onSuccess, onNotFound, onErro
         },
         {
           as: "Estado",
-          model: models.estado_empresas,
-          attributes: ["id", "nombre_estado"],
+          model: models.estados,
+          attributes: ["id", "estado"],
         },
         {
           as: "Provincia",
