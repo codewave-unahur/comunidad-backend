@@ -21,6 +21,7 @@ import aptitudesOfertas from './aptitudesOfertas.js';
 import grupos from './grupos.js';
 import rubros from './rubros.js';
 import abm from './abmModels.js';
+import estadosEmpresas from './estadosEmpresas.js';
 import {validateToken} from '../middlewares/validador';
 
 const router = express.Router();
@@ -48,6 +49,6 @@ router.use('/aptitudesOfertas', aptitudesOfertas);
 router.use('/grupos', grupos);
 router.use('/rubros', rubros);
 router.use('/abm', abm);
-
+router.use('/estadosEmpresas', estadosEmpresas);
 
 export default router;
