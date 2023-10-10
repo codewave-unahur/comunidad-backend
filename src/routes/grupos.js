@@ -1,6 +1,6 @@
 import express from 'express';
 import{
-    createGroup,
+    createGrupo,
     getAll,
     getGrupoById,
     updateGrupo,
@@ -10,7 +10,7 @@ import { withErrorHandling } from './utils';
 
 const router = express.Router();
 
-router.post("/", withErrorHandling(createGroup));
+router.post("/", withErrorHandling(createGrupo));
 router.get("/", withErrorHandling(getAll))
       .get("/:id", withErrorHandling(getGrupoById));
 router.put("/:id", withErrorHandling(updateGrupo));

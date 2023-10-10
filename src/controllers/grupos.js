@@ -1,6 +1,6 @@
 const models = require("../../database/models");
 
-export const createGroup = async (req, res) => {
+export const createGrupo = async (req, res) => {
   const descripcion = req.body.descripcion;
 
   try {
@@ -60,7 +60,7 @@ export const updateGrupo = async (req, res) => {
     );
 
     if (updatedGroup[0]) {
-      res.sendStatus(200).send("OK");
+      res.status(200).send("OK");
     } else {
       res.status(404).send("NOT FOUND");
     }
