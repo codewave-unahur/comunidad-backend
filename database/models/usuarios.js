@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       ,{
         as : 'Grupos',  // nombre de mi relacion
         foreignKey: 'fk_id_grupo'     // campo con el que voy a igualar
-      })
+      });
     }
   }
   usuarios.init({
