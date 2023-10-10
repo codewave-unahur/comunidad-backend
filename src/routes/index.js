@@ -18,6 +18,7 @@ import password from './password.js';
 import aptitudesPostulantes from './aptitudesPostulantes.js';
 import aptitudes from './aptitudes.js';
 import aptitudesOfertas from './aptitudesOfertas.js';
+import grupos from './grupos.js';
 import {validateToken} from '../middlewares/validador';
 
 const router = express.Router();
@@ -42,5 +43,6 @@ router.use('/password',password);
 router.use('/aptitudesPostulantes', aptitudesPostulantes);
 router.use('/aptitudes', aptitudes);
 router.use('/aptitudesOfertas', aptitudesOfertas);
+router.use('/grupos', grupos);
 
 export default router;
