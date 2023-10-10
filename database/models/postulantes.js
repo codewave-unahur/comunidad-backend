@@ -52,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
       fk_id_usuario: DataTypes.INTEGER,
       fk_id_estudios: DataTypes.INTEGER,
       fk_id_carrera: DataTypes.INTEGER,
-      fk_id_estado: DataTypes.INTEGER,
+      estado: DataTypes.STRING,
       nombre: DataTypes.STRING,
       apellido: DataTypes.STRING,
       nacionalidad: DataTypes.STRING,

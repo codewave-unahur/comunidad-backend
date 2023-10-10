@@ -179,7 +179,7 @@ export const postPostulante = async (req, res) => {
       fk_id_usuario: req.body.idUsuario,
       fk_id_estudios: req.body.estudios,
       fk_id_carrera: req.body.carrera,
-      fk_id_estado: req.body.estado,
+      estado: req.body.estado,
       nombre: req.body.nombre,
       apellido: req.body.apellido,
       nacionalidad: req.body.nacionalidad,
@@ -248,7 +248,7 @@ export const updatePostulante = async (req, res) => {
           fk_id_usuario: req.body.idUsuario,
           fk_id_estudios: req.body.estudios,
           fk_id_carrera: req.body.carrera,
-          fk_id_estado: req.body.estado,
+          estado: req.body.estado,
           nombre: req.body.nombre,
           apellido: req.body.apellido,
           nacionalidad: req.body.nacionalidad,
@@ -268,7 +268,7 @@ export const updatePostulante = async (req, res) => {
           cv: req.body.cv,
           foto: req.body.foto
         },
-          { fields: ["tipo_documento", "fk_id_usuario","fk_id_estudios","fk_id_carrera","fk_id_estado","nombre","apellido","nacionalidad","fecha_nac","pais","fk_id_provincia","fk_id_ciudad","calle","nro","piso","depto","cp","telefono","cant_materias","alumno_unahur","presentacion","cv","foto"] }
+          { fields: ["tipo_documento", "fk_id_usuario","fk_id_estudios","fk_id_carrera","estado","nombre","apellido","nacionalidad","fecha_nac","pais","fk_id_provincia","fk_id_ciudad","calle","nro","piso","depto","cp","telefono","cant_materias","alumno_unahur","presentacion","cv","foto"] }
       )
       .then(() => res.sendStatus(200))
       .catch((error) => {

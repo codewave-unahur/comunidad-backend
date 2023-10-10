@@ -6,7 +6,7 @@ export const getOfertasPorFiltros = async (req, res) => {
   let limiteComoNumero = Number.parseInt(req.query.limite);
   let ordenarPor = req.query.ordenar;
   let buscarTitulo = req.query.buscarTitulo;
-  let idEstado = req.query.idEstado;
+  let estado = req.query.estado;
 
   let pagina = 0;
   if (!Number.isNaN(paginaComoNumero) && paginaComoNumero > 0) {
@@ -27,8 +27,8 @@ export const getOfertasPorFiltros = async (req, res) => {
     buscarTitulo = buscarTitulo.replace(/\s/g, "%");
   }
 
-  if (typeof idEstado === "undefined") {
-    idEstado = 1;
+  if (typeof estado === "undefined") {
+    estado = 1;
  }
 
   models.ofertas
@@ -73,8 +73,8 @@ export const getOfertasPorFiltros = async (req, res) => {
             titulo_oferta: {
               [sequelize.iLike]: `%${buscarTitulo}%`,
             },
-            fk_id_estado: {
-              [sequelize.eq]: [idEstado]
+            estado: {
+              [sequelize.eq]: [estado]
             },
           },
         ],
@@ -272,7 +272,7 @@ export const createOferta = async (req, res) => {
       fk_id_contrato: req.body.idContrato,
       fk_id_estudio: req.body.idEstudio,
       fk_id_carrera: req.body.idCarrera,
-      fk_id_estado: 2,
+      estado: "Pendiente",
       fecha_vigencia: req.body.fechaVigencia,
       titulo_oferta: req.body.tituloOferta,
       descripcion: req.body.descripcion,
@@ -320,7 +320,7 @@ export const updateOfertas = async (req, res) => {
           fk_id_contrato: req.body.idContrato,
           fk_id_estudio: req.body.idEstudio,
           fk_id_carrera: req.body.idCarrera,
-          fk_id_estado: req.body.idEstado,
+          estado: req.body.estado,
           fecha_vigencia: req.body.fechaVigencia,
           titulo_oferta: req.body.tituloOferta,
           descripcion: req.body.descripcion,
@@ -335,7 +335,7 @@ export const updateOfertas = async (req, res) => {
           beneficios: req.body.beneficios,
           remuneracion: req.body.remuneracion,
         },
-        { fields: ["fk_id_jornada", "fk_id_contrato", "fk_id_estudio","fk_id_carrera","fk_id_estado","fecha_vigencia","titulo_oferta","descripcion","horario_laboral_desde","horario_laboral_hasta","edad_desde","edad_hasta","experiencia_previa_desc","zona_trabajo","areas_estudio","otros_detalles","beneficios","remuneracion"] }
+        { fields: ["fk_id_jornada", "fk_id_contrato", "fk_id_estudio","fk_id_carrera","estado","fecha_vigencia","titulo_oferta","descripcion","horario_laboral_desde","horario_laboral_hasta","edad_desde","edad_hasta","experiencia_previa_desc","zona_trabajo","areas_estudio","otros_detalles","beneficios","remuneracion"] }
       )
       .then(() => res.sendStatus(200))
       .catch((error) => {

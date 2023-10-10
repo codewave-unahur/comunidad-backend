@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
     fk_id_contrato: DataTypes.INTEGER,
     fk_id_estudio: DataTypes.INTEGER,
     fk_id_carrera: DataTypes.INTEGER,
-    fk_id_estado: DataTypes.INTEGER,
+    estado: DataTypes.STRING,
     fecha_vigencia: DataTypes.DATE,
     titulo_oferta: DataTypes.STRING,
     descripcion: DataTypes.STRING,

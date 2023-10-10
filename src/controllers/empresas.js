@@ -6,7 +6,7 @@ export const getConFiltros = async (req, res) => {
   let limiteComoNumero = Number.parseInt(req.query.limite);
   let ordenarPor = req.query.ordenar;
   let nombreEmpresa = req.query.nombreEmpresa;
-  let idEstado = req.query.idEstado;
+  let estado = req.query.estado;
 
   let pagina = 0;
   if (!Number.isNaN(paginaComoNumero) && paginaComoNumero > 0) {
@@ -27,8 +27,8 @@ export const getConFiltros = async (req, res) => {
     nombreEmpresa = req.query.nombreEmpresa.replace(/\s/g, "%");
   }
 
-  if (typeof idEstado === "undefined") {
-    idEstado = 1;
+  if (typeof estado === "undefined") {
+    estado = "Activo";
  }
 
   models.empresas
@@ -47,11 +47,6 @@ export const getConFiltros = async (req, res) => {
           attributes: ["id", "nombre_rubro"],
         },
         {
-          as: "Estado",
-          model: models.estados,
-          attributes: ["id", "estado"],
-        },
-        {
           as: "Provincia",
           model: models.provincias,
           attributes: ["id", "nombre"],
@@ -68,8 +63,8 @@ export const getConFiltros = async (req, res) => {
             nombre_empresa: {
               [sequelize.iLike]: `%${nombreEmpresa}%`,
             },
-            fk_id_estado: {
-              [sequelize.eq]: idEstado
+            estado: {
+              [sequelize.eq]: estado
             },
           },
         ],
@@ -82,7 +77,7 @@ export const getConFiltros = async (req, res) => {
         totalPaginas: Math.ceil(empresas.count / limite),
       })
     )
-    .catch(() => res.sendStatus(500));
+    .catch((error) => res.status(500).send(error));
 };
 
 export const getEmpresas = async (req, res) => {
@@ -103,11 +98,6 @@ export const getEmpresas = async (req, res) => {
           as: "Rubro",
           model: models.rubros,
           attributes: ["id", "nombre_rubro"],
-        },
-        {
-          as: "Estado",
-          model: models.estados,
-          attributes: ["id", "estado"],
         },
         {
           as: "Provincia",
@@ -143,11 +133,6 @@ const findEmpresas= (id, { onSuccess, onNotFound, onError }) => {
           as: "Rubro",
           model: models.rubros,
           attributes: ["id", "nombre_rubro"],
-        },
-        {
-          as: "Estado",
-          model: models.estados,
-          attributes: ["id", "estado"],
         },
         {
           as: "Provincia",
@@ -187,11 +172,6 @@ const findEmpresasPorIdUsuario = (fk_id_usuario, { onSuccess, onNotFound, onErro
           as: "Rubro",
           model: models.rubros,
           attributes: ["id", "nombre_rubro"],
-        },
-        {
-          as: "Estado",
-          model: models.estados,
-          attributes: ["id", "estado"],
         },
         {
           as: "Provincia",
@@ -237,7 +217,7 @@ export const postEmpresa = async (req, res) => {
       id:  req.body.cuit,
       fk_id_usuario: req.body.idUsuario,     
       fk_id_rubro: req.body.idRubro,          
-      fk_id_estado: 2,         
+      estado: "Observado",         
       nombre_empresa: req.body.nombreEmpresa,       
       descripcion: req.body.descripcion,          
       pais: req.body.pais,                
@@ -274,7 +254,7 @@ export const updateEmpresa = async (req, res) => {
         {
           fk_id_usuario: req.body.idUsuario,     
           fk_id_rubro: req.body.idRubro,          
-          fk_id_estado: req.body.idEstado,         
+          estado: req.body.estado,         
           nombre_empresa: req.body.nombreEmpresa,       
           descripcion: req.body.descripcion,          
           pais: req.body.pais,                
@@ -291,7 +271,7 @@ export const updateEmpresa = async (req, res) => {
           email_representante: req.body.emailRepresentante,
           logo: req.body.logo, 
         },
-        { fields: ["fk_id_usuario", "fk_id_rubro", "fk_id_estado","nombre_empresa","descripcion","pais","fk_id_provincia","descripcion","fk_id_ciudad","calle","nro","piso","depto","cp","telefono","web","nombre_representante","email_representante","logo"] }
+        { fields: ["fk_id_usuario", "fk_id_rubro", "estado","nombre_empresa","descripcion","pais","fk_id_provincia","descripcion","fk_id_ciudad","calle","nro","piso","depto","cp","telefono","web","nombre_representante","email_representante","logo"] }
       )
       .then(() => res.sendStatus(200)
       )
@@ -320,9 +300,9 @@ export const patchEmpresa = async (req, res) => {
   empresas
       .update(
         {          
-          fk_id_estado: 1,
+          estado: "Activo",
         },
-        { fields: ["fk_id_estado"] }
+        { fields: ["estado"] }
       ).then(() => res.sendStatus(200),
       changeGroup(empresas.fk_id_usuario),
       console.log(empresas.fk_id_usuario)

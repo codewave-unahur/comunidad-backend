@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
   empresas.init({
     fk_id_usuario: DataTypes.INTEGER,
     fk_id_rubro: DataTypes.INTEGER,
-    fk_id_estado: DataTypes.INTEGER,
+    estado: DataTypes.STRING,
     nombre_empresa: DataTypes.STRING,
     descripcion: DataTypes.STRING,
     pais: DataTypes.STRING,
