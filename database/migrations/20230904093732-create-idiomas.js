@@ -3,8 +3,9 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('idiomas', {
       id: {
-        allowNull: false,
         primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,       
         type: Sequelize.INTEGER,
       },
       nombre_idioma: {
