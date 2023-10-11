@@ -84,11 +84,6 @@ const findPostulantesPorIdUsuario = (
           attributes: ["id", "nombre_carrera"],
         },
         {
-          as: "Estado",
-          model: models.estados,
-          attributes: ["id", "estado"],
-        },
-        {
           as: "Provincia",
           model: models.provincias,
           attributes: ["id", "nombre"],
@@ -137,11 +132,6 @@ const findPostulantesPorDNI = (id,{ onSuccess, onNotFound, onError }) => {
           as: "Carrera",
           model: models.carreras,
           attributes: ["id", "nombre_carrera"],
-        },
-        {
-          as: "Estado",
-          model: models.estados,
-          attributes: ["id", "estado"],
         },
         {
           as: "Provincia",

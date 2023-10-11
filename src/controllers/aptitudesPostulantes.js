@@ -136,7 +136,7 @@ export const updateAptitudPostulante = async (req, res) => {
     }
   } catch (error) {
     console.error(`Error al actualizar aptitud_postulante: ${error}`);
-    res.sendStatus(500); // Error interno del servidor
+    res.sendStatus(500);
   }
 };
 
@@ -155,7 +155,7 @@ export const deleteByIdAptitudPostulante = async (req, res) => {
     }
   } catch (error) {
     console.error(`Error al eliminar aptitud_postulante: ${error}`);
-    res.sendStatus(500); // Error interno del servidor
+    res.sendStatus(500);
   }
 };
 
@@ -174,6 +174,6 @@ export const deleteAptitudByIdPostulante = async (req, res) => {
     }
   } catch (error) {
     console.error(`Error al eliminar aptitud_postulante: ${error}`);
-    res.sendStatus(500); // Error interno del servidor
+    res.sendStatus(500);
   }
 };

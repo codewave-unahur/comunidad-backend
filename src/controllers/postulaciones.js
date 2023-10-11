@@ -100,7 +100,7 @@ export const getConFiltros = async (req, res) => {
       {
         as: "Postulante",
         model: models.postulantes,
-        attributes: ["id", "nombre", "apellido","fk_id_usuario","telefono"],
+        attributes: ["id", "nombre", "apellido", "estado", "fk_id_usuario", "telefono"],
       },
       {
         as: "Oferta",
