@@ -174,11 +174,15 @@ export const getIdOferta = async (req, res) => {
   });
 };
 
+// Si buscas solo por el cuit de la empresa te trae todas las ofertas que tiene con el estado activo.
+// Si buscas con el cuit y el titulo, te trae los titulos mas parecidos con el estado activa.
+// O buscar con el cuit y el estado, te trae las ofertas con el estado que vos queres.
 export const getOfertasPorIdEmpresa = async (req, res) => {
   let buscarTitulo = req.query.buscarTitulo;
   let pagina = req.query.pagina;
   let limite = req.query.limite;
   let fk_id_empresa = req.params.id;
+  let estado = req.query.estado;
 
   if (typeof buscarTitulo === "undefined") {
     buscarTitulo = "_";
@@ -192,6 +196,10 @@ export const getOfertasPorIdEmpresa = async (req, res) => {
 
   if (typeof limite === "undefined") {
     limite = 30;
+  }
+
+  if (!estado) {
+    estado = "Activa";
   }
 
   models.ofertas
@@ -225,14 +233,14 @@ export const getOfertasPorIdEmpresa = async (req, res) => {
           attributes: ["id", "nombre_contrato"],
         },
       ],
-      where: { fk_id_empresa,
-        [sequelize.and]: [
-          {
-            titulo_oferta: {
-              [sequelize.iLike]: `%${buscarTitulo}%`,
-            },
-          },
-        ],
+      where: {
+        fk_id_empresa,
+        titulo_oferta: {
+          [sequelize.iLike]: `%${buscarTitulo}%`,
+        },
+        estado: {
+          [sequelize.iLike]: `%${estado}%`,
+        },
       },
     })
     .then((ofertas) =>
