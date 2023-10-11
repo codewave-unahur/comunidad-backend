@@ -12,7 +12,7 @@ import provincias from './provincias';
 import ciudades from './ciudades';
 import idiomas from './idiomas';
 import nivelesIdiomas from './nivelesIdiomas';
-import files  from './files';
+import files from './files';
 import tiposDocumentos from './tiposDocumentos';
 import password from './password.js';
 import aptitudesPostulantes from './aptitudesPostulantes.js';

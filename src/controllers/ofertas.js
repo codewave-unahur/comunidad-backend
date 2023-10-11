@@ -28,7 +28,7 @@ export const getOfertasPorFiltros = async (req, res) => {
   }
 
   if (typeof estado === "undefined") {
-    estado = 1;
+    estado = "Activa";
  }
 
   models.ofertas
@@ -61,11 +61,6 @@ export const getOfertasPorFiltros = async (req, res) => {
           model: models.contratos,
           attributes: ["id", "nombre_contrato"],
         },
-        {
-          as: "Estado",
-          model: models.estados,
-          attributes: ["id", "estado"],
-        },
       ],
       where: {
         [sequelize.and]: [
@@ -74,7 +69,7 @@ export const getOfertasPorFiltros = async (req, res) => {
               [sequelize.iLike]: `%${buscarTitulo}%`,
             },
             estado: {
-              [sequelize.eq]: [estado]
+              [sequelize.iLike]: `%${estado}%`
             },
           },
         ],
@@ -124,11 +119,6 @@ export const getOfertas = async (req, res) => {
           model: models.contratos,
           attributes: ["id", "nombre_contrato"],
         },
-        {
-          as: "Estado",
-          model: models.estados,
-          attributes: ["id", "estado"],
-        },
       ]
     })
     .then((ofertas) =>
@@ -168,11 +158,6 @@ const findOferta = (id, { onSuccess, onNotFound, onError }) => {
           as: "Contrato",
           model: models.contratos,
           attributes: ["id", "nombre_contrato"],
-        },
-        {
-          as: "Estado",
-          model: models.estados,
-          attributes: ["id", "estado"],
         },
       ],
       where: { id },
@@ -238,11 +223,6 @@ export const getOfertasPorIdEmpresa = async (req, res) => {
           as: "Contrato",
           model: models.contratos,
           attributes: ["id", "nombre_contrato"],
-        },
-        {
-          as: "Estado",
-          model: models.estados,
-          attributes: ["id", "estado"],
         },
       ],
       where: { fk_id_empresa,
