@@ -7,7 +7,7 @@
     "babel-node": "babel-node src/app.js",
     "dev": "nodemon --exec npm run babel-node src/app.js",
     "start": "node ./dist/app.js",
-    "build": "babel src --out-dir dist --copy-files --source-maps"
+    "build": "npx babel src --out-dir dist --copy-files --source-maps --config-file .babelrc"
   },
   "keywords": [],
   "author": "",
