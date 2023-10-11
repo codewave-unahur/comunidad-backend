@@ -174,7 +174,7 @@ export const getIdOferta = async (req, res) => {
   });
 };
 
-// Si buscas solo por el cuit de la empresa te trae todas las ofertas que tiene con el estado activo.
+// Si buscas solo el cuit de la empresa te trae todas las ofertas que tiene con el estado activa.
 // Si buscas con el cuit y el titulo, te trae los titulos mas parecidos con el estado activa.
 // O buscar con el cuit y el estado, te trae las ofertas con el estado que vos queres.
 export const getOfertasPorIdEmpresa = async (req, res) => {
