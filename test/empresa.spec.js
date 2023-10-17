@@ -254,6 +254,58 @@ describe('Empresa', () => {
     expect(response.body).toEqual(expectedData);
   });
   
- 
+  test('PATCH /empresas/cuit/', async () => {
+    const response = await api.patch('/empresas/cuit/' + cuit);
+    expect(response.status).toBe(200);
+});
+
+test('GET /empresa/cuit', async () => {
+  const response = await api.get('/empresas/cuit/' + cuit);
+  expect(response.status).toBe(200);
+  const expectedData = {
+    id: "3012837892",
+    fk_id_usuario: 468,
+    fk_id_rubro: 1,
+    estado: "Activo",
+    nombre_empresa: "Bayer AG",
+    descripcion: "Bayer AG es una empresa químico-farmacéutica alemana fundada en Barmen, Alemania en 1863. Hoy en día, tiene su sede en Leverkusen, Renania del Norte-Westfalia, Alemania.​ Es bien conocida a nivel mundial por su marca original de la aspirina.",
+    pais: "Argentina",
+    fk_id_provincia: 50,
+    fk_id_ciudad: 50098,
+    calle: "Doncella",
+    nro: 120,
+    piso: 1,
+    depto: "1",
+    cp: "1712",
+    telefono: 1326873598,
+    web: "www.bayer.com",
+    nombre_representante: "Ezequiel",
+    email_representante: "EzequielDavid@gmail.com",
+    logo: "logo.jpg",
+    Usuario: {
+      id: 468,
+      usuario: "bayer@bayer.com",
+    },
+    Rubro: {
+      id: 1,
+      nombre_rubro: "desarrollo",
+    },
+    Provincia: {
+      id: 50,
+      nombre: "Mendoza",
+    },
+    Ciudad: {
+      id: 50098,
+      nombre: "San Martin",
+      fk_id_provincia: 50,
+    },
+  };
+
+  expect(response.body).toEqual(
+    expect.objectContaining({
+      ...expectedData,
+    })
+  );    
+});
   
 });

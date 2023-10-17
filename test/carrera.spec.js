@@ -3,7 +3,7 @@ import request from 'supertest';
 const api = request('http://localhost:3001');
 
 // Demigra y hacer un seed primero.
-// Este test funciona si la base tiene un seed.... 
+// Este test funciona si tiene un seed la base.... 
 describe('Carrera', () => {
   let id = 1;
 
