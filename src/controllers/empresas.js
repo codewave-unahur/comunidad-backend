@@ -146,6 +146,9 @@ const findEmpresas= (id, { onSuccess, onNotFound, onError }) => {
         },
       ],
       where: { id },
+      attributes: {
+        exclude: ["createdAt", "updatedAt"], // Excluir createdAt y updatedAt
+      },
     })
     .then((empresas) => (empresas ? onSuccess(empresas) : onNotFound()))
     .catch(() => onError());
@@ -185,6 +188,9 @@ const findEmpresasPorIdUsuario = (fk_id_usuario, { onSuccess, onNotFound, onErro
         },
       ],
       where: { fk_id_usuario },
+      attributes: {
+        exclude: ["createdAt", "updatedAt"], // Excluir createdAt y updatedAt
+      },
     })
     .then((empresas) => (empresas ? onSuccess(empresas) : onNotFound()))
     .catch(() => onError());
