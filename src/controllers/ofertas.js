@@ -89,6 +89,12 @@ export const getOfertas = async (req, res) => {
   let pagina = Number.parseInt(req.query.pagina);
   let limite = Number.parseInt(req.query.limite);
 
+  if (!pagina){
+    pagina = 0;
+  }
+  if(!limite){
+    limite = 1000;
+  }
   models.ofertas
     .findAndCountAll({
       limit: limite,
