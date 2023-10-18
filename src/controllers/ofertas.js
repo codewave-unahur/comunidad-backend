@@ -28,7 +28,7 @@ export const getOfertasPorFiltros = async (req, res) => {
   }
 
   if (typeof estado === "undefined") {
-    estado = "Activa";
+    estado = "Activo";
  }
 
   models.ofertas
