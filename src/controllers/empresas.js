@@ -84,6 +84,15 @@ export const getEmpresas = async (req, res) => {
   let pagina = Number.parseInt(req.query.pagina);
   let limite = Number.parseInt(req.query.limite);
 
+  if (!pagina) {
+    pagina = 0;
+  }
+
+  if (!limite) {
+    // Si limite no se proporciona, traer todas las empresas
+    limite = 1000;
+  }
+
   models.empresas
     .findAndCountAll({
       limit: limite,
