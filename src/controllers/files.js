@@ -1,21 +1,19 @@
 const models = require("../../database/models");
-const { Storage } = require("@google-cloud/storage");
-const { v4: uuidv4 } = require('uuid');
+import { createClient } from '@supabase/supabase-js'
+const supabaseUrl = 'https://fjjrxhcerjjthjglqptp.supabase.co'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqanJ4aGNlcmpqdGhqZ2xxcHRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTM1MjY0NjcsImV4cCI6MjAwOTEwMjQ2N30.yGkjxpJya0kre_XdN-JfUY1tFmvPJrYVoZg_aGvYlsw'
+const supabase = createClient(supabaseUrl, supabaseKey)
 
-
-let projectId = "red-seeker-365622"; // Google Cloud
-let keyFilename = "./red-seeker-365622-b037b7220de8.json"; // Google Cloud -> Credentials -> Service Accounts
-const storage = new Storage({
-  projectId,
-  keyFilename,
-});
-const bucket = storage.bucket("comunidadstorage"); // Cloud -> Storage
 
 async function renameFile(srcFileName, destFileName) {
-  await bucket.file(srcFileName).rename(destFileName);
+  await supabase
+    .storage
+    .from('files')
+    .move(srcFileName, destFileName)
   console.log(
     `${srcFileName} renamed to ${destFileName}`
-  )};
+  )
+};
 
 export const uploadCV = async (req, res) => {
   try {
@@ -24,47 +22,40 @@ export const uploadCV = async (req, res) => {
       const uuidName = uuidv4();
       const blob = bucket.file(originalName);
       const blobStream = blob.createWriteStream();
-      const extension = originalName.split('.',2);
+      const extension = originalName.split('.', 2);
       const newFullNameFile = uuidName.concat('.', extension[1]);
       const mimeType = req.file.mimetype;
       const id = req.headers.id
-      
+
       blobStream.on("finish", () => {
         res.status(200).send("Success");
         console.log("Success");
       });
       blobStream.end(req.file.buffer);
       setTimeout(() => {
-      renameFile(originalName, newFullNameFile); }, 5000);
-      updateCv(id,mimeType,newFullNameFile);
+        renameFile(originalName, newFullNameFile);
+      }, 5000);
+      updateCv(id, mimeType, newFullNameFile);
     } else throw "algun error con la subida de archivo";
-  }catch (error) {
+  } catch (error) {
     res.status(500).send(error);
   }
 };
 
 export const uploadLogo = async (req, res) => {
   try {
-    if (req.file) {
-      const originalName = req.file.originalname;
-      const uuidName = uuidv4();
-      const blob = bucket.file(originalName);
-      const blobStream = blob.createWriteStream();
-      const extension = originalName.split('.',2);
-      const newFullNameFile = uuidName.concat('.', extension[1]);
+    console.log(req.file)
+    await supabase
+        .storage
+        .from('files')
+        .upload(req.file.originalname, req.file, {
+          cacheControl: '3600',
+          upsert: false
+        })
       const mimeType = req.file.mimetype;
       const id = req.headers.id
-      
-      blobStream.on("finish", () => {
-        res.status(200).send("Success");
-        console.log("Success");
-      });
-      blobStream.end(req.file.buffer);
-      setTimeout(() => {
-      renameFile(originalName, newFullNameFile); }, 5000);
-      updateLogo(id,mimeType,newFullNameFile);
-    } else throw "algun error con la subida de archivo";
-  }catch (error) {
+      //updateLogo(id, mimeType, newFullNameFile);
+  } catch (error) {
     res.status(500).send(error);
   }
 };
@@ -72,25 +63,19 @@ export const uploadLogo = async (req, res) => {
 export const uploadFoto = async (req, res) => {
   try {
     if (req.file) {
-      const originalName = req.file.originalname;
-      const uuidName = uuidv4();
-      const blob = bucket.file(originalName);
-      const blobStream = blob.createWriteStream();
-      const extension = originalName.split('.',2);
-      const newFullNameFile = uuidName.concat('.', extension[1]);
-      const mimeType = req.file.mimetype;
-      const id = req.headers.id
-      
-      blobStream.on("finish", () => {
-        res.status(200).send("Success");
-        console.log("Success");
-      });
+      await supabase
+        .storage
+        .from('files')
+        .upload('public/avatar1.png', decode('base64FileData'), {
+          contentType: 'image/png'
+        })
       blobStream.end(req.file.buffer);
       setTimeout(() => {
-      renameFile(originalName, newFullNameFile); }, 5000);
-      updateFoto(id,mimeType,newFullNameFile);
+        renameFile(originalName, newFullNameFile);
+      }, 5000);
+      updateFoto(id, mimeType, newFullNameFile);
     } else throw "algun error con la subida de archivo";
-  }catch (error) {
+  } catch (error) {
     res.status(500).send(error);
   }
 };

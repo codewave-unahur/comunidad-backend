@@ -4,47 +4,38 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.updatePostulante = exports.postPostulante = exports.getPorIdUsuario = exports.getPorId = exports.getConFiltros = exports.deletePostulante = void 0;
-
 const models = require("../../database/models");
-
 const {
   Op
 } = require("sequelize");
-
 const getConFiltros = async (req, res) => {
   const paginaComoNumero = Number.parseInt(req.query.pagina);
   const limiteComoNumero = Number.parseInt(req.query.limite);
   let ordenarPor = req.query.ordenar;
-  let buscarPostulante = req.query.buscarPostulante; //let buscarDNI = req.query.buscarDNI;
+  let buscarPostulante = req.query.buscarPostulante;
+
+  //let buscarDNI = req.query.buscarDNI;
 
   let pagina = 0;
-
   if (!Number.isNaN(paginaComoNumero) && paginaComoNumero > 0) {
     pagina = paginaComoNumero;
   }
-
   let limite = 30;
-
   if (!Number.isNaN(limiteComoNumero) && limiteComoNumero > 0) {
     limite = limiteComoNumero;
   }
-
   if (typeof ordenarPor === "undefined") {
     ordenarPor = "createdAt";
   }
-
   let buscarNombre = "_";
   let buscarApellido = "_";
-
   if (typeof buscarPostulante !== "undefined") {
     buscarNombre = req.query.buscarPostulante.split(" ", 2)[0];
     buscarApellido = req.query.buscarPostulante.split(" ", 2)[1];
   }
-
   if (typeof buscarApellido === "undefined") {
     buscarApellido = buscarNombre;
   }
-
   models.postulantes.findAndCountAll({
     limit: limite,
     offset: pagina * limite,
@@ -94,9 +85,7 @@ const getConFiltros = async (req, res) => {
     totalPaginas: Math.ceil(postulantes.count / limite)
   })).catch(() => res.sendStatus(400));
 };
-
 exports.getConFiltros = getConFiltros;
-
 const findPostulantesPorIdUsuario = (fk_id_usuario, {
   onSuccess,
   onNotFound,
@@ -137,7 +126,6 @@ const findPostulantesPorIdUsuario = (fk_id_usuario, {
     }
   }).then(postulantes => postulantes ? onSuccess(postulantes) : onNotFound()).catch(() => onError());
 };
-
 const getPorIdUsuario = async (req, res) => {
   findPostulantesPorIdUsuario(req.params.id, {
     onSuccess: postulantes => res.send(postulantes),
@@ -145,9 +133,7 @@ const getPorIdUsuario = async (req, res) => {
     onError: () => res.sendStatus(400)
   });
 };
-
 exports.getPorIdUsuario = getPorIdUsuario;
-
 const findPostulantesPorDNI = (id, {
   onSuccess,
   onNotFound,
@@ -188,7 +174,6 @@ const findPostulantesPorDNI = (id, {
     }
   }).then(postulantes => postulantes ? onSuccess(postulantes) : onNotFound()).catch(() => onError());
 };
-
 const getPorId = async (req, res) => {
   findPostulantesPorDNI(req.params.id, {
     onSuccess: postulantes => res.send(postulantes),
@@ -196,9 +181,7 @@ const getPorId = async (req, res) => {
     onError: () => res.sendStatus(400)
   });
 };
-
 exports.getPorId = getPorId;
-
 const postPostulante = async (req, res) => {
   models.postulantes.create({
     id: req.body.documento,
@@ -223,11 +206,12 @@ const postPostulante = async (req, res) => {
     cant_materias: req.body.cantMaterias,
     alumno_unahur: req.body.alumnoUnahur,
     presentacion: req.body.presentacion,
-    cv: "path del cv",
-    foto: "path de la foto"
+    cv: req.body.cv,
+    foto: req.body.foto
   }).then(postulantes => res.status(201).send({
     id: postulantes.id
-  }), //aca habilitamos el usuario
+  }),
+  //aca habilitamos el usuario
   enableUser(req.body.idUsuario)).catch(error => {
     if (error == "SequelizeUniqueConstraintError: Validation error") {
       res.status(401).send("Bad request: este dni ya se dio de alta");
@@ -236,11 +220,10 @@ const postPostulante = async (req, res) => {
       res.sendStatus(500);
     }
   });
-}; //Con esto habilitamos el usuario cuando de el alta en postulantes
+};
 
-
+//Con esto habilitamos el usuario cuando de el alta en postulantes
 exports.postPostulante = postPostulante;
-
 const enableUser = id_usuario => {
   models.usuarios.update({
     estado: "t"
@@ -250,19 +233,15 @@ const enableUser = id_usuario => {
     }
   });
 };
-
 const deletePostulante = async (req, res) => {
   const onSuccess = postulantes => postulantes.destroy().then(() => res.sendStatus(200)).catch(() => res.sendStatus(500));
-
   findPostulantesPorDNI(req.params.id, {
     onSuccess,
     onNotFound: () => res.sendStatus(404),
     onError: () => res.sendStatus(500)
   });
 };
-
 exports.deletePostulante = deletePostulante;
-
 const updatePostulante = async (req, res) => {
   const onSuccess = postulantes => postulantes.update({
     fk_id_tipo_documento: req.body.tipoDocumento,
@@ -286,10 +265,10 @@ const updatePostulante = async (req, res) => {
     cant_materias: req.body.cantMaterias,
     alumno_unahur: req.body.alumnoUnahur,
     presentacion: req.body.presentacion,
-    cv:req.body.cv,
-    foto:req.body.foto,
+    cv: req.body.cv,
+    foto: req.body.foto
   }, {
-    fields: ["fk_id_tipo_documento", "fk_id_usuario", "fk_id_estudios", "fk_id_carrera", "fk_id_estado", "nombre", "apellido", "nacionalidad", "fecha_nac", "pais", "fk_id_provincia", "fk_id_ciudad", "calle", "nro", "piso", "depto", "cp", "telefono", "cant_materias", "alumno_unahur", "presentacion","cv","foto"]
+    fields: ["fk_id_tipo_documento", "fk_id_usuario", "fk_id_estudios", "fk_id_carrera", "fk_id_estado", "nombre", "apellido", "nacionalidad", "fecha_nac", "pais", "fk_id_provincia", "fk_id_ciudad", "calle", "nro", "piso", "depto", "cp", "telefono", "cant_materias", "alumno_unahur", "presentacion", "cv", "foto"]
   }).then(() => res.sendStatus(200)).catch(error => {
     if (error == "SequelizeUniqueConstraintError: Validation error") {
       res.status(400).send("Bad request: Algun tipo de error de validacion de campos");
@@ -298,13 +277,11 @@ const updatePostulante = async (req, res) => {
       res.sendStatus(500);
     }
   });
-
   findPostulantesPorDNI(req.params.id, {
     onSuccess,
     onNotFound: () => res.sendStatus(404),
     onError: () => res.sendStatus(500)
   });
 };
-
 exports.updatePostulante = updatePostulante;
 //# sourceMappingURL=postulantes.js.map

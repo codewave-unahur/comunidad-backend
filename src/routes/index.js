@@ -21,7 +21,7 @@ import {validateToken} from '../middlewares/validador';
 
 const router = express.Router();
 
-router.use(validateToken);
+//router.use(validateToken);
 router.use('/usuarios', usuarios);
 router.use('/postulantes', postulantes);
 router.use('/ofertas', ofertas);
