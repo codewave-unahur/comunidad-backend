@@ -50,7 +50,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       logo: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       createdAt: {
         type: Sequelize.DATE

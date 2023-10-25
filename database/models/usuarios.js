@@ -1,14 +1,15 @@
 'use strict';
+
+const bcrypt = require("bcrypt");
+const bcryptSalt = process.env.BCRYPT_SALT;
+
 const {
   Model
 } = require('sequelize');
+
+
 module.exports = (sequelize, DataTypes) => {
   class usuarios extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       usuarios.belongsTo(models.grupos// modelo al que pertenece
       ,{
@@ -27,5 +28,13 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'usuarios',
   });
+  
+  usuarios.beforeCreate(async (usuario, options) => {
+    if (usuario.changed("password")) {
+      const hash = await bcrypt.hash(usuario.password, Number(bcryptSalt));
+      usuario.password = hash;
+    }
+  });
+
   return usuarios;
 };

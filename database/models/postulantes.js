@@ -58,6 +58,10 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: "fk_id_ciudad", // campo con el que voy a igualar
           }
         );
+        postulantes.hasMany(models.aptitudes_postulantes, {
+          foreignKey: "fk_id_usuario",
+          as: "AptitudesPostulantes",
+        });
     }
   }
   postulantes.init(

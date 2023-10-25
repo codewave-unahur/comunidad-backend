@@ -10,6 +10,7 @@ const expireTime = process.env.EXPIRE;
 //Creamos un usuario
 export const signUp = async (req, res) => {
   //Nos traemos el usuario desde el body
+  const id = await req.body.id;
   const usuario = await req.body.usuario;
   const password = await req.body.password;
 
@@ -131,5 +132,30 @@ export const deleteUsuario = async (req, res) => {
     onSuccess,
     onNotFound: () => res.sendStatus(404),
     onError: () => res.sendStatus(500)
+  });
+};
+
+export const updateUsuario = async (req, res) => {
+  const usuarioEdit = req.body.usuario;
+
+  const onSuccess = (usuario) =>
+    usuario
+      .update({
+        usuario: usuarioEdit,
+      })
+      .then(() => res.sendStatus(200))
+      .catch((error) => {
+        if (error.name === "SequelizeUniqueConstraintError") {
+          res.status(400).send("Bad request: Algun tipo de error de validacion de campos");
+        } else {
+          console.log(`Error al intentar actualizar la base de datos: ${error}`);
+          res.sendStatus(500);
+        }
+      });
+
+  findUsuarioPorId(req.params.id, {
+    onSuccess,
+    onNotFound: () => res.sendStatus(404),
+    onError: () => res.sendStatus(500),
   });
 };

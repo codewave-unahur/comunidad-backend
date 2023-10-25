@@ -290,9 +290,10 @@ export const updateEmpresa = async (req, res) => {
           telefono: req.body.telefono,             
           web: req.body.web,                  
           nombre_representante: req.body.nombreRepresentante, 
-          email_representante: req.body.emailRepresentante, 
+          email_representante: req.body.emailRepresentante,
+          logo: req.body.logo, 
         },
-        { fields: ["fk_id_usuario", "fk_id_rubro", "fk_id_estado","nombre_empresa","descripcion","pais","fk_id_provincia","descripcion","fk_id_ciudad","calle","nro","piso","depto","cp","telefono","web","nombre_representante","email_representante"] }
+        { fields: ["fk_id_usuario", "fk_id_rubro", "fk_id_estado","nombre_empresa","descripcion","pais","fk_id_provincia","descripcion","fk_id_ciudad","calle","nro","piso","depto","cp","telefono","web","nombre_representante","email_representante","logo"] }
       )
       .then(() => res.sendStatus(200)
       )

@@ -2,15 +2,17 @@ import express from 'express';
 import {
   getAll,
   postIdiomasPostulantes,
-  getPorId
+  getPorIdPostulante
 } from '../controllers/idiomasPostulantes';
 import { withErrorHandling } from './utils';
 import { validateToken } from '../middlewares/validador';
 
 const router = express.Router();
 
-router.get('/', withErrorHandling(getAll));
 router.post('/', withErrorHandling(postIdiomasPostulantes));
-router.get('/:id', withErrorHandling(getPorId));
+router.get('/', withErrorHandling(getAll));
+router.get('/:id', withErrorHandling(getPorIdPostulante));
+
+
 
 export default router;

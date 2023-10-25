@@ -104,6 +104,7 @@ const findPostulantesPorIdUsuario = (
   fk_id_usuario,
   { onSuccess, onNotFound, onError }
 ) => {
+  console.log('Buscando postulantes por ID de usuario:', fk_id_usuario);
   models.postulantes
     .findOne({
       include: [
@@ -120,7 +121,7 @@ const findPostulantesPorIdUsuario = (
         {
           as: "Estudios",
           model: models.estudios,
-          attributes: ["id", "nombre_estudio", "estado_estudio"],
+          attributes: ["id", "nombre_estudio_estado"],
         },
         {
           as: "Carrera",
@@ -149,14 +150,17 @@ const findPostulantesPorIdUsuario = (
     .then((postulantes) =>
       postulantes ? onSuccess(postulantes) : onNotFound()
     )
-    .catch(() => onError());
+    .catch((error) => {
+      console.error('Error al buscar postulantes:', error);
+      onError();
+    });
 };
 
 export const getPorIdUsuario = async (req, res) => {
   findPostulantesPorIdUsuario(req.params.id, {
     onSuccess: (postulantes) => res.send(postulantes),
-    onNotFound: () => res.sendStatus(401),
-    onError: () => res.sendStatus(400),
+    onNotFound: () => res.sendStatus(404),
+    onError: () => res.sendStatus(500),
   });
 };
 

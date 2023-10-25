@@ -10,7 +10,12 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      aptitudes.hasMany(models.aptitudes_postulantes// modelo al que pertenece
+      ,{
+        as : 'Aptitudes del postulante',  // nombre de mi relacion
+        foreignKey: 'fk_id_aptitud'     // campo con el que voy a igualar
+      }
+    )
     }
   }
   aptitudes.init({
