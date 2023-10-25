@@ -188,7 +188,6 @@ export const getOfertasPorIdEmpresa = async (req, res) => {
   let pagina = req.query.pagina;
   let limite = req.query.limite;
   let fk_id_empresa = req.params.id;
-  let estado = req.query.estado;
 
   if (typeof buscarTitulo === "undefined") {
     buscarTitulo = "_";
@@ -202,10 +201,6 @@ export const getOfertasPorIdEmpresa = async (req, res) => {
 
   if (typeof limite === "undefined") {
     limite = 30;
-  }
-
-  if (!estado) {
-    estado = "Activa";
   }
 
   models.ofertas
@@ -243,10 +238,7 @@ export const getOfertasPorIdEmpresa = async (req, res) => {
         fk_id_empresa,
         titulo_oferta: {
           [sequelize.iLike]: `%${buscarTitulo}%`,
-        },
-        estado: {
-          [sequelize.iLike]: `%${estado}%`,
-        },
+        }
       },
     })
     .then((ofertas) =>
