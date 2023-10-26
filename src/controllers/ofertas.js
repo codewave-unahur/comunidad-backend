@@ -39,7 +39,7 @@ export const getOfertasPorFiltros = async (req, res) => {
         {
           as: "Empresa",
           model: models.empresas,
-          attributes: ["id", "nombre_empresa", "descripcion"],
+          attributes: ["id", "nombre_empresa", "descripcion", "logo"],
         },
         {
           as: "Estudio",
@@ -103,7 +103,7 @@ export const getOfertas = async (req, res) => {
         {
           as: "Empresa",
           model: models.empresas,
-          attributes: ["id", "nombre_empresa", "descripcion"],
+          attributes: ["id", "nombre_empresa", "descripcion", "logo"],
         },
         {
           as: "Estudio",
@@ -143,7 +143,7 @@ const findOferta = (id, { onSuccess, onNotFound, onError }) => {
         {
           as: "Empresa",
           model: models.empresas,
-          attributes: ["id", "nombre_empresa", "descripcion"],
+          attributes: ["id", "nombre_empresa", "descripcion", "logo"],
         },
         {
           as: "Estudio",
@@ -211,7 +211,7 @@ export const getOfertasPorIdEmpresa = async (req, res) => {
         {
           as: "Empresa",
           model: models.empresas,
-          attributes: ["id", "nombre_empresa", "descripcion"],
+          attributes: ["id", "nombre_empresa", "descripcion", "logo"],
         },
         {
           as: "Estudio",
