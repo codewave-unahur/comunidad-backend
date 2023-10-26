@@ -53,8 +53,8 @@ export const requestPasswordReset = async (usuario, res) => {
       user.usuario,
       "Solicitud de restablecimiento de contraseña",
       {
-        usuario: user.usuario,
-        link: link,
+        //usuario: user.usuario,
+        token: resetToken,
       },
       '../../database/utils/template/requestResetPassword.handlebars'
     );
