@@ -15,6 +15,9 @@ module.exports = {
       contactado: {
         type: Sequelize.BOOLEAN,
       },
+      estado_postulacion: {
+        type: Sequelize.BOOLEAN,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

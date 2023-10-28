@@ -11,6 +11,7 @@ module.exports = {
         updatedAt: new Date('2022-12-07 14:15:23.354+00'),
         fk_id_empresa: 3010203041,
         contactado: 'f',
+        estado_postulacion: 't',
       },
       {
         id: 165,
@@ -20,6 +21,7 @@ module.exports = {
         updatedAt: new Date('2022-12-07 18:57:52.45+00'),
         fk_id_empresa: 30182432120,
         contactado: 'f',
+        estado_postulacion: 't',
       },
       {
         id: 166,
@@ -29,6 +31,7 @@ module.exports = {
         updatedAt: new Date('2022-12-07 20:50:19.547+00'),
         fk_id_empresa: 30182432120,
         contactado: 'f',
+        estado_postulacion: 't',
       },
       {
         id: 167,
@@ -38,6 +41,7 @@ module.exports = {
         updatedAt: new Date('2022-12-08 00:00:55.037+00'),
         fk_id_empresa: 30182432120,
         contactado: 't',
+        estado_postulacion: 'f',
       },
       {
         id: 168,
@@ -47,6 +51,7 @@ module.exports = {
         updatedAt: new Date('2022-12-08 18:01:00.024+00'),
         fk_id_empresa: 3010203041,
         contactado: 'f',
+        estado_postulacion: 'f',
       },
       // Agregar más objetos aquí...
     ], {});
