@@ -1,11 +1,18 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('idiomas_ofertas', {
+    await queryInterface.createTable('abmModels', {
       id: {
         allowNull: false,
+        autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
+      },
+      id_usuario_mod: {
+        type: Sequelize.INTEGER,
+      },
+      motivo: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
@@ -18,6 +25,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('idiomas_ofertas');
+    await queryInterface.dropTable('abmModels');
   },
 };

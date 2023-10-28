@@ -1,11 +1,12 @@
 const models = require("../../database/models");
 
-
 export const createAptitudPostulante = async (req, res) => {
     models.aptitudes_postulantes
       .create({
         fk_id_aptitud: req.body.idAptitud,     
-        fk_id_usuario: req.body.idUsuario,      
+        fk_id_usuario: req.body.idPostulante,
+        fk_id_idioma: req.body.idIdioma, 
+        fk_id_nivel: req.body.idNivel,      
       })
       .then(
         (aptitudes_postulantes) => res.status(201).send({ id: aptitudes_postulantes.id }))
@@ -20,18 +21,17 @@ export const createAptitudPostulante = async (req, res) => {
       });
 };
 
-
 export const getAll = async (req, res) => {
     try {
       const aptitudes_postulantes = await models.aptitudes_postulantes.findAll({
-        attributes: ["id", "fk_id_aptitud", "fk_id_usuario"],
+        attributes: ["id", "fk_id_aptitud", "fk_id_usuario","fk_id_idioma","fk_id_nivel"],
         include: [
             {
                 model: models.postulantes,
                 as: "Postulante",
-                attributes: ["id","nombre","apellido","nacionalidad","fecha_nac","pais","fk_id_provincia","fk_id_ciudad",
+                attributes: ["id","nombre","apellido","nacionalidad", "estado", "fecha_nac","pais","fk_id_provincia","fk_id_ciudad",
                 "calle","nro","piso","depto","cp","telefono","cant_materias","alumno_unahur","presentacion","cv","foto",
-                "fk_id_usuario","fk_id_estudios","fk_id_carrera","fk_id_estado","fk_id_tipo_documento"],
+                "fk_id_usuario","fk_id_estudios","fk_id_carrera", "tipo_documento"],
                 include:[
                     {
                         model: models.usuarios,
@@ -41,11 +41,20 @@ export const getAll = async (req, res) => {
                 ,]
             },
             {
-                as: "Aptitud",
+                as: "Aptitudes del postulante",
                 model: models.aptitudes,
                 attributes: ["id", "nombre_aptitud", "descripcion"],
             },
-          
+            {
+              as: "Idioma del postulante",
+              model: models.idiomas,
+              attributes: ["id", "nombre_idioma"],
+            },
+            {
+              as: "Nivel del postulante",
+              model: models.niveles_idiomas,
+              attributes: ["id", "nivel"],
+            },
         ],
       });
       res.send({ aptitudes_postulantes });
@@ -63,9 +72,9 @@ const findAptitudesPorIdUsuario = (fk_id_usuario, { onSuccess, onNotFound, onErr
         {
             model: models.postulantes,
             as: "Postulante",
-            attributes: ["id","nombre","apellido","nacionalidad","fecha_nac","pais","fk_id_provincia","fk_id_ciudad",
+            attributes: ["id","nombre","apellido","nacionalidad", "estado", "fecha_nac","pais","fk_id_provincia","fk_id_ciudad",
             "calle","nro","piso","depto","cp","telefono","cant_materias","alumno_unahur","presentacion","cv","foto",
-            "fk_id_usuario","fk_id_estudios","fk_id_carrera","fk_id_estado","fk_id_tipo_documento"],
+            "fk_id_usuario","fk_id_estudios","fk_id_carrera","tipo_documento"],
             include:[
                 {
                     model: models.usuarios,
@@ -75,11 +84,20 @@ const findAptitudesPorIdUsuario = (fk_id_usuario, { onSuccess, onNotFound, onErr
             ,]
         },
         {
-            as: "Aptitud",
+            as: "Aptitudes del postulante",
             model: models.aptitudes,
             attributes: ["id", "nombre_aptitud", "descripcion"],
         },
-      
+        {
+          as: "Idioma del postulante",
+          model: models.idiomas,
+          attributes: ["id", "nombre_idioma"],
+        },
+        {
+          as: "Nivel del postulante",
+          model: models.niveles_idiomas,
+          attributes: ["id", "nivel"],
+        },
     ],
       where: { fk_id_usuario },
     })
@@ -93,4 +111,69 @@ export const getIdUsuario = async (req, res) => {
     onNotFound: () => res.sendStatus(404),
     onError: () => res.sendStatus(500),
   });
+};
+
+export const updateAptitudPostulante = async (req, res) => {
+  const aptitudPostulanteId = req.params.id;
+
+  try {
+    const [updatedRows] = await models.aptitudes_postulantes.update(
+      {
+        fk_id_aptitud: req.body.idAptitud,
+        fk_id_usuario: req.body.idPostulante,
+        fk_id_idioma: req.body.idIdioma,
+        fk_id_nivel: req.body.idNivel,
+      },
+      {
+        where: { id: aptitudPostulanteId },
+      }
+    );
+
+    if (updatedRows === 0) {
+      res.status(404).send("NOT FOUND");
+    } else {
+      res.status(200).send("OK");
+    }
+  } catch (error) {
+    console.error(`Error al actualizar aptitud_postulante: ${error}`);
+    res.sendStatus(500);
+  }
+};
+
+export const deleteByIdAptitudPostulante = async (req, res) => {
+  const idaptitudPostulante = req.params.id;
+
+  try {
+    const result = await models.aptitudes_postulantes.destroy({
+      where: { id: idaptitudPostulante },
+    });
+
+    if (result === 0) {
+      res.status(404).send("NOT FOUND");
+    } else {
+      res.status(200).send("DESTROYED");
+    }
+  } catch (error) {
+    console.error(`Error al eliminar aptitud_postulante: ${error}`);
+    res.sendStatus(500);
+  }
+};
+
+export const deleteAptitudByIdPostulante = async (req, res) => {
+  const aptitudPostulanteId = req.params.id;
+
+  try {
+    const result = await models.aptitudes_postulantes.destroy({
+      where: { fk_id_usuario: aptitudPostulanteId },
+    });
+
+    if (result === 0) {
+      res.status(404).send("NOT FOUND");
+    } else {
+      res.status(200).send("DESTROYED");
+    }
+  } catch (error) {
+    console.error(`Error al eliminar aptitud_postulante: ${error}`);
+    res.sendStatus(500);
+  }
 };

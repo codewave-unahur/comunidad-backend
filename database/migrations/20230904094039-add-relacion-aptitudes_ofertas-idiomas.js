@@ -3,13 +3,13 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.addColumn(
-      'abm', 
-      'fk_id_usuario', 
+      'aptitudes_ofertas', 
+      'fk_id_idioma', 
       {
         type: Sequelize.INTEGER,
         //allowNull: false,
       references: {
-        model: 'usuarios', // Nombre de la tabla que se referencia (en minúsculas y en plural)
+        model: 'idiomas', // Nombre de la tabla que se referencia (en minúsculas y en plural)
         key: 'id',       // Columna que se referencia en la tabla "grupos"
       },
       onUpdate: 'CASCADE', // Opcional: Define el comportamiento de actualización en cascada
@@ -18,9 +18,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.removeColumn('abm', 'fk_id_usuario');
+    await queryInterface.removeColumn('aptitudes_ofertas', 'fk_id_idioma');
   }
 };
-
-
-

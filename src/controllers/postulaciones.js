@@ -1,13 +1,9 @@
 const models = require("../../database/models");
-const { Op } = require("sequelize");
-const Sequelize = require("sequelize");
-
 
 export const getPorIdPostulante = async (req, res) => {
-
-  let paginaComoNumero = Number.parseInt(req.query.pagina);
-  let limiteComoNumero = Number.parseInt(req.query.limite);
-  let idPostulante = req.query.id;
+  const paginaComoNumero = Number.parseInt(req.query.pagina);
+  const limiteComoNumero = Number.parseInt(req.query.limite);
+  const idPostulante = req.params.id;
 
   let pagina = 0;
   if (!Number.isNaN(paginaComoNumero) && paginaComoNumero > 0) {
@@ -52,10 +48,9 @@ export const getPorIdPostulante = async (req, res) => {
 };
 
 export const getPorIdOferta = async (req, res) => {
-
-  let paginaComoNumero = Number.parseInt(req.query.pagina);
-  let limiteComoNumero = Number.parseInt(req.query.limite);
-  let idOferta = req.query.id;
+  const paginaComoNumero = Number.parseInt(req.query.pagina);
+  const limiteComoNumero = Number.parseInt(req.query.limite);
+  const idOferta = req.params.id;
 
   let pagina = 0;
   if (!Number.isNaN(paginaComoNumero) && paginaComoNumero > 0) {
@@ -100,14 +95,12 @@ export const getPorIdOferta = async (req, res) => {
 };
 
 export const getConFiltros = async (req, res) => {
-  models.postulaciones
-    .findAll({
-    //Devolvemos los registros
+  models.postulaciones.findAll({
     include: [
       {
         as: "Postulante",
         model: models.postulantes,
-        attributes: ["id", "nombre", "apellido","fk_id_usuario","telefono"],
+        attributes: ["id", "nombre", "apellido", "estado", "fk_id_usuario", "telefono"],
       },
       {
         as: "Oferta",
@@ -127,27 +120,26 @@ export const getConFiltros = async (req, res) => {
 };
 
 export const postPostulaciones = async (req, res) => {
-  models.postulaciones
-    .create({ 
+  try {
+    const postulacion = await models.postulaciones.create({
       fk_id_postulante: req.body.postulante,
       fk_id_oferta: req.body.oferta,
       fk_id_empresa: req.body.empresa,
       contactado: "f",
-    })
-    .then(postulaciones => res.status(201).send({ id: postulaciones.id }),
-    )
-    .catch(error => {
-      if (error == "SequelizeUniqueConstraintError: Validation error") {
-        res.status(400).send('Bad request: una error')
-      }
-      else {
-        console.log(`Error al intentar insertar en la base de datos: ${error}`)
-        res.sendStatus(500)
-      }
     });
-  };
 
-  const findPostulaciones= (id, { onSuccess, onNotFound, onError }) => {
+    res.status(201).send({ id: postulacion.id });
+  } catch (error) {
+    if (error.name === "SequelizeUniqueConstraintError") {
+      res.status(400).send('Bad request: algún error de validación de campos');
+    } else {
+      console.error(`Error al intentar insertar en la base de datos: ${error}`);
+      res.sendStatus(500);
+    }
+  }
+};
+
+const findPostulaciones= (id, { onSuccess, onNotFound, onError }) => {
     models.postulaciones
       .findOne({
         include: [
@@ -171,17 +163,17 @@ export const postPostulaciones = async (req, res) => {
       })
       .then((postulaciones) => (postulaciones ? onSuccess(postulaciones) : onNotFound()))
       .catch(() => onError());
-  };
+};
 
-  export const getPorId = async (req, res) => {
+export const getPorId = async (req, res) => {
     findPostulaciones(req.params.id, {
       onSuccess: (postulaciones) => res.send(postulaciones),
       onNotFound: () => res.sendStatus(404),
       onError: () => res.sendStatus(500),
     });
-  };
+};
 
-  export const deletePostulacion = async (req, res) => {
+export const deletePostulacion = async (req, res) => {
     const onSuccess = postulaciones =>
     postulaciones
         .destroy()
@@ -192,9 +184,9 @@ export const postPostulaciones = async (req, res) => {
       onNotFound: () => res.sendStatus(404),
       onError: () => res.sendStatus(500)
     });
-  };
+};
 
-  export const updatePostulaciones = async (req, res) => {
+export const updatePostulaciones = async (req, res) => {
     const onSuccess = (postulaciones) =>
     postulaciones
         .update(
@@ -224,18 +216,4 @@ export const postPostulaciones = async (req, res) => {
       onNotFound: () => res.sendStatus(404),
       onError: () => res.sendStatus(500),
     });
-  };
-
-
-  export const getCountPostulacionesPorOferta = async (req, res) => {
-    consultapelada = await Op.query("select fk_id_oferta as id_oferta, count(*) as cantidad_postulantes from postulaciones group by fk_id_oferta;", {
-      model: models.postulanciones})
-      .then((consultapelada) =>
-        res.send({
-          consultapelada
-        })
-      )
-      .catch(() => res.sendStatus(500));
-  };
-
-
+};

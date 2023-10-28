@@ -5,9 +5,13 @@ module.exports = {
       id: {
         allowNull: false,
         primaryKey: true,
+        autoIncrement: true,
         type: Sequelize.INTEGER,
       },
       nombre_contrato: {
+        type: Sequelize.STRING,
+      },
+      tipo_contrato:{
         type: Sequelize.STRING,
       },
       createdAt: {

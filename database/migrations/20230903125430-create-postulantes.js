@@ -5,6 +5,7 @@ module.exports = {
       id: {
         allowNull: false,
         primaryKey: true,
+        autoIncrement: true,
         type: Sequelize.INTEGER,
       },
       nombre: {
@@ -13,6 +14,9 @@ module.exports = {
       apellido: {
         type: Sequelize.STRING,
       },
+      estado:{
+        type: Sequelize.STRING
+      },
       nacionalidad: {
         type: Sequelize.STRING,
       },
@@ -20,6 +24,9 @@ module.exports = {
         type: Sequelize.DATE,
       },
       pais: {
+        type: Sequelize.STRING,
+      },
+      tipo_documento: {
         type: Sequelize.STRING,
       },
       fk_id_provincia: {

@@ -4,6 +4,7 @@ module.exports = {
     await queryInterface.createTable('ofertas', {
       id: {
         allowNull: false,
+        autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
@@ -11,6 +12,9 @@ module.exports = {
         type: Sequelize.DATE
       },
       titulo_oferta: {
+        type: Sequelize.STRING
+      },
+      estado:{
         type: Sequelize.STRING
       },
       descripcion: {

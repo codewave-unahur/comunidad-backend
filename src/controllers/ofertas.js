@@ -1,14 +1,12 @@
-import { BOOLEAN } from "sequelize";
-
 const models = require("../../database/models");
-const { Op } = require("sequelize");
+const { Op: sequelize } = require("sequelize");
 
-export const getConFiltros = async (req, res) => {
+export const getOfertasPorFiltros = async (req, res) => {
   let paginaComoNumero = Number.parseInt(req.query.pagina);
   let limiteComoNumero = Number.parseInt(req.query.limite);
   let ordenarPor = req.query.ordenar;
   let buscarTitulo = req.query.buscarTitulo;
-  let idEstado = req.query.idEstado;
+  let estado = req.query.estado;
 
   let pagina = 0;
   if (!Number.isNaN(paginaComoNumero) && paginaComoNumero > 0) {
@@ -29,8 +27,8 @@ export const getConFiltros = async (req, res) => {
     buscarTitulo = buscarTitulo.replace(/\s/g, "%");
   }
 
-  if (typeof idEstado === "undefined") {
-    idEstado = 1;
+  if (typeof estado === "undefined") {
+    estado = "Activo";
  }
 
   models.ofertas
@@ -41,12 +39,12 @@ export const getConFiltros = async (req, res) => {
         {
           as: "Empresa",
           model: models.empresas,
-          attributes: ["id", "nombre_empresa", "descripcion"],
+          attributes: ["id", "nombre_empresa", "descripcion", "logo"],
         },
         {
           as: "Estudio",
           model: models.estudios,
-          attributes: ["id", "nombre_estudio", "estado_estudio"],
+          attributes: ["id", "nombre_estudio_estado"],
         },
         {
           as: "Carrera",
@@ -63,20 +61,15 @@ export const getConFiltros = async (req, res) => {
           model: models.contratos,
           attributes: ["id", "nombre_contrato"],
         },
-        {
-          as: "Estado",
-          model: models.estado_ofertas,
-          attributes: ["id", "nombre_estado"],
-        },
       ],
       where: {
-        [Op.and]: [
+        [sequelize.and]: [
           {
             titulo_oferta: {
-              [Op.iLike]: `%${buscarTitulo}%`,
+              [sequelize.iLike]: `%${buscarTitulo}%`,
             },
-            fk_id_estado: {
-              [Op.eq]: [idEstado]
+            estado: {
+              [sequelize.iLike]: `%${estado}%`
             },
           },
         ],
@@ -92,10 +85,16 @@ export const getConFiltros = async (req, res) => {
     .catch(() => res.sendStatus(500));
 };
 
-export const getPeladas = async (req, res) => {
-  let pagina = 0;
-  let limite = 1000;
+export const getOfertas = async (req, res) => {
+  let pagina = Number.parseInt(req.query.pagina);
+  let limite = Number.parseInt(req.query.limite);
 
+  if (!pagina){
+    pagina = 0;
+  }
+  if(!limite){
+    limite = 1000;
+  }
   models.ofertas
     .findAndCountAll({
       limit: limite,
@@ -104,12 +103,12 @@ export const getPeladas = async (req, res) => {
         {
           as: "Empresa",
           model: models.empresas,
-          attributes: ["id", "nombre_empresa", "descripcion"],
+          attributes: ["id", "nombre_empresa", "descripcion", "logo"],
         },
         {
           as: "Estudio",
           model: models.estudios,
-          attributes: ["id", "nombre_estudio", "estado_estudio"],
+          attributes: ["id", "nombre_estudio_estado"],
         },
         {
           as: "Carrera",
@@ -125,11 +124,6 @@ export const getPeladas = async (req, res) => {
           as: "Contrato",
           model: models.contratos,
           attributes: ["id", "nombre_contrato"],
-        },
-        {
-          as: "Estado",
-          model: models.estado_ofertas,
-          attributes: ["id", "nombre_estado"],
         },
       ]
     })
@@ -149,12 +143,12 @@ const findOferta = (id, { onSuccess, onNotFound, onError }) => {
         {
           as: "Empresa",
           model: models.empresas,
-          attributes: ["id", "nombre_empresa", "descripcion"],
+          attributes: ["id", "nombre_empresa", "descripcion", "logo"],
         },
         {
           as: "Estudio",
           model: models.estudios,
-          attributes: ["id", "nombre_estudio", "estado_estudio"],
+          attributes: ["id", "nombre_estudio_estado"],
         },
         {
           as: "Carrera",
@@ -171,11 +165,6 @@ const findOferta = (id, { onSuccess, onNotFound, onError }) => {
           model: models.contratos,
           attributes: ["id", "nombre_contrato"],
         },
-        {
-          as: "Estado",
-          model: models.estado_ofertas,
-          attributes: ["id", "nombre_estado"],
-        },
       ],
       where: { id },
     })
@@ -183,7 +172,7 @@ const findOferta = (id, { onSuccess, onNotFound, onError }) => {
     .catch(() => onError());
 };
 
-export const getPorId = async (req, res) => {
+export const getIdOferta = async (req, res) => {
   findOferta(req.params.id, {
     onSuccess: (ofertas) => res.send(ofertas),
     onNotFound: () => res.sendStatus(404),
@@ -191,7 +180,9 @@ export const getPorId = async (req, res) => {
   });
 };
 
-
+// Si buscas solo el cuit de la empresa te trae todas las ofertas que tiene con el estado activa.
+// Si buscas con el cuit y el titulo, te trae los titulos mas parecidos con el estado activa.
+// O buscar con el cuit y el estado, te trae las ofertas con el estado que vos queres.
 export const getOfertasPorIdEmpresa = async (req, res) => {
   let buscarTitulo = req.query.buscarTitulo;
   let pagina = req.query.pagina;
@@ -220,12 +211,12 @@ export const getOfertasPorIdEmpresa = async (req, res) => {
         {
           as: "Empresa",
           model: models.empresas,
-          attributes: ["id", "nombre_empresa", "descripcion"],
+          attributes: ["id", "nombre_empresa", "descripcion", "logo"],
         },
         {
           as: "Estudio",
           model: models.estudios,
-          attributes: ["id", "nombre_estudio", "estado_estudio"],
+          attributes: ["id", "nombre_estudio_estado"],
         },
         {
           as: "Carrera",
@@ -242,20 +233,12 @@ export const getOfertasPorIdEmpresa = async (req, res) => {
           model: models.contratos,
           attributes: ["id", "nombre_contrato"],
         },
-        {
-          as: "Estado",
-          model: models.estado_ofertas,
-          attributes: ["id", "nombre_estado"],
-        },
       ],
-      where: { fk_id_empresa,
-        [Op.and]: [
-          {
-            titulo_oferta: {
-              [Op.iLike]: `%${buscarTitulo}%`,
-            },
-          },
-        ],
+      where: {
+        fk_id_empresa,
+        titulo_oferta: {
+          [sequelize.iLike]: `%${buscarTitulo}%`,
+        }
       },
     })
     .then((ofertas) =>
@@ -267,7 +250,7 @@ export const getOfertasPorIdEmpresa = async (req, res) => {
     .catch(() => res.sendStatus(500));
 };
 
-export const postOfertas = async (req, res) => {
+export const createOferta = async (req, res) => {
   models.ofertas
     .create({
       fk_id_empresa: req.body.idEmpresa,
@@ -275,12 +258,10 @@ export const postOfertas = async (req, res) => {
       fk_id_contrato: req.body.idContrato,
       fk_id_estudio: req.body.idEstudio,
       fk_id_carrera: req.body.idCarrera,
-      fk_id_estado: 2,
+      estado: "Pendiente",
       fecha_vigencia: req.body.fechaVigencia,
       titulo_oferta: req.body.tituloOferta,
       descripcion: req.body.descripcion,
-      horario_laboral_desde: req.body.horarioLaboralDesde,
-      horario_laboral_hasta: req.body.horarioLaboralHasta,
       edad_desde: req.body.edadDesde,
       edad_hasta: req.body.edadHasta,
       experiencia_previa_desc: req.body.experienciaPreviaDesc,
@@ -289,6 +270,8 @@ export const postOfertas = async (req, res) => {
       otros_detalles: req.body.otrosDetalles,
       beneficios: req.body.beneficios,
       remuneracion: req.body.remuneracion,
+      horario_laboral_desde: req.body.horarioLaboralDesde,
+      horario_laboral_hasta: req.body.horarioLaboralHasta,
     })
     .then((ofertas) => res.status(201).send({ id: ofertas.id }))
     .catch((error) => {
@@ -323,7 +306,7 @@ export const updateOfertas = async (req, res) => {
           fk_id_contrato: req.body.idContrato,
           fk_id_estudio: req.body.idEstudio,
           fk_id_carrera: req.body.idCarrera,
-          fk_id_estado: req.body.idEstado,
+          estado: req.body.estado,
           fecha_vigencia: req.body.fechaVigencia,
           titulo_oferta: req.body.tituloOferta,
           descripcion: req.body.descripcion,
@@ -338,7 +321,7 @@ export const updateOfertas = async (req, res) => {
           beneficios: req.body.beneficios,
           remuneracion: req.body.remuneracion,
         },
-        { fields: ["fk_id_jornada", "fk_id_contrato", "fk_id_estudio","fk_id_carrera","fk_id_estado","fecha_vigencia","titulo_oferta","descripcion","horario_laboral_desde","horario_laboral_hasta","edad_desde","edad_hasta","experiencia_previa_desc","zona_trabajo","areas_estudio","otros_detalles","beneficios","remuneracion"] }
+        { fields: ["fk_id_jornada", "fk_id_contrato", "fk_id_estudio","fk_id_carrera","estado","fecha_vigencia","titulo_oferta","descripcion","horario_laboral_desde","horario_laboral_hasta","edad_desde","edad_hasta","experiencia_previa_desc","zona_trabajo","areas_estudio","otros_detalles","beneficios","remuneracion"] }
       )
       .then(() => res.sendStatus(200))
       .catch((error) => {

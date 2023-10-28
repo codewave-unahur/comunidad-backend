@@ -2,20 +2,9 @@
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class postulantes extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+    
     static associate(models) {
       // define association here
-      postulantes.belongsTo(
-        models.tipos_documentos, // modelo al que pertenece
-        {
-          as: "Tipo_documento", // nombre de mi relacion
-          foreignKey: "fk_id_tipo_documento", // campo con el que voy a igualar
-        }
-      ),
         postulantes.belongsTo(
           models.usuarios, // modelo al que pertenece
           {
@@ -38,13 +27,6 @@ module.exports = (sequelize, DataTypes) => {
           }
         ),
         postulantes.belongsTo(
-          models.estado_postulantes, // modelo al que pertenece
-          {
-            as: "Estado", // nombre de mi relacion
-            foreignKey: "fk_id_estado", // campo con el que voy a igualar
-          }
-        ),
-        postulantes.belongsTo(
           models.provincias, // modelo al que pertenece
           {
             as: "Provincia", // nombre de mi relacion
@@ -60,17 +42,17 @@ module.exports = (sequelize, DataTypes) => {
         );
         postulantes.hasMany(models.aptitudes_postulantes, {
           foreignKey: "fk_id_usuario",
-          as: "AptitudesPostulantes",
+          as: "Aptitudes",
         });
     }
   }
   postulantes.init(
     {
-      fk_id_tipo_documento: DataTypes.INTEGER,
+      tipo_documento: DataTypes.STRING,
       fk_id_usuario: DataTypes.INTEGER,
       fk_id_estudios: DataTypes.INTEGER,
       fk_id_carrera: DataTypes.INTEGER,
-      fk_id_estado: DataTypes.INTEGER,
+      estado: DataTypes.STRING,
       nombre: DataTypes.STRING,
       apellido: DataTypes.STRING,
       nacionalidad: DataTypes.STRING,

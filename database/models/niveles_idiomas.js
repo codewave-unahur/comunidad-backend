@@ -4,13 +4,11 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class niveles_idiomas extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      niveles_idiomas.hasMany(models.aptitudes_ofertas ,{
+        as : 'Nivel de idioma',  // nombre de mi relacion
+        foreignKey: 'fk_id_nivel'     // campo con el que voy a igualar
+      });
     }
   }
   niveles_idiomas.init({

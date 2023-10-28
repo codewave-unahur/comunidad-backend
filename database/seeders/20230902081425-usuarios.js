@@ -4,6 +4,23 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     const usuarios = [
       {
+        id: 4556,
+        fk_id_grupo: 1,
+        usuario: 'ivorrajosemaria@gmail.com',
+        password: '$2b$10$pe6NURnRkf8uRtBZd7o2Ve0M2hg/mHtO1CqBFQrA4p6NIyZ7pHI6S',
+        estado: 't',
+        createdAt: '2022-12-07 03:11:21.855+00',
+        updatedAt: '2022-12-07 03:12:29.529+00',
+      }, {
+        id: 4555,
+        fk_id_grupo: 1,
+        usuario: 'gonza.iglesias00@gmail.com',
+        password: '$2b$10$pe6NURnRkf8uRtBZd7o2Ve0M2hg/mHtO1CqBFQrA4p6NIyZ7pHI6S',
+        estado: 't',
+        createdAt: '2022-12-07 03:11:21.855+00',
+        updatedAt: '2022-12-07 03:12:29.529+00',
+      },
+      {
         id: 467,
         fk_id_grupo: 1,
         usuario: 'redbull@redbull.com',

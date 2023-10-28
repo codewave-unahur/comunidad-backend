@@ -1,93 +1,72 @@
-const JWT = require("jsonwebtoken");
 const models = require("../../database/models");
 const sendEmail = require("../../database/utils/sendEmail.js");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
-const JWTSecret = process.env.SECRET;
 const bcryptSalt = process.env.BCRYPT_SALT;
 const clientURL = process.env.CLIENT_URL;
 const puerto = process.env.PORT;
 
-const findUsuario = (email) => {
+const findUsuarioPorEmail = (email) => {
   return models.usuarios
     .findOne({ where: { usuario: email } })
     .then((usuario) => (usuario ? usuario : false));
 };
 
-//Esto abria que ver porque ya esta definada esta funcion en usuario, lo que si capaz se puede rescatar algo sino queda descartado...
-export const signup = async (req, res) => {
-  const usuario = await req.usuario;
-  // en caso de que se use este metodo, hay que hasear la password..
-  const password = await req.password;
-    // el usuario es el email..
-  let user = await findUsuario(req.usuario);
-  if (user) {
-    throw new Error("Ya existe el correo electrónico", 422);
-  }
-  const token = JWT.sign({ id: user.id }, JWTSecret);
-
-  models.usuarios
-      .create(
-        {
-          id: req.id,
-          usuario: usuario,
-          password: password,
-          fk_id_grupo: "1",
-          estado: "0",
-        }
-      );
-      // me lo agrega con las password hasheada pero nose de donde lo saca... <.<
-  console.log("Password",password)
-  return ({
-    id: req.id,
-    usuario: usuario,
-    token: token,
-  });
-};
-
-const findToken = (id) => {
+const findTokenId = (id) => {
   return models.tokens
     .findOne({ where: { userId: id } })
     .then((token) => (token ? token : false));
 };
 
-export const requestPasswordReset = async (usuario) => {
-  const user = await findUsuario(usuario);
-  // importar otra liberia para devolver un httpError para futuro.
-  if (!user) throw new Error("El correo electrónico no existe.");
+export const requestPasswordReset = async (usuario, res) => {
+  const user = await findUsuarioPorEmail(usuario);
+  if (!user) {
+    res.status(404).send("El correo electrónico no existe.");
+    return;
+  }
 
-  let token = await findToken(user.id);
+  let token = await findTokenId(user.id);
   if (token) await token.destroy();
 
   let resetToken = crypto.randomBytes(32).toString("hex");
   const hash = await bcrypt.hash(resetToken, Number(bcryptSalt));
 
-  models.tokens.create({
-    userId: user.id,
-    token: hash,
-    createdAt: Date.now(),
-    updatedAt: Date.now(),
-  }).then((token) => {
-    // `token` contendrá el registro creado con el `id` autoincremental asignado por la base de datos
-    console.log('Token creado con ID:', token.id);
-  }).catch((error) => {
+  try {
+    const createdToken = await models.tokens.create({
+      userId: user.id,
+      token: hash,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+
+    console.log('Token creado con ID:', createdToken.id);
+  } catch (error) {
     console.error('Error al crear el token:', error);
-  });
-  
+    res.status(500).send("Error al crear el token.");
+    return;
+  }
+
   const link = `${clientURL}:${puerto}/passwordReset?token=${resetToken}&id=${user.id}`;
 
-  sendEmail(
-    user.usuario,
-    "Solicitud de restablecimiento de contraseña",
-    {
-      usuario: user.usuario,
-      link: link,
-    },
-    '../../database/utils/template/requestResetPassword.handlebars'
-  );
-  return { link };
-};
+  try {
+    console.log("Esto es lo que se envia como token", resetToken)
+    sendEmail(
+      user.usuario,
+      "Solicitud de restablecimiento de contraseña",
+      {
+        //usuario: user.usuario,
+        token: resetToken,
+      },
+      '../../database/utils/template/requestResetPassword.handlebars'
+    );
+  } catch (error) {
+    console.error('Error al enviar el correo electrónico:', error);
+    res.status(500).send("Error al enviar el correo electrónico.");
+    return;
+  }
 
+  res.send({ link });
+};
 
 const findUsuarioPorId = async (id) => {
   try {
@@ -99,37 +78,30 @@ const findUsuarioPorId = async (id) => {
   }
 };
 
-export const resetPassword = async (userId, token, password) => {
+export const resetPassword = async (userId, token, password, res) => {
   try {
-    const passwordResetToken = await findToken(userId);
-
-     // importar otra liberia para devolver un httpError para futuro.
+    const passwordResetToken = await findTokenId(userId);
     if (!passwordResetToken) {
-      throw new Error("Token de restablecimiento de contraseña no válido o caducado");
+      res.status(404).send("Token de restablecimiento de contraseña no válido o caducado");
+      return;
     }
 
-    console.log(passwordResetToken.token, token);
-
     const isValid = await bcrypt.compare(token, passwordResetToken.token);
-
-     // importar otra liberia para devolver un httpError para futuro.
     if (!isValid) {
-      throw new Error("Token de restablecimiento de contraseña no válido o caducado");
+      res.status(403).send("Token de restablecimiento de contraseña no válido o caducado");
+      return;
     }
 
     const hashPassword = await bcrypt.hash(password, Number(bcryptSalt));
-
     const usuario = await findUsuarioPorId(userId);
-
-     // importar otra liberia para devolver un httpError para futuro.
     if (!usuario) {
-      throw new Error("Usuario no encontrado");
+      res.status(404).send("Usuario no encontrado");
+      return;
     }
 
     await usuario.update({ password: hashPassword });
-
     console.log(`Contraseña actualizada para el usuario: ${usuario.usuario}`);
-
+    
     await sendEmail(
       usuario.usuario,
       "Restablecimiento de contraseña exitoso",
@@ -141,10 +113,12 @@ export const resetPassword = async (userId, token, password) => {
 
     await passwordResetToken.destroy();
 
-    return { message: "El restablecimiento de contraseña fue exitoso" };
+    res.send({ message: "El restablecimiento de contraseña fue exitoso" });
+    return;
   } catch (error) {
     console.error(`Error en resetPassword: ${error.message}`);
-    throw error;
+    res.status(500).send("Error en el restablecimiento de contraseña");
+    return;
   }
 };
 

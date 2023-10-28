@@ -1,13 +1,20 @@
 import express from 'express';
 import {
-  getConFiltros
+  createCiudad,
+  getAll,
+  getCiudadById,
+  updateCiudadById,
+  deleteCiudadById
 } from '../controllers/ciudades';
 import { withErrorHandling } from './utils';
-import { validateToken } from '../middlewares/validador';
 
 const router = express.Router();
 
-// Aca no usaria validateToken, las ciudades estaria bueno sacarlas de una api....
-router.get('/', withErrorHandling(getConFiltros));
+router.post('/', withErrorHandling(createCiudad));
+router.get('/', withErrorHandling(getAll))
+      .get('/:id', withErrorHandling(getCiudadById));
+router.put('/:id', withErrorHandling(updateCiudadById));
+router.delete('/:id', withErrorHandling(deleteCiudadById));
+
 
 export default router;
