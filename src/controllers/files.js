@@ -1,7 +1,8 @@
 const models = require("../../database/models");
 import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = 'https://fjjrxhcerjjthjglqptp.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqanJ4aGNlcmpqdGhqZ2xxcHRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTM1MjY0NjcsImV4cCI6MjAwOTEwMjQ2N30.yGkjxpJya0kre_XdN-JfUY1tFmvPJrYVoZg_aGvYlsw'
+//la key de supa para que no haga bardo tiene que ser la de service key o secret
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqanJ4aGNlcmpqdGhqZ2xxcHRwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY5MzUyNjQ2NywiZXhwIjoyMDA5MTAyNDY3fQ.aJ54McCK2fK2Oac-hmGkXWfXZHYy5AiQ4GC_-W5ze8Y'
 const supabase = createClient(supabaseUrl, supabaseKey)
 
 
@@ -43,20 +44,29 @@ export const uploadCV = async (req, res) => {
 };
 
 export const uploadLogo = async (req, res) => {
-  try {
-    console.log(req.file)
-    await supabase
-        .storage
-        .from('files')
-        .upload(req.file.originalname, req.file, {
-          cacheControl: '3600',
-          upsert: false
-        })
-      const mimeType = req.file.mimetype;
-      const id = req.headers.id
-      //updateLogo(id, mimeType, newFullNameFile);
-  } catch (error) {
+  //los errores de supa no necesitan try, no fallan sino que devuelven el error
+  const {data, error} =  await supabase.storage.from('publicBucket').upload(req.file.originalname, req.file.buffer, {
+    contentType: req.file.mimetype,
+    cacheControl: '3600',
+    upsert: true
+    })
+  const mimeType = req.file.mimetype;
+  const id = req.headers.id
+  const publicUrl = supabase.storage.from('publicBucket').getPublicUrl(req.file.originalname)['data']['publicUrl']
+
+  //updateLogo(id, mimeType, newFullNameFile);
+  if (error) {
+    console.log(error)
     res.status(500).send(error);
+  } else {
+    console.log(data)
+    res.status(200).send(
+      {
+        url: publicUrl,
+        id: id,
+        status: "success"
+      }
+    );
   }
 };
 

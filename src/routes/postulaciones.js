@@ -6,7 +6,8 @@ import {
   getPorIdPostulante,
   getPorId,
   deletePostulacion,
-  updatePostulaciones
+  updatePostulaciones,
+  activarPostulante
 } from '../controllers/postulaciones';
 import { withErrorHandling } from './utils';
 
@@ -18,6 +19,7 @@ router.get('/todas/', withErrorHandling(getConFiltros))
       .get('/oferta/:id', withErrorHandling(getPorIdOferta))
       .get('/postulante/:id', withErrorHandling(getPorIdPostulante));
 router.put('/:id', withErrorHandling(updatePostulaciones));
+router.put('/activar/:id', withErrorHandling(activarPostulante));
 router.delete('/:id', withErrorHandling(deletePostulacion));
 
 export default router;
