@@ -12,7 +12,8 @@ const sendEmail = async (email, subject, payload, template) => {
       auth: {
         // Naturalmente, reemplace ambas con sus credenciales reales o una contraseña específica de la aplicación.
         user: process.env.EMAIL_USERNAME,
-        pass: 'dyqr fowb hfem jwvr',
+        //pass: 'dyqr fowb hfem jwvr',
+        pass: 'ygnw vtlu zqmm ogew',
       },
     });
 
