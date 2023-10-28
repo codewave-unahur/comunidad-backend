@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "babel-node": "babel-node src/app.js",
-    "dev": "npm run DB && nodemon --exec npm run babel-node src/app.js",
+    "dev": "nodemon --exec npm run babel-node src/app.js",
     "start": "node ./dist/app.js",
     "build": "babel src --out-dir dist --copy-files --source-maps",
     "DB": "npx sequelize db:migrate:undo:all && npx sequelize db:migrate && npx sequelize db:seed:all",

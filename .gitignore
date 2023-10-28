@@ -74,3 +74,5 @@ docker/postgres/data
 
 # MacOS
 .DS_Store
+
+dist/*

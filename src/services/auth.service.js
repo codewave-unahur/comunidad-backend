@@ -49,6 +49,7 @@ export const requestPasswordReset = async (usuario, res) => {
   const link = `${clientURL}:${puerto}/passwordReset?token=${resetToken}&id=${user.id}`;
 
   try {
+    console.log("Esto es lo que se envia como token", resetToken)
     sendEmail(
       user.usuario,
       "Solicitud de restablecimiento de contraseña",
