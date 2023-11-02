@@ -14,21 +14,11 @@ module.exports = (sequelize, DataTypes) => {
         as: 'Postulante',
         foreignKey: 'fk_id_usuario',
       });
-      aptitudes_postulantes.belongsTo(models.idiomas ,{
-        as : 'Idioma del postulante',  // nombre de mi relacion
-        foreignKey: 'fk_id_idioma'     // campo con el que voy a igualar
-      });
-      aptitudes_postulantes.belongsTo(models.niveles_idiomas ,{
-        as : 'Nivel del postulante',  // nombre de mi relacion
-        foreignKey: 'fk_id_nivel'     // campo con el que voy a igualar
-      });
     }
   }
   aptitudes_postulantes.init({
     fk_id_aptitud: DataTypes.INTEGER,
-    fk_id_usuario: DataTypes.INTEGER,
-    fk_id_idioma: DataTypes.INTEGER,
-    fk_id_nivel: DataTypes.INTEGER
+    fk_id_usuario: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'aptitudes_postulantes',

@@ -1,20 +1,15 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('idiomas', {
+    await queryInterface.createTable('preferencias_postulantes', {
       id: {
+        allowNull: false,
         primaryKey: true,
         autoIncrement: true,
-        allowNull: false,       
         type: Sequelize.INTEGER,
       },
-      nombre_idioma: {
-        type: Sequelize.STRING,
-      },
-      nivel_oral: {
-        type: Sequelize.STRING,
-      },
-      nivel_escrito: {
+      nombre_preferencia: {
+        allowNull: false,
         type: Sequelize.STRING,
       },
       createdAt: {
@@ -28,6 +23,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('idiomas');
+    await queryInterface.dropTable('preferencias_postulantes');
   },
 };
