@@ -61,6 +61,18 @@ export const getOfertasPorFiltros = async (req, res) => {
           model: models.contratos,
           attributes: ["id", "nombre_contrato"],
         },
+        {
+          as: "Idiomas",
+          model: models.idiomas_postulantes,
+          attributes: ["id"],
+          include: [
+            {
+            as: "Idioma",
+            model: models.idiomas,
+            attributes: ["id", "nombre_idioma"],
+            }
+          ],
+        }
       ],
       where: {
         [sequelize.and]: [
@@ -125,6 +137,18 @@ export const getOfertas = async (req, res) => {
           model: models.contratos,
           attributes: ["id", "nombre_contrato"],
         },
+        {
+          as: "Idiomas",
+          model: models.idiomas_postulantes,
+          attributes: ["id"],
+          include: [
+            {
+            as: "Idioma de oferta",
+            model: models.idiomas,
+            attributes: ["id", "nombre_idioma"],
+            }
+          ],
+        }
       ]
     })
     .then((ofertas) =>
@@ -165,6 +189,18 @@ const findOferta = (id, { onSuccess, onNotFound, onError }) => {
           model: models.contratos,
           attributes: ["id", "nombre_contrato"],
         },
+        {
+          as: "Idiomas",
+          model: models.idiomas_postulantes,
+          attributes: ["id"],
+          include: [
+            {
+            as: "Idioma de oferta",
+            model: models.idiomas,
+            attributes: ["id", "nombre_idioma"],
+            }
+          ],
+        }
       ],
       where: { id },
     })
@@ -233,6 +269,18 @@ export const getOfertasPorIdEmpresa = async (req, res) => {
           model: models.contratos,
           attributes: ["id", "nombre_contrato"],
         },
+        {
+          as: "Idiomas",
+          model: models.idiomas_postulantes,
+          attributes: ["id"],
+          include: [
+            {
+            as: "Idioma de oferta",
+            model: models.idiomas,
+            attributes: ["id", "nombre_idioma"],
+            }
+          ],
+        }
       ],
       where: {
         fk_id_empresa,

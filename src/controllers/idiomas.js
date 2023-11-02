@@ -4,7 +4,7 @@ const models = require("../../database/models");
 export const getAll = async (req, res) => {
   try {
     const idiomas = await models.idiomas.findAll({
-      attributes: ["id", "nombre_idioma"],
+      attributes: ["id", "nombre_idioma", "nivel_oral", "nivel_escrito"],
     });
     res.json({ idiomas });
   } catch (error) {
@@ -19,7 +19,7 @@ export const getIdiomaById = async (req, res) => {
 
   try {
     const idioma = await models.idiomas.findByPk(id, {
-      attributes: ["id", "nombre_idioma"],
+      attributes: ["id", "nombre_idioma", "nivel_oral", "nivel_escrito"],
     });
 
     if (idioma) {
@@ -35,10 +35,14 @@ export const getIdiomaById = async (req, res) => {
 // Crear un nuevo idioma
 export const createIdioma = async (req, res) => {
   const nombre = req.body.nombre_idioma;
+  const nivel_escrito = req.body.nivel_escrito;
+  const nivel_oral = req.body.nivel_oral;
 
   try {
     const newIdioma = await models.idiomas.create({
       nombre_idioma: nombre,
+      nivel_escrito: nivel_escrito,
+      nivel_oral: nivel_oral,
     });
 
     res.status(201).json({ idioma: newIdioma });

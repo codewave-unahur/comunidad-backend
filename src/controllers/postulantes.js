@@ -93,6 +93,17 @@ const findPostulantesPorIdUsuario = (
           model: models.ciudades,
           attributes: ["id", "nombre", "fk_id_provincia"],
         },
+        {
+          as: "Idiomas",
+          model: models.idiomas_postulantes,
+          include: [
+            {
+              as: "Idiomas del postulante",
+              model: models.idiomas,
+              attributes: ["id", "nombre_idioma", "nivel_oral", "nivel_escrito"],
+            },
+          ],
+        }
       ],
 
       where: { fk_id_usuario },
@@ -143,6 +154,18 @@ const findPostulantesPorDNI = (id,{ onSuccess, onNotFound, onError }) => {
           model: models.ciudades,
           attributes: ["id", "nombre", "fk_id_provincia"],
         },
+        {
+          as: "Idiomas",
+          model: models.idiomas_postulantes,
+          attributes: ["id"],
+          include: [
+            {
+              as: "Idiomas del postulante",
+              model: models.idiomas,
+              attributes: ["id", "nombre_idioma", "nivel_oral", "nivel_escrito"],
+            },
+          ],
+        }
       ],
 
       where: { id },
