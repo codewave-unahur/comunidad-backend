@@ -1,15 +1,12 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('niveles_idiomas', {
+    await queryInterface.createTable('idiomas_ofertas', {
       id: {
+        allowNull: false,
         primaryKey: true,
         autoIncrement: true,
-        allowNull: false,
         type: Sequelize.INTEGER,
-      },
-      nivel: {
-        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
@@ -22,6 +19,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('niveles_idiomas');
+    await queryInterface.dropTable('idiomas_ofertas');
   },
 };

@@ -44,6 +44,10 @@ module.exports = (sequelize, DataTypes) => {
           foreignKey: "fk_id_usuario",
           as: "Aptitudes",
         });
+        postulantes.hasMany(models.idiomas_postulantes, {
+          foreignKey: "fk_id_postulante",
+          as: "Idiomas",
+        });
     }
   }
   postulantes.init(
