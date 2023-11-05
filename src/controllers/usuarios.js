@@ -12,6 +12,7 @@ export const signUp = async (req, res) => {
   //Nos traemos el usuario desde el body
   const usuario = await req.body.usuario;
   const password = await req.body.password;
+  const tipoGrupo = await req.body.grupo;
 
   //Obtenemos el largo de la password
   const passwordLength = password.length;
@@ -23,8 +24,8 @@ export const signUp = async (req, res) => {
   //largo de contraseña
   const minPasswordLength = 6;
 
-   //Buscamos si existe el usuario en la base
-   const findUsuario = await models.usuarios.findOne({
+  //Buscamos si existe el usuario en la base
+  const findUsuario = await models.usuarios.findOne({
     where: { usuario: usuario },
   });
   if (findUsuario !== null) {
@@ -36,7 +37,7 @@ export const signUp = async (req, res) => {
       .create({
         usuario: usuario,
         password: hashPassword,
-        fk_id_grupo: "1",
+        fk_id_grupo: tipoGrupo,
         estado: "0",
       })
       .then((usuarios) => res.status(201).send({ id: usuarios.id }))
