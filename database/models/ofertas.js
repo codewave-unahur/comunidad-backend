@@ -38,12 +38,12 @@ module.exports = (sequelize, DataTypes) => {
       }),
       ofertas.hasMany(models.aptitudes_ofertas// modelo al que pertenece
       ,{
-        as : 'Oferta',  // nombre de mi relacion
+        as : 'Aptitudes',  // nombre de mi relacion
         foreignKey: 'fk_id_oferta'     // campo con el que voy a igualar
       }),
       ofertas.hasMany(models.idiomas_ofertas,
          {
-          as: 'Idioma de oferta',
+          as: 'Idiomas',
           foreignKey: 'fk_id_oferta',
       }// modelo al que pertenece
       )

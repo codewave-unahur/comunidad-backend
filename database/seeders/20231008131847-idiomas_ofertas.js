@@ -16,7 +16,7 @@ module.exports = {
         updatedAt : '2022-06-05 12:00:00+00',
         fk_id_idioma: 10,
         fk_id_oferta: 72,
-      },
+      }
     ], {});
   },
 

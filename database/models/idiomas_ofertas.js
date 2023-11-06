@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'fk_id_oferta',
       });
       idioma_ofertas.belongsTo(models.idiomas ,{
-        as : 'Idioma de oferta',  // nombre de mi relacion
+        as : 'Idiomas de oferta',  // nombre de mi relacion
         foreignKey: 'fk_id_idioma'     // campo con el que voy a igualar
       });
     }

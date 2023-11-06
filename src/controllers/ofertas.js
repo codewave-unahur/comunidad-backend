@@ -62,18 +62,18 @@ export const getOfertasPorFiltros = async (req, res) => {
           attributes: ["id", "nombre_contrato"],
         },
         // Aca tambien ...
-       /* {
+        {
           as: "Idiomas",
-          model: models.idiomas_postulantes,
+          model: models.idiomas_ofertas,
           attributes: ["id"],
           include: [
             {
-            as: "Idioma",
+            as: "Idiomas de oferta",
             model: models.idiomas,
             attributes: ["id", "nombre_idioma"],
             }
           ],
-        }*/
+        }
       ],
       where: {
         [sequelize.and]: [
@@ -139,18 +139,18 @@ export const getOfertas = async (req, res) => {
           attributes: ["id", "nombre_contrato"],
         },
         // Aca Se rompe mal 
-        /*{
+        {
           as: "Idiomas",
-          model: models.idiomas_postulantes,
+          model: models.idiomas_ofertas,
           attributes: ["id"],
           include: [
             {
-            as: "Idioma de oferta",
+            as: "Idiomas de oferta",
             model: models.idiomas,
             attributes: ["id", "nombre_idioma"],
             }
           ],
-        }*/
+        }
       ]
     })
     .then((ofertas) =>
@@ -159,7 +159,7 @@ export const getOfertas = async (req, res) => {
         totalPaginas: Math.ceil(ofertas.count / limite),
       })
     )
-    .catch(() => res.sendStatus(500));
+    .catch((error) => res.send(error));
 };
 
 const findOferta = (id, { onSuccess, onNotFound, onError }) => {
@@ -192,18 +192,18 @@ const findOferta = (id, { onSuccess, onNotFound, onError }) => {
           attributes: ["id", "nombre_contrato"],
         },
         // Aca tambien... falla...
-        /*{
+        {
           as: "Idiomas",
-          model: models.idiomas_postulantes,
+          model: models.idiomas_ofertas,
           attributes: ["id"],
           include: [
             {
-            as: "Idioma de oferta",
+            as: "Idiomas de oferta",
             model: models.idiomas,
             attributes: ["id", "nombre_idioma"],
             }
           ],
-        }*/
+        }
       ],
       where: { id },
     })
@@ -272,18 +272,18 @@ export const getOfertasPorIdEmpresa = async (req, res) => {
           model: models.contratos,
           attributes: ["id", "nombre_contrato"],
         },
-       /*{
+        {
           as: "Idiomas",
-          model: models.idiomas_postulantes,
+          model: models.idiomas_ofertas,
           attributes: ["id"],
           include: [
             {
-            as: "Idioma de oferta",
+            as: "Idiomas de oferta",
             model: models.idiomas,
             attributes: ["id", "nombre_idioma"],
             }
           ],
-        }*/
+        }
       ],
       where: {
         fk_id_empresa,
