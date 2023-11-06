@@ -18,12 +18,14 @@ async function renameFile(srcFileName, destFileName) {
 
 export const uploadCV = async (req, res) => {
   const id = req.headers.id
-  const {data, error} =  await supabase.storage.from('publicBucket').upload( String(id + "/" + req.file.originalname), req.file.buffer, {
+  const nombre_almacenamiento = String(id + "/" + req.file.originalname)
+
+  const {data, error} =  await supabase.storage.from('publicBucket').upload( nombre_almacenamiento, req.file.buffer, {
     contentType: req.file.mimetype,
     cacheControl: '3600',
     upsert: true
     })
-  const publicUrl = supabase.storage.from('publicBucket').getPublicUrl(req.file.originalname)['data']['publicUrl']
+  const publicUrl = supabase.storage.from('publicBucket').getPublicUrl(nombre_almacenamiento)['data']['publicUrl']
 
   updateCv(id, publicUrl);
   if (error) {
@@ -44,12 +46,13 @@ export const uploadCV = async (req, res) => {
 export const uploadLogo = async (req, res) => {
   //los errores de supa no necesitan try, no fallan sino que devuelven el error
   const id = req.headers.id
-  const {data, error} =  await supabase.storage.from('publicBucket').upload( String(id + "/" + req.file.originalname), req.file.buffer, {
+  const nombre_almacenamiento = String(id + "/" + req.file.originalname)
+  const {data, error} =  await supabase.storage.from('publicBucket').upload( nombre_almacenamiento, req.file.buffer, {
     contentType: req.file.mimetype,
     cacheControl: '3600',
     upsert: true
     })
-  const publicUrl = supabase.storage.from('publicBucket').getPublicUrl(req.file.originalname)['data']['publicUrl']
+  const publicUrl = supabase.storage.from('publicBucket').getPublicUrl(nombre_almacenamiento)['data']['publicUrl']
 
   updateLogo(id, publicUrl);
   if (error) {
@@ -70,12 +73,14 @@ export const uploadLogo = async (req, res) => {
 export const uploadFoto = async (req, res) => {
   //los errores de supa no necesitan try, no fallan sino que devuelven el error
   const id = req.headers.id
-  const {data, error} =  await supabase.storage.from('publicBucket').upload( String(id + "/" + req.file.originalname), req.file.buffer, {
+  const nombre_almacenamiento = String(id + "/" + req.file.originalname)
+
+  const {data, error} =  await supabase.storage.from('publicBucket').upload( nombre_almacenamiento, req.file.buffer, {
     contentType: req.file.mimetype,
     cacheControl: '3600',
     upsert: true
     })
-  const publicUrl = supabase.storage.from('publicBucket').getPublicUrl(req.file.originalname)['data']['publicUrl']
+  const publicUrl = supabase.storage.from('publicBucket').getPublicUrl(nombre_almacenamiento)['data']['publicUrl']
 
   updateFoto(id, publicUrl);
   if (error) {
