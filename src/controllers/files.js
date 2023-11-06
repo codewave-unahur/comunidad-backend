@@ -17,44 +17,44 @@ async function renameFile(srcFileName, destFileName) {
 };
 
 export const uploadCV = async (req, res) => {
-  try {
-    if (req.file) {
-      const originalName = req.file.originalname;
-      const uuidName = uuidv4();
-      const blob = bucket.file(originalName);
-      const blobStream = blob.createWriteStream();
-      const extension = originalName.split('.', 2);
-      const newFullNameFile = uuidName.concat('.', extension[1]);
-      const mimeType = req.file.mimetype;
-      const id = req.headers.id
+  const id = req.headers.id
+  const nombre_almacenamiento = String(id + "/" + req.file.originalname)
 
-      blobStream.on("finish", () => {
-        res.status(200).send("Success");
-        console.log("Success");
-      });
-      blobStream.end(req.file.buffer);
-      setTimeout(() => {
-        renameFile(originalName, newFullNameFile);
-      }, 5000);
-      updateCv(id, mimeType, newFullNameFile);
-    } else throw "algun error con la subida de archivo";
-  } catch (error) {
+  const {data, error} =  await supabase.storage.from('publicBucket').upload( nombre_almacenamiento, req.file.buffer, {
+    contentType: req.file.mimetype,
+    cacheControl: '3600',
+    upsert: true
+    })
+  const publicUrl = supabase.storage.from('publicBucket').getPublicUrl(nombre_almacenamiento)['data']['publicUrl']
+
+  updateCv(id, publicUrl);
+  if (error) {
+    console.log(error)
     res.status(500).send(error);
+  } else {
+    console.log(data)
+    res.status(200).send(
+      {
+        url: publicUrl,
+        id: id,
+        status: "success"
+      }
+    );
   }
 };
 
 export const uploadLogo = async (req, res) => {
   //los errores de supa no necesitan try, no fallan sino que devuelven el error
-  const {data, error} =  await supabase.storage.from('publicBucket').upload(req.file.originalname, req.file.buffer, {
+  const id = req.headers.id
+  const nombre_almacenamiento = String(id + "/" + req.file.originalname)
+  const {data, error} =  await supabase.storage.from('publicBucket').upload( nombre_almacenamiento, req.file.buffer, {
     contentType: req.file.mimetype,
     cacheControl: '3600',
     upsert: true
     })
-  const mimeType = req.file.mimetype;
-  const id = req.headers.id
-  const publicUrl = supabase.storage.from('publicBucket').getPublicUrl(req.file.originalname)['data']['publicUrl']
+  const publicUrl = supabase.storage.from('publicBucket').getPublicUrl(nombre_almacenamiento)['data']['publicUrl']
 
-  //updateLogo(id, mimeType, newFullNameFile);
+  updateLogo(id, publicUrl);
   if (error) {
     console.log(error)
     res.status(500).send(error);
@@ -71,22 +71,30 @@ export const uploadLogo = async (req, res) => {
 };
 
 export const uploadFoto = async (req, res) => {
-  try {
-    if (req.file) {
-      await supabase
-        .storage
-        .from('files')
-        .upload('public/avatar1.png', decode('base64FileData'), {
-          contentType: 'image/png'
-        })
-      blobStream.end(req.file.buffer);
-      setTimeout(() => {
-        renameFile(originalName, newFullNameFile);
-      }, 5000);
-      updateFoto(id, mimeType, newFullNameFile);
-    } else throw "algun error con la subida de archivo";
-  } catch (error) {
+  //los errores de supa no necesitan try, no fallan sino que devuelven el error
+  const id = req.headers.id
+  const nombre_almacenamiento = String(id + "/" + req.file.originalname)
+
+  const {data, error} =  await supabase.storage.from('publicBucket').upload( nombre_almacenamiento, req.file.buffer, {
+    contentType: req.file.mimetype,
+    cacheControl: '3600',
+    upsert: true
+    })
+  const publicUrl = supabase.storage.from('publicBucket').getPublicUrl(nombre_almacenamiento)['data']['publicUrl']
+
+  updateFoto(id, publicUrl);
+  if (error) {
+    console.log(error)
     res.status(500).send(error);
+  } else {
+    console.log(data)
+    res.status(200).send(
+      {
+        url: publicUrl,
+        id: id,
+        status: "success"
+      }
+    );
   }
 };
 
@@ -109,8 +117,8 @@ export const getFiles = async (req, res) => {
 };
 
 //Con esto actualizamos la foto 
-const updateFoto = (id, mimeType, nombreFoto) => {
-  const foto = mimeType.concat('|', nombreFoto);
+const updateFoto = (id, url) => {
+  const foto = url
 
   models.postulantes.update(
     { foto: foto },
@@ -123,8 +131,8 @@ const updateFoto = (id, mimeType, nombreFoto) => {
 };
 
 //Con esto actualizamos el CV
-const updateCv = (id, mimeType, nombreCv) => {
-  const cv = mimeType.concat('|', nombreCv);
+const updateCv = (id, url) => {
+  const cv = url
 
   models.postulantes.update(
     { cv: cv },
@@ -137,8 +145,8 @@ const updateCv = (id, mimeType, nombreCv) => {
 };
 
 //Con esto actualizamos el Logo
-const updateLogo = (id, mimeType, nombreLogo) => {
-  const logo = mimeType.concat('|', nombreLogo);
+const updateLogo = (id, url) => {
+  const logo = url;
 
   models.empresas.update(
     { logo: logo },
