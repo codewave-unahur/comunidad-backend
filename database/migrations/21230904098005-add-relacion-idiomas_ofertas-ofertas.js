@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         //allowNull: false,
       references: {
-        model: 'idiomas', // Nombre de la tabla que se referencia (en minúsculas y en plural)
+        model: 'ofertas', // Nombre de la tabla que se referencia (en minúsculas y en plural)
         key: 'id',       // Columna que se referencia en la tabla "grupos"
       },
       onUpdate: 'CASCADE', // Opcional: Define el comportamiento de actualización en cascada

@@ -8,14 +8,14 @@ module.exports = {
         createdAt: '2022-06-05 12:00:00+00',
         updatedAt : '2022-06-05 12:00:00+00',
         fk_id_idioma: 1,
-        fk_id_oferta: 1,
+        fk_id_oferta: 66,
       },
       {
         id:2,
         createdAt: '2022-06-05 12:00:00+00',
         updatedAt : '2022-06-05 12:00:00+00',
         fk_id_idioma: 10,
-        fk_id_oferta: 5,
+        fk_id_oferta: 72,
       },
     ], {});
   },
