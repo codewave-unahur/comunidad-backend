@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
     fk_id_rubro: DataTypes.INTEGER,
     estado: DataTypes.STRING,
     nombre_empresa: DataTypes.STRING,
-    descripcion: DataTypes.STRING,
+    descripcion: DataTypes.TEXT,
     pais: DataTypes.STRING,
     fk_id_provincia: DataTypes.INTEGER,
     fk_id_ciudad: DataTypes.INTEGER,
