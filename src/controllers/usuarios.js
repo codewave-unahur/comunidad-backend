@@ -25,12 +25,22 @@ export const signUp = async (req, res) => {
   const minPasswordLength = 6;
 
   //Buscamos si existe el usuario en la base
-  const findUsuario = await models.usuarios.findOne({
-    where: { usuario: usuario },
+  const findUsuarioHabilitado = await models.usuarios.findOne({
+    where: { usuario: usuario, estado: true },
   });
-  if (findUsuario !== null) {
+  if (findUsuarioHabilitado !== null) {
     return (res.status(402).send("Bad request: El usuario ya existe"));
   };
+
+
+  const findUsuarioInhabilitado = await models.usuarios.findOne({
+    where: { usuario: usuario, estado: false },
+  });
+
+  if (findUsuarioInhabilitado !== null) {
+    return (res.status(200).send({id : findUsuarioInhabilitado.id}));
+  };
+  
   //Luego de algunas validaciones insertamos el usuario en la tabla o devolvemos un error.
   if (passwordLength >= minPasswordLength) {
     models.usuarios

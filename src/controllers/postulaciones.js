@@ -94,6 +94,54 @@ export const getPorIdOferta = async (req, res) => {
     .catch(() => res.sendStatus(500));
 };
 
+
+export const getPorIdOfertasTodas = async (req, res) => {
+  const paginaComoNumero = Number.parseInt(req.query.pagina);
+  const limiteComoNumero = Number.parseInt(req.query.limite);
+  const idOferta = req.params.id;
+
+  let pagina = 0;
+  if (!Number.isNaN(paginaComoNumero) && paginaComoNumero > 0) {
+    pagina = paginaComoNumero;
+  }
+
+  let limite = 30;
+  if (!Number.isNaN(limiteComoNumero) && limiteComoNumero > 0) {
+    limite = limiteComoNumero;
+  }
+ 
+  models.postulaciones
+    .findAndCountAll({
+      limit: limite,
+      offset: pagina * limite,
+      include: [
+        {
+          as: "Postulante",
+          model: models.postulantes,
+          attributes: ["id", "nombre", "apellido","fk_id_usuario","telefono","foto","cv"],
+        },
+        {
+          as: "Oferta",
+          model: models.ofertas,
+          attributes: ["id", "titulo_oferta"],
+        },        
+        {
+          as: "Empresa",
+          model: models.empresas,
+          attributes: ["id", "nombre_empresa"],
+        },
+      ],
+      where: { fk_id_oferta: idOferta},
+    })
+    .then((postulaciones) =>
+      res.send({
+        postulaciones,
+        totalPaginas: Math.ceil(postulaciones.count / limite),
+      })
+    )
+    .catch(() => res.sendStatus(500));
+};
+
 export const getConFiltros = async (req, res) => {
   models.postulaciones.findAll({
     include: [
