@@ -63,6 +63,7 @@ module.exports = (sequelize, DataTypes) => {
     descripcion: DataTypes.STRING,
     horario_laboral_desde: DataTypes.STRING,
     horario_laboral_hasta: DataTypes.STRING,
+    //modalidad_trabajo: DataTypes.STRING,
     edad_desde: DataTypes.INTEGER,
     edad_hasta: DataTypes.INTEGER,
     experiencia_previa_desc: DataTypes.STRING,
