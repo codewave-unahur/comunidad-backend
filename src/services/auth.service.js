@@ -28,7 +28,7 @@ export const requestPasswordReset = async (usuario, res) => {
   let token = await findTokenId(user.id);
   if (token) await token.destroy();
 
-  let resetToken = crypto.randomBytes(32).toString("hex");
+  let resetToken = (crypto.randomBytes(3).toString("hex")).toLocaleUpperCase();
   const hash = await bcrypt.hash(resetToken, Number(bcryptSalt));
 
   try {
