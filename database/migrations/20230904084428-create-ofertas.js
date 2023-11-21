@@ -17,6 +17,9 @@ module.exports = {
       estado:{
         type: Sequelize.STRING
       },
+      cierre:{
+        type: Sequelize.TEXT,
+      },
       descripcion: {
         type: Sequelize.TEXT
       },
