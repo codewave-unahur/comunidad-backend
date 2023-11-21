@@ -14,6 +14,9 @@ module.exports = {
       apellido: {
         type: Sequelize.STRING,
       },
+      genero: {
+        type: Sequelize.STRING,
+      },
       estado:{
         type: Sequelize.STRING
       },
