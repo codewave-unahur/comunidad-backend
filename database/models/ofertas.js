@@ -59,6 +59,7 @@ module.exports = (sequelize, DataTypes) => {
     fk_id_carrera: DataTypes.INTEGER,
     estado: DataTypes.STRING,
     cierre: DataTypes.TEXT,
+    check: DataTypes.TEXT,
     fecha_vigencia: DataTypes.DATE,
     titulo_oferta: DataTypes.STRING,
     descripcion: DataTypes.STRING,

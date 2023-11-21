@@ -12,6 +12,7 @@ module.exports = {
         fk_id_carrera: 4,
         estado: "Finalizada",
         cierre: " ",
+        check: " ",
         fecha_vigencia: "2022-12-23 00:00:00+00",
         titulo_oferta: "Laboratorista - Industria Petrolera",
         descripcion:
@@ -38,6 +39,7 @@ module.exports = {
         fk_id_carrera: 4,
         estado: "Observada",
         cierre: " ",
+        check: " ",
         fecha_vigencia: "2022-12-31 00:00:00+00",
         titulo_oferta: "Ingeniero de Operaciones - Industria Petrolera",
         descripcion:
@@ -65,6 +67,7 @@ module.exports = {
         fk_id_carrera: 2,
         estado: "Finalizada",
         cierre: " ",
+        check: " ",
         fecha_vigencia: "2023-01-14 00:00:00+00",
         titulo_oferta: "Diseñador de redes",
         descripcion:
@@ -91,6 +94,7 @@ module.exports = {
         fk_id_carrera: 14,
         estado: "Activa",
         cierre: " ",
+        check: " ",
         fecha_vigencia: "2022-12-30 00:00:00+00",
         titulo_oferta: "Jefe de mantenimiento eléctrico",
         descripcion:
@@ -117,6 +121,7 @@ module.exports = {
         fk_id_carrera: 2,
         estado: "Pendiente",
         cierre: " ",
+        check: " ",
         fecha_vigencia: "2022-12-30 00:00:00+00",
         titulo_oferta: "Ingeniero en Telecomunicaciones",
         descripcion:
@@ -144,6 +149,7 @@ module.exports = {
         fk_id_carrera: 2,
         estado: "Activa",
         cierre: " ",
+        check: " ",
         fecha_vigencia: "2022-12-23 00:00:00+00",
         titulo_oferta: "Administrador de Redes - SSR",
         descripcion:
@@ -170,6 +176,7 @@ module.exports = {
         fk_id_carrera: 4,
         estado: "Activa",
         cierre: " ",
+        check: " ",
         fecha_vigencia: "2022-12-30 00:00:00+00",
         titulo_oferta: "Desarrollador Haskell SR",
         descripcion: "Buscamos un desarrollador Haskell para nuestra empresa",
@@ -195,6 +202,7 @@ module.exports = {
         fk_id_carrera: 4,
         estado: "Activa",
         cierre: " ",
+        check: " ",
         fecha_vigencia: "2022-12-31 00:00:00+00",
         titulo_oferta: "Ingeniero reservorios",
         descripcion:
@@ -221,6 +229,7 @@ module.exports = {
         fk_id_carrera: 4,
         estado: "Pendiente",
         cierre: " ",
+        check: " ",
         fecha_vigencia: "2022-12-30 00:00:00+00",
         titulo_oferta: "Supervisor de Laboratorio",
         descripcion:
@@ -247,6 +256,7 @@ module.exports = {
         fk_id_carrera: 4,
         estado: "Activa",
         cierre: " ",
+        check: " ",
         fecha_vigencia: "2023-12-31 00:00:00+00",
         titulo_oferta: "Soporte Técnico de Laboratorio",
         descripcion:
@@ -273,6 +283,7 @@ module.exports = {
         fk_id_carrera: 4,
         estado: "Activa",
         cierre: " ",
+        check: " ",
         fecha_vigencia: "2023-12-23 00:00:00+00",
         titulo_oferta: "Analista de control de calidad físico químico",
         descripcion:
@@ -299,6 +310,7 @@ module.exports = {
         fk_id_carrera: 4,
         estado: "Activa",
         cierre: " ",
+        check: " ",
         fecha_vigencia: "2023-12-30 00:00:00+00",
         titulo_oferta: "Analista de Laboratorio",
         descripcion:
@@ -325,6 +337,7 @@ module.exports = {
         fk_id_carrera: 4,
         estado: "Activa",
         cierre: " ",
+        check: " ",
         fecha_vigencia: "2022-12-30 00:00:00+00",
         titulo_oferta: "Desarrollador Python",
         descripcion: "Necesitamos un desarrollador Python",

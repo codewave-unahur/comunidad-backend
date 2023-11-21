@@ -311,6 +311,7 @@ export const createOferta = async (req, res) => {
       fk_id_carrera: req.body.idCarrera,
       estado: "Pendiente",
       cierre:" ",
+      check: " ",
       fecha_vigencia: req.body.fechaVigencia,
       titulo_oferta: req.body.tituloOferta,
       descripcion: req.body.descripcion,
@@ -360,6 +361,7 @@ export const updateOfertas = async (req, res) => {
           fk_id_carrera: req.body.idCarrera,
           estado: req.body.estado,
           cierre: req.body.cierre,
+          check: req.body.check,
           fecha_vigencia: req.body.fechaVigencia,
           titulo_oferta: req.body.tituloOferta,
           descripcion: req.body.descripcion,
@@ -374,7 +376,7 @@ export const updateOfertas = async (req, res) => {
           beneficios: req.body.beneficios,
           remuneracion: req.body.remuneracion,
         },
-        { fields: ["fk_id_jornada", "fk_id_contrato", "fk_id_estudio","fk_id_carrera","estado", "cierre","fecha_vigencia","titulo_oferta","descripcion","horario_laboral_desde","horario_laboral_hasta","edad_desde","edad_hasta","experiencia_previa_desc","zona_trabajo","areas_estudio","otros_detalles","beneficios","remuneracion"] }
+        { fields: ["fk_id_jornada", "fk_id_contrato", "fk_id_estudio","fk_id_carrera","estado", "cierre", "check","fecha_vigencia","titulo_oferta","descripcion","horario_laboral_desde","horario_laboral_hasta","edad_desde","edad_hasta","experiencia_previa_desc","zona_trabajo","areas_estudio","otros_detalles","beneficios","remuneracion"] }
       )
       .then(() => res.sendStatus(200))
       .catch((error) => {

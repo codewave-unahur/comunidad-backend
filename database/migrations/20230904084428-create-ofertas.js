@@ -20,6 +20,9 @@ module.exports = {
       cierre:{
         type: Sequelize.TEXT,
       },
+      check:{
+        type: Sequelize.TEXT,
+      },
       descripcion: {
         type: Sequelize.TEXT
       },
