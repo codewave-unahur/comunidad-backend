@@ -34,20 +34,21 @@ export const getConFiltros = async (req, res) => {
         },
         // ... (otros includes)
       ],
+      
       where: {
         [Op.or]: [
-          {
+          buscarNombre !== '_' && {
             nombre: {
               [Op.iLike]: `%${buscarNombre}%`,
             },
           },
-          {
+          buscarApellido !== '_' && {
             apellido: {
               [Op.iLike]: `%${buscarApellido}%`,
             },
           },
-        ],
-      },
+        ].filter(Boolean), // Eliminar elementos nulos o falsos
+      },      
       order: [ordenarPor],
     });
 
