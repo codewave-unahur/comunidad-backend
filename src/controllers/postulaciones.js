@@ -1,20 +1,28 @@
 const models = require("../../database/models");
+const { Op: sequelize } = require("sequelize");
 
 export const getPorIdPostulante = async (req, res) => {
   const paginaComoNumero = Number.parseInt(req.query.pagina);
   const limiteComoNumero = Number.parseInt(req.query.limite);
   const idPostulante = req.params.id;
+  let nombre_postulacion = req.query.nombreDeOferta;
 
   let pagina = 0;
   if (!Number.isNaN(paginaComoNumero) && paginaComoNumero > 0) {
     pagina = paginaComoNumero;
-  }
+  };
 
   let limite = 30;
   if (!Number.isNaN(limiteComoNumero) && limiteComoNumero > 0) {
     limite = limiteComoNumero;
-  }
- 
+  };
+
+  if (typeof nombre_postulacion === "undefined") {
+    nombre_postulacion = "_";
+  } else {
+    nombre_postulacion = nombre_postulacion.replace(/\s/g, "%");
+  };
+    
   models.postulaciones
     .findAndCountAll({
       limit: limite,
@@ -23,28 +31,42 @@ export const getPorIdPostulante = async (req, res) => {
         {
           as: "Postulante",
           model: models.postulantes,
-          attributes: ["id", "nombre", "apellido","fk_id_usuario","telefono"],
+          attributes: ["id", "nombre", "apellido", "fk_id_usuario", "telefono"],
         },
         {
           as: "Oferta",
           model: models.ofertas,
           attributes: ["id", "titulo_oferta"],
-        },        
+        },
         {
           as: "Empresa",
           model: models.empresas,
           attributes: ["id", "nombre_empresa"],
         },
       ],
-      where: { fk_id_postulante: idPostulante },
+
+      where: {
+        [sequelize.and]: [
+          { fk_id_postulante: idPostulante },
+          {
+            '$Oferta.titulo_oferta$': {
+              [sequelize.iLike]: `%${nombre_postulacion}%`,
+            },
+          },
+        ],
+      }, 
     })
-    .then((postulaciones) =>
+    .then((postulaciones) => {
       res.send({
         postulaciones,
         totalPaginas: Math.ceil(postulaciones.count / limite),
-      })
-    )
-    .catch(() => res.sendStatus(500));
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
+    
 };
 
 export const getPorIdOferta = async (req, res) => {
