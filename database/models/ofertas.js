@@ -60,6 +60,8 @@ module.exports = (sequelize, DataTypes) => {
     estado: DataTypes.STRING,
     cierre: DataTypes.TEXT,
     check: DataTypes.TEXT,
+    modalidadDeTrabajo: DataTypes.STRING,
+    tareasARealizar: DataTypes.TEXT,
     fecha_vigencia: DataTypes.DATE,
     titulo_oferta: DataTypes.STRING,
     descripcion: DataTypes.STRING,

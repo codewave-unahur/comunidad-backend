@@ -16,7 +16,7 @@ export const getConFiltros = async (req, res) => {
     const pagina = !Number.isNaN(paginaComoNumero) && paginaComoNumero > 0 ? paginaComoNumero : 0;
     const limite = !Number.isNaN(limiteComoNumero) && limiteComoNumero > 0 ? limiteComoNumero : 30;
 
-    //Esto esta anda raro, no anda ......
+    // Busca por el nombre y el apellido 
     let [buscarNombre = "_", buscarApellido = "_"] = (buscarPostulante || "").split(" ", 2);
 
     if (typeof buscarApellido === "undefined") {
@@ -34,7 +34,7 @@ export const getConFiltros = async (req, res) => {
         },
         // ... (otros includes)
       ],
-      
+
       where: {
         [Op.or]: [
           buscarNombre !== '_' && {

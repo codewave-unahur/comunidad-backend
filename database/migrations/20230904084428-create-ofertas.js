@@ -23,6 +23,12 @@ module.exports = {
       check:{
         type: Sequelize.TEXT,
       },
+      modalidadDeTrabajo:{
+        type: Sequelize.STRING,
+      },
+      tareasARealizar:{
+        type: Sequelize.TEXT,
+      },
       descripcion: {
         type: Sequelize.TEXT
       },
