@@ -105,6 +105,17 @@ const findPostulantesPorIdUsuario = (
               attributes: ["id", "nombre_idioma", "nivel_oral", "nivel_escrito"],
             },
           ],
+        },
+        {
+          as: "Preferencias",
+          model: models.preferencias_postulantes,
+          include: [
+            {
+              as: "Preferencias del postulante",
+              model: models.preferencias,
+              attributes: ["id", "nombre_preferencia"],
+            },
+          ],
         }
       ],
 
@@ -167,9 +178,32 @@ const findPostulantesPorDNI = (id,{ onSuccess, onNotFound, onError }) => {
               attributes: ["id", "nombre_idioma", "nivel_oral", "nivel_escrito"],
             },
           ],
+        },
+        {
+          as: "Preferencias",
+          model: models.preferencias_postulantes,
+          attributes: ["id"],
+          include: [
+            {
+              as: "Preferencias del postulante",
+              model: models.preferencias,
+              attributes: ["id", "nombre_preferencia"],
+            },
+          ],
+        },
+        {
+          as: "Aptitudes",
+          model: models.aptitudes_postulantes,
+          attributes: ["id"],
+          include: [
+            {
+              as: "Aptitudes del postulante",
+              model: models.aptitudes,
+              attributes: ["id", "nombre_aptitud", "descripcion"],
+            }
+          ]
         }
       ],
-
       where: { id },
     })
     .then((postulantes) =>
@@ -182,7 +216,7 @@ export const getPorId = async (req, res) => {
   findPostulantesPorDNI(req.params.id, {
     onSuccess: (postulantes) => res.send(postulantes),
     onNotFound: () => res.sendStatus(404),
-    onError: () => res.sendStatus(400),
+    onError: (error) => res.sendStatus(400, error),
   });
 };
 
@@ -254,6 +288,49 @@ export const deletePostulante = async (req, res) => {
     onError: () => res.sendStatus(500)
   });
 };
+
+export const agregarPreferencias = async (req, res) => {
+  const preferenciasNuevas = req.body.preferencias;
+  preferenciasNuevas.forEach(preferencia => {
+    models.preferencias_postulantes.create({
+      fk_id_postulante: req.params.id,
+      fk_id_preferencia: preferencia.id
+    });
+    })
+    res.sendStatus(200);
+  };
+
+export const eliminarPreferencias = async (req, res) => {
+  models.preferencias_postulantes.destroy({
+    where: {
+      fk_id_postulante: req.params.id,
+      fk_id_preferencia: req.body.id
+    }
+  })
+  res.sendStatus(200);
+}
+
+export const agregarAptitudes = async (req, res) => {
+  const aptitudesNuevas = req.body.aptitudes;
+  aptitudesNuevas.forEach(aptitud => {
+    models.aptitudes_postulantes.create({
+      fk_id_usuario: req.params.id,
+      fk_id_aptitud: aptitud.id
+    });
+    })
+    res.sendStatus(200);
+  }
+
+export const eliminarAptitudes = async (req, res) => {
+  models.aptitudes_postulantes.destroy({
+    where: {
+      fk_id_usuario: req.params.id,
+      fk_id_aptitud: req.body.id
+    }
+  })
+  res.sendStatus(200);
+}
+
 
 export const updatePostulante = async (req, res) => {
   const onSuccess = (postulantes) =>

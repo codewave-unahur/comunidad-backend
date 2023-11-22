@@ -4,7 +4,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.addColumn(
       'preferencias_postulantes', 
-      'fk_id_postulantes', 
+      'fk_id_postulante', 
       {
         type: Sequelize.INTEGER,
         //allowNull: false,
@@ -18,7 +18,7 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.removeColumn('preferencias_postulantes', 'fk_id_postulantes');
+    await queryInterface.removeColumn('preferencias_postulantes', 'fk_id_postulante');
   }
 };
 
