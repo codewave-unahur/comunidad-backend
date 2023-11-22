@@ -8,10 +8,6 @@ module.exports = {
         autoIncrement: true,
         type: Sequelize.INTEGER,
       },
-      nombre_preferencia: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
