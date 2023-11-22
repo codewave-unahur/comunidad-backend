@@ -284,7 +284,7 @@ export const updatePostulante = async (req, res) => {
           cv: req.body.cv,
           foto: req.body.foto
         },
-          { fields: ["tipo_documento", "fk_id_usuario","fk_id_estudios","fk_id_carrera","estado","nombre","apellido","nacionalidad","fecha_nac","pais","fk_id_provincia","fk_id_ciudad","calle","nro","piso","depto","cp","telefono","cant_materias","alumno_unahur","presentacion","cv","foto"] }
+          { fields: ["tipo_documento", "fk_id_usuario","fk_id_estudios","fk_id_carrera","estado","nombre","apellido","nacionalidad","fecha_nac","pais","fk_id_provincia","fk_id_ciudad","calle","nro","piso","depto","cp","telefono","cant_materias","alumno_unahur","presentacion","cv","foto","genero"] }
       )
       .then(() => res.sendStatus(200))
       .catch((error) => {
