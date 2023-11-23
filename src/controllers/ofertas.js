@@ -312,6 +312,7 @@ export const createOferta = async (req, res) => {
       estado: "Pendiente",
       cierre: null,
       check: null,
+      genero: req.body.genero,
       modalidadDeTrabajo: req.body.modalidadDeTrabajo,
       tareasARealizar: req.body.tareasARealizar,
       fecha_vigencia: req.body.fechaVigencia,
@@ -366,6 +367,7 @@ export const updateOfertas = async (req, res) => {
           check: req.body.check,
           modalidadDeTrabajo: req.body.modalidadDeTrabajo,
           tareasARealizar: req.body.tareasARealizar,
+          genero: req.body.genero,
           fecha_vigencia: req.body.fechaVigencia,
           titulo_oferta: req.body.tituloOferta,
           descripcion: req.body.descripcion,
@@ -380,7 +382,7 @@ export const updateOfertas = async (req, res) => {
           beneficios: req.body.beneficios,
           remuneracion: req.body.remuneracion,
         },
-        { fields: ["fk_id_jornada", "fk_id_contrato", "fk_id_estudio","fk_id_carrera","estado", "cierre", "check", "modalidadDeTrabajo", "tareasARealizar", "fecha_vigencia","titulo_oferta","descripcion","horario_laboral_desde","horario_laboral_hasta","edad_desde","edad_hasta","experiencia_previa_desc","zona_trabajo","areas_estudio","otros_detalles","beneficios","remuneracion"] }
+        { fields: ["fk_id_jornada", "fk_id_contrato", "fk_id_estudio","fk_id_carrera","estado", "cierre", "check", "modalidadDeTrabajo", "tareasARealizar", "genero", "fecha_vigencia","titulo_oferta","descripcion","horario_laboral_desde","horario_laboral_hasta","edad_desde","edad_hasta","experiencia_previa_desc","zona_trabajo","areas_estudio","otros_detalles","beneficios","remuneracion"] }
       )
       .then(() => res.sendStatus(200))
       .catch((error) => {

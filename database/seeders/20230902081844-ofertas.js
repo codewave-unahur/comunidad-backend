@@ -15,6 +15,7 @@ module.exports = {
         check: null,
         modalidadDeTrabajo: "Presencial",
         tareasARealizar: null,
+        genero: null,
         fecha_vigencia: "2022-12-23 00:00:00+00",
         titulo_oferta: "Laboratorista - Industria Petrolera",
         descripcion:

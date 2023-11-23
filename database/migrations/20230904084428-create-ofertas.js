@@ -29,6 +29,9 @@ module.exports = {
       tareasARealizar:{
         type: Sequelize.TEXT,
       },
+      genero:{ 
+        type: Sequelize.STRING
+      },
       descripcion: {
         type: Sequelize.TEXT
       },
