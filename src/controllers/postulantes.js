@@ -32,7 +32,30 @@ export const getConFiltros = async (req, res) => {
           model: models.usuarios,
           attributes: ["id", "usuario", "estado", "createdAt"],
         },
-        // ... (otros includes)
+        {
+          as: "Aptitudes",
+          model: models.aptitudes_postulantes,
+          attributes: ["id"],
+          include: [
+            {
+              as: "Aptitudes del postulante",
+              model: models.aptitudes,
+              attributes: ["id", "nombre_aptitud", "descripcion"],
+            }
+          ]
+        },
+        {
+          as: "Preferencias",
+          model: models.preferencias_postulantes,
+          attributes: ["id"],
+          include: [
+            {
+              as: "Preferencias del postulante",
+              model: models.preferencias,
+              attributes: ["id", "nombre_preferencia"],
+            },
+          ],
+        }
       ],
 
       where: {
