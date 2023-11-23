@@ -22,6 +22,7 @@ import grupos from './grupos.js';
 import rubros from './rubros.js';
 import abm from './abmModels.js';
 import estados from './estados.js';
+import preferencias from './preferencias.js';
 
 import {validateToken} from '../middlewares/validador';
 
@@ -29,6 +30,7 @@ const router = express.Router();
 
 router.use('/ofertas', ofertas);
 //router.use(validateToken);
+router.use('/preferencias', preferencias);
 router.use('/usuarios', usuarios);
 router.use('/postulantes', postulantes);
 router.use('/empresas', empresas);
