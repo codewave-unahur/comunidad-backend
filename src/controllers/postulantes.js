@@ -354,7 +354,7 @@ export const eliminarAptitudes = async (req, res) => {
   res.sendStatus(200);
 }
 
-export const agregarIdioma = async (req, res) => {
+export const agregarIdiomas = async (req, res) => {
   const idiomasNuevos = req.body.idiomas;
   idiomasNuevos.forEach(idioma => {
     models.idiomas.findOne({
@@ -365,7 +365,7 @@ export const agregarIdioma = async (req, res) => {
       }
     }).then(idiomas => {
       models.idiomas_postulantes.create({
-        fk_id_usuario: req.params.id,
+        fk_id_postulante: req.params.id,
         fk_id_idioma: idiomas.id
       }).then(() => res.sendStatus(200))
       .catch(() => res.sendStatus(500));
@@ -383,7 +383,7 @@ export const eliminarIdioma = async (req, res) => {
   }).then(idiomas => {
     models.idiomas_postulantes.destroy({
       where: {
-        fk_id_usuario: req.params.id,
+        fk_id_postulante: req.params.id,
         fk_id_idioma: idiomas.id
       }
     }).then(() => res.sendStatus(200))
