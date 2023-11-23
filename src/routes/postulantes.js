@@ -9,7 +9,9 @@ import {
   agregarPreferencias,
   eliminarPreferencias,
   agregarAptitudes,
-  eliminarAptitudes
+  eliminarAptitudes,
+  agregarIdioma,
+  eliminarIdioma
 } from '../controllers/postulantes';
 import { withErrorHandling } from './utils';
 
@@ -20,6 +22,8 @@ router.get('/', withErrorHandling(getConFiltros))
       .get('/idUsuario/:id', withErrorHandling(getPorIdUsuario)) 
       .get('/dni/:id', withErrorHandling(getPorId));
 router.post('/preferencias/:id', withErrorHandling(agregarPreferencias));
+router.post('/idiomas/:id', withErrorHandling(agregarIdioma));
+router.delete('/idiomas/:id', withErrorHandling(eliminarIdioma));
 router.delete('/preferencias/:id', withErrorHandling(eliminarPreferencias));
 router.post('/aptitudes/:id', withErrorHandling(agregarAptitudes));
 router.delete('/aptitudes/:id', withErrorHandling(eliminarAptitudes));
