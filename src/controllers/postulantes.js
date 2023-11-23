@@ -374,22 +374,13 @@ export const agregarIdiomas = async (req, res) => {
 }
 
 export const eliminarIdioma = async (req, res) => {
-  models.idiomas.findOne({
+ models.idiomas_postulantes.destroy({
     where: {
-      nombre_idioma: req.body.nombre_idioma,
-      nivel_oral: req.body.nivel_oral,
-      nivel_escrito: req.body.nivel_escrito
+      id: req.params.id
     }
-  }).then(idiomas => {
-    models.idiomas_postulantes.destroy({
-      where: {
-        fk_id_postulante: req.params.id,
-        fk_id_idioma: idiomas.id
-      }
-    }).then(() => res.sendStatus(200))
+ }).then(() => res.sendStatus(200))
     .catch(() => res.sendStatus(500));
-  })
-}
+  }
 
 
 export const updatePostulante = async (req, res) => {
