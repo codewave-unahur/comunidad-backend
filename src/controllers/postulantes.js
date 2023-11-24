@@ -255,6 +255,7 @@ export const postPostulante = async (req, res) => {
       nombre: req.body.nombre,
       apellido: req.body.apellido,
       genero: req.body.genero,
+      discapacidad: req.body.discapacidad,
       nacionalidad: req.body.nacionalidad,
       fecha_nac: req.body.fecha_nac,
       pais: req.body.pais,
@@ -266,11 +267,14 @@ export const postPostulante = async (req, res) => {
       depto: req.body.depto,
       cp: req.body.cp,
       telefono: req.body.telefono,
+      segundoTelefono: req.body.segundoTelefono,
       cant_materias: req.body.cantMaterias,
       alumno_unahur: req.body.alumnoUnahur,
       presentacion: req.body.presentacion,
       cv: req.body.cv,
       foto: req.body.foto,
+      linkedIn: req.body.linkedIn,
+      portfolio: req.body.portfolio
     })
     .then(
       (postulantes) => res.status(201).send({ id: postulantes.id }),
@@ -396,6 +400,7 @@ export const updatePostulante = async (req, res) => {
           nombre: req.body.nombre,
           apellido: req.body.apellido,
           genero: req.body.genero,
+          discapacidad: req.body.discapacidad,
           nacionalidad: req.body.nacionalidad,
           fecha_nac: req.body.fecha_nac,
           pais: req.body.pais,
@@ -407,13 +412,16 @@ export const updatePostulante = async (req, res) => {
           depto: req.body.depto,
           cp: req.body.cp,
           telefono: req.body.telefono,
+          segundoTelefono: req.body.segundoTelefono,
           cant_materias: req.body.cantMaterias,
           alumno_unahur: req.body.alumnoUnahur,
           presentacion: req.body.presentacion,
           cv: req.body.cv,
-          foto: req.body.foto
+          foto: req.body.foto,
+          linkedIn: req.body.linkedIn,
+          portfolio: req.body.portfolio
         },
-          { fields: ["tipo_documento", "fk_id_usuario","fk_id_estudios","fk_id_carrera","estado","nombre","apellido","nacionalidad","fecha_nac","pais","fk_id_provincia","fk_id_ciudad","calle","nro","piso","depto","cp","telefono","cant_materias","alumno_unahur","presentacion","cv","foto","genero"] }
+          { fields: ["tipo_documento", "fk_id_usuario","fk_id_estudios","fk_id_carrera","estado","nombre","apellido","nacionalidad","fecha_nac","pais","fk_id_provincia","fk_id_ciudad","calle","nro","piso","depto","cp","telefono", "segundoTelefono","cant_materias","alumno_unahur","presentacion","cv","foto", "linkedIn", "portfolio","genero", "discapacidad"] }
       )
       .then(() => res.sendStatus(200))
       .catch((error) => {

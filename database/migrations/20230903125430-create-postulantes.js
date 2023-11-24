@@ -17,6 +17,9 @@ module.exports = {
       genero: {
         type: Sequelize.STRING,
       },
+      discapacidad:{
+        type: Sequelize.STRING,
+      },
       estado:{
         type: Sequelize.STRING
       },
@@ -56,6 +59,9 @@ module.exports = {
       telefono: {
         type: Sequelize.INTEGER,
       },
+      segundoTelefono:{
+        type: Sequelize.INTEGER,
+      },
       cant_materias: {
         type: Sequelize.STRING,
       },
@@ -69,6 +75,12 @@ module.exports = {
         type: Sequelize.TEXT,
       },
       foto: {
+        type: Sequelize.TEXT,
+      },
+      linkedIn: {
+        type: Sequelize.TEXT,
+      },
+      portfolio: {
         type: Sequelize.TEXT,
       },
       createdAt: {
