@@ -69,7 +69,7 @@ module.exports = {
         type: Sequelize.BOOLEAN,
       },
       presentacion: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
       },
       cv: {
         type: Sequelize.TEXT,
