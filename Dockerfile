@@ -7,7 +7,7 @@ COPY package*.json ./
 RUN npm install
 
 # Copia la carpeta de código fuente
-COPY ./dist ./dist
+COPY ./src ./src
 COPY ./database ./database
 COPY .sequelizerc .sequelizerc
 COPY .babelrc .babelrc
