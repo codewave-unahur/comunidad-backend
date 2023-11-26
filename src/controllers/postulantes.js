@@ -1,6 +1,7 @@
 const models = require("../../database/models");
 const { Op } = require("sequelize");
-// ... (importaciones)
+const sendEmail = require("../../database/utils/sendEmail.js");
+
 
 export const getConFiltros = async (req, res) => {
   try {
@@ -243,8 +244,30 @@ export const getPorId = async (req, res) => {
   });
 };
 
+export const findUsuarioPorDNI = async (dni) => {
+  try {
+    const postulantes = await models.postulantes.findAndCountAll({
+      include: [
+        {
+          as: "Usuario",
+          model: models.usuarios,
+          attributes: ["id", "usuario"],
+        },
+      ],
+      where: { fk_id_usuario: dni },
+    });
+
+    return postulantes ? postulantes : false;
+  } catch (error) {
+    console.error(`Error al buscar usuario por DNI: ${error}`);
+    return ;
+  }
+};
+
+
 export const postPostulante = async (req, res) => {
-  models.postulantes
+  try{
+    const postulante = await models.postulantes
     .create({
       id: req.body.documento,
       tipo_documento: req.body.tipoDocumento,
@@ -275,20 +298,35 @@ export const postPostulante = async (req, res) => {
       foto: req.body.foto,
       linkedIn: req.body.linkedIn,
       portfolio: req.body.portfolio
-    })
-    .then(
-      (postulantes) => res.status(201).send({ id: postulantes.id }),
-      //aca habilitamos el usuario
-      enableUser(req.body.idUsuario)
-    )
-    .catch((error) => {
-      if (error == "SequelizeUniqueConstraintError: Validation error") {
+    });
+
+    const user = await findUsuarioPorDNI(postulante.fk_id_usuario);
+
+    if (user) {
+      await sendEmail(
+      user.rows[0].Usuario.dataValues.usuario, 
+      "Bienvenido a Comunidad UNAHUR",
+      {
+        nombre: postulante.nombre,
+      },
+      '../../database/utils/template/welcome.handlebars'
+      );
+    } else {
+      console.error("No se encontró el usuario o la propiedad 'usuario' está indefinida.");
+    }
+
+    enableUser(req.body.idUsuario); //Aca habilitamos el usuario
+
+    res.status(201).send({ id: postulante.id });
+
+    } catch (error) {
+      if (error.name === "SequelizeUniqueConstraintError") {
         res.status(401).send("Bad request: este dni ya se dio de alta");
       } else {
         console.log(`Error al intentar insertar en la base de datos: ${error}`);
         res.sendStatus(500);
       }
-    });
+    }
 };
 
 //Con esto habilitamos el usuario cuando de el alta en postulantes
