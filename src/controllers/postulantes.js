@@ -1,5 +1,6 @@
 const models = require("../../database/models");
 const { Op } = require("sequelize");
+const { Op: sequelize } = require("sequelize");
 const sendEmail = require("../../database/utils/sendEmail.js");
 
 
@@ -520,4 +521,95 @@ export const updatePostulante = async (req, res) => {
     onNotFound: () => res.sendStatus(404),
     onError: () => res.sendStatus(500),
   });
+};
+
+
+export const postulantesBaseUnahur = async (req, res) => {
+  try {
+    const paginaComoNumero = Number.parseInt(req.query.pagina);
+    const limiteComoNumero = Number.parseInt(req.query.limite);
+    let ordenarPor = req.query.ordenar;
+    let buscarPostulante = req.query.buscarPostulante;
+
+    // Validar ordenarPor
+    const camposValidos = ["createdAt", "otroCampoValido"];
+    ordenarPor = camposValidos.includes(ordenarPor) ? ordenarPor : "createdAt";
+
+    const pagina = !Number.isNaN(paginaComoNumero) && paginaComoNumero > 0 ? paginaComoNumero : 0;
+    const limite = !Number.isNaN(limiteComoNumero) && limiteComoNumero > 0 ? limiteComoNumero : 30;
+
+    // Busca por el nombre y el apellido 
+    let [buscarNombre = "_", buscarApellido = "_"] = (buscarPostulante || "").split(" ", 2);
+
+    if (typeof buscarApellido === "undefined") {
+      buscarApellido = buscarNombre;
+    }
+
+    const postulantes = await models.postulantes.findAndCountAll({
+      limit: limite,
+      offset: pagina * limite,
+      include: [
+        {
+          as: "Usuario",
+          model: models.usuarios,
+          attributes: ["id", "usuario", "estado", "createdAt"],
+        },
+        {
+          as: "Postulaciones",
+          model: models.postulaciones,
+          attributes: ["id", "fk_id_oferta"],
+          where : {
+            fk_id_oferta : 0
+          },
+        },
+        {
+          as: "Aptitudes",
+          model: models.aptitudes_postulantes,
+          attributes: ["id"],
+          include: [
+            {
+              as: "Aptitudes del postulante",
+              model: models.aptitudes,
+              attributes: ["id", "nombre_aptitud", "descripcion"],
+            }
+          ]
+        },
+        {
+          as: "Preferencias",
+          model: models.preferencias_postulantes,
+          attributes: ["id"],
+          include: [
+            {
+              as: "Preferencias del postulante",
+              model: models.preferencias,
+              attributes: ["id", "nombre_preferencia"],
+            },
+          ],
+        }
+      ],
+      where: {
+        [Op.or]: [
+          buscarNombre !== '_' && {
+            nombre: {
+              [Op.iLike]: `%${buscarNombre}%`,
+            },
+          },
+          buscarApellido !== '_' && {
+            apellido: {
+              [Op.iLike]: `%${buscarApellido}%`,
+            },
+          },
+        ].filter(Boolean), // Eliminar elementos nulos o falsos
+      },      
+      order: [ordenarPor],
+    });
+
+    res.send({
+      postulantes,
+      totalPaginas: Math.ceil(postulantes.count / limite),
+    });
+  } catch (error) {
+    console.error('Error al buscar postulantes:', error);
+    res.sendStatus(400);
+  }
 };

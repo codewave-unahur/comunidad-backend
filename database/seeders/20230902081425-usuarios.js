@@ -4,6 +4,15 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     const usuarios = [
       {
+        id: 0,
+        fk_id_grupo: 3,
+        usuario: '',
+        password: 'alksjdalkjsbdalkjsdhoaushdiouhasdlkj',
+        estado: 't',
+        createdAt: '2022-08-23 00:52:55.693+00',
+        updatedAt: '2022-08-23 00:52:55.693+00',
+      },
+      {
         id: 4556,
         fk_id_grupo: 1,
         usuario: 'ivorrajosemaria@gmail.com',

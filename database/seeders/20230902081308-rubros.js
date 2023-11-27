@@ -4,6 +4,12 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     const rubros = [
       {
+        id: 0,
+        nombre_rubro: "educación",
+        createdAt: "2022-06-05 12:00:00+00",
+        updatedAt: "2022-06-05 12:00:00+00",
+      },
+      {
         id: 1,
         nombre_rubro: "desarrollo",
         createdAt: "2022-06-05 12:00:00+00",

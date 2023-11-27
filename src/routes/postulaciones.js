@@ -10,13 +10,15 @@ import {
   activarPostulante,
   getPorIdOfertaTodas,
   marcarContactado,
-  desactivarPostulacion
+  desactivarPostulacion,
+  postularseBaseUnahur
 } from '../controllers/postulaciones';
 import { withErrorHandling } from './utils';
 
 const router = express.Router();
 
 router.post('/', withErrorHandling(postPostulaciones));
+router.post('/baseConstante/:id', withErrorHandling(postularseBaseUnahur));
 router.get('/todas/', withErrorHandling(getConFiltros))
       .get('/:id', withErrorHandling(getPorId))
       .get('/oferta/:id', withErrorHandling(getPorIdOferta))

@@ -84,6 +84,7 @@ export const getOfertasPorFiltros = async (req, res) => {
             estado: {
               [sequelize.iLike]: `%${estado}%`
             },
+            id: { [sequelize.gt]: 0 },
           },
         ],
       },
@@ -151,7 +152,10 @@ export const getOfertas = async (req, res) => {
             }
           ],
         }
-      ]
+      ],
+      where: {
+        id: { [sequelize.gt]: 0 },
+      },
     })
     .then((ofertas) =>
       res.send({
@@ -328,7 +332,49 @@ export const createOferta = async (req, res) => {
       remuneracion: req.body.remuneracion,
       horario_laboral_desde: req.body.horarioLaboralDesde,
       horario_laboral_hasta: req.body.horarioLaboralHasta,
-    })
+    }).then(
+      (ofertas) => {
+        if (req.body.idiomas.length > 0) {
+          req.body.idiomas.forEach((idioma) => {
+            models.idiomas.findOne({
+              where: {
+                nombre_idioma: idioma.nombre_idioma,
+                nivel_oral: idioma.nivel_oral,
+                nivel_escrito: idioma.nivel_escrito
+              }}).then(
+                (idiomas) => {
+                  models.idiomas_ofertas.create({
+                    fk_id_oferta: ofertas.id,
+                    fk_id_idioma: idiomas.id,
+                  });
+                }
+              );
+          });
+        }
+      }
+    ).then(
+      (ofertas) => {
+        if (req.body.preferencias.length > 0) {
+          req.body.preferencias.forEach((preferencia) => {
+            models.preferencias_ofertas.create({
+              fk_id_oferta: ofertas.id,
+              fk_id_preferencia: preferencia.id,
+            });
+          });
+        }
+      }
+    ).then (
+      (ofertas) => {
+        if (req.body.aptitudes.length > 0) {
+          req.body.aptitudes.forEach((aptitud) => {
+            models.aptitudes_ofertas.create({
+              fk_id_oferta: ofertas.id,
+              fk_id_aptitud: aptitud.id,
+            });
+          });
+        }
+      }
+    )
     .then((ofertas) => res.status(201).send({ id: ofertas.id }))
     .catch((error) => {
       if (error == "SequelizeUniqueConstraintError: Validation error") {
