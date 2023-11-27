@@ -398,21 +398,31 @@ export const eliminarAptitudes = async (req, res) => {
 
 export const agregarIdiomas = async (req, res) => {
   const idiomasNuevos = req.body.idiomas;
-  idiomasNuevos.forEach(idioma => {
-    models.idiomas.findOne({
-      where: {
-        nombre_idioma: idioma.nombre_idioma,
-        nivel_oral: idioma.nivel_oral,
-        nivel_escrito: idioma.nivel_escrito
-      }
-    }).then(idiomas => {
-      models.idiomas_postulantes.create({
+
+  for (const idioma of idiomasNuevos) {
+    try {
+      const idiomas = await models.idiomas.findOne({
+        where: {
+          nombre_idioma: idioma.nombre_idioma,
+          nivel_oral: idioma.nivel_oral,
+          nivel_escrito: idioma.nivel_escrito
+        }
+      });
+
+      const idiomaPostulante = await models.idiomas_postulantes.create({
         fk_id_postulante: req.params.id,
         fk_id_idioma: idiomas.id
-      }).then(() => res.sendStatus(200))
-      .catch(() => res.sendStatus(500));
-    })
-  })
+      });
+
+      // Puedes hacer algo con idiomaPostulante si es necesario
+
+    } catch (error) {
+      console.error(error);
+      return res.sendStatus(500);
+    }
+  }
+
+  res.sendStatus(200);
 }
 
 export const eliminarIdioma = async (req, res) => {
