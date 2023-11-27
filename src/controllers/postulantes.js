@@ -387,13 +387,19 @@ export const agregarAptitudes = async (req, res) => {
   }
 
 export const eliminarAptitudes = async (req, res) => {
-  models.aptitudes_postulantes.destroy({
-    where: {
-      fk_id_usuario: req.params.id,
-      fk_id_aptitud: req.body.id
-    }
-  })
-  res.sendStatus(200);
+  try {
+    await models.aptitudes_postulantes.destroy({
+      where: {
+        fk_id_usuario: req.params.id,
+        fk_id_aptitud: req.body.id
+      }
+    });
+    
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
 }
 
 export const agregarIdiomas = async (req, res) => {
