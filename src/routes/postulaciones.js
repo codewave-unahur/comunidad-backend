@@ -9,7 +9,8 @@ import {
   updatePostulaciones,
   activarPostulante,
   getPorIdOfertaTodas,
-  marcarContactado
+  marcarContactado,
+  desactivarPostulacion
 } from '../controllers/postulaciones';
 import { withErrorHandling } from './utils';
 
@@ -23,6 +24,7 @@ router.get('/todas/', withErrorHandling(getConFiltros))
 router.get('/ofertatodas/:id', withErrorHandling(getPorIdOfertaTodas));
 router.put('/:id', withErrorHandling(updatePostulaciones));
 router.put('/activar/:id', withErrorHandling(activarPostulante));
+router.put('/desactivar/:id', withErrorHandling(desactivarPostulacion));
 router.put('/contactado/:id', withErrorHandling(marcarContactado));
 router.delete('/:id', withErrorHandling(deletePostulacion));
 

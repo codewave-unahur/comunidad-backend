@@ -274,7 +274,7 @@ export const postPostulante = async (req, res) => {
       fk_id_usuario: req.body.idUsuario,
       fk_id_estudios: req.body.estudios,
       fk_id_carrera: req.body.carrera,
-      estado: req.body.estado,
+      estado: "Activo",
       nombre: req.body.nombre,
       apellido: req.body.apellido,
       genero: req.body.genero,
@@ -315,7 +315,7 @@ export const postPostulante = async (req, res) => {
       console.error("No se encontró el usuario o la propiedad 'usuario' está indefinida.");
     }
 
-    enableUser(req.body.idUsuario); //Aca habilitamos el usuario
+    await enableUser(req.body.idUsuario); //Aca habilitamos el usuario
 
     res.status(201).send({ id: postulante.id });
 
@@ -330,7 +330,7 @@ export const postPostulante = async (req, res) => {
 };
 
 //Con esto habilitamos el usuario cuando de el alta en postulantes
-const enableUser = (id_usuario) => {
+const enableUser = async (id_usuario) => {
   models.usuarios.update(
     { estado: "t" },
     {

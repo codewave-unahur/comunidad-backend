@@ -317,6 +317,36 @@ export const activarPostulante = async (req, res) => {
     });
 }
 
+export const desactivarPostulacion = async (req, res) => {
+  // Agregar el email de rechazo a la postulacion
+  const onSuccess = (postulaciones) =>
+    postulaciones
+    .update(
+      {
+        estado_postulacion: false,
+      },
+      { fields: ["estado_postulacion"] }
+    )
+    .then(() => res.sendStatus(200))
+    .catch((error) => {
+      if (error == "SequelizeUniqueConstraintError: Validation error") {
+        res
+          .status(400)
+          .send("Bad request: Algun tipo de error de validacion de campos");
+      } else {
+        console.log(
+          `Error al intentar actualizar la base de datos: ${error}`
+        );
+        res.sendStatus(500);
+      }
+    });
+    findPostulaciones(req.params.id, {
+      onSuccess,
+      onNotFound: () => res.sendStatus(404),
+      onError: () => res.sendStatus(500),
+    });
+}
+
 export const marcarContactado = async (req, res) => {
   const onSuccess = (postulaciones) =>
     postulaciones
