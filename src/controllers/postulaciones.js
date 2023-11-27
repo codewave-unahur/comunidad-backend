@@ -346,4 +346,33 @@ export const marcarContactado = async (req, res) => {
     });
   }
 
-  
+export const postularseBaseUnahur = async (req, res) => {
+  models.postulantes.findOne({
+    where: { fk_id_usuario: req.params.id },
+  }).then((postulante) => {
+    if (postulante) {
+      models.postulaciones
+        .create({
+          fk_id_postulante: postulante.id,
+          fk_id_oferta: 0,
+          fk_id_empresa: 0,
+          contactado: "f",
+        })
+        .then((postulacion) => res.send({ id: postulacion.id, idPostulante: postulante.id }))
+        .catch((error) => {
+          if (error.name === "SequelizeUniqueConstraintError") {
+            res
+              .status(400)
+              .send("Bad request: algún error de validación de campos");
+          } else {
+            console.error(
+              `Error al intentar insertar en la base de datos: ${error}`
+            );
+            res.sendStatus(500);
+          }
+        });
+    } else {
+      res.status(400).send("Bad request: el usuario no existe");
+    }
+  });
+}
