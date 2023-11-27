@@ -366,18 +366,24 @@ export const agregarPreferencias = async (req, res) => {
   };
 
 export const eliminarPreferencias = async (req, res) => {
-  models.preferencias_postulantes.destroy({
-    where: {
-      fk_id_postulante: req.params.id,
-      fk_id_preferencia: req.body.id
-    }
-  })
-  res.sendStatus(200);
+  try {
+    await models.preferencias_postulantes.destroy({
+      where: {
+        fk_id_postulante: req.params.id,
+        fk_id_preferencia: req.body.id
+      }
+    });
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
 }
 
 export const agregarAptitudes = async (req, res) => {
   const aptitudesNuevas = req.body.aptitudes;
-  
+
   try {
     for (const aptitud of aptitudesNuevas) {
       await models.aptitudes_postulantes.create({
