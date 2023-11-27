@@ -11,7 +11,8 @@ import {
   getPorIdOfertaTodas,
   marcarContactado,
   desactivarPostulacion,
-  postularseBaseUnahur
+  postularseBaseUnahur,
+  marcarNoContactado
 } from '../controllers/postulaciones';
 import { withErrorHandling } from './utils';
 
@@ -28,6 +29,7 @@ router.put('/:id', withErrorHandling(updatePostulaciones));
 router.put('/activar/:id', withErrorHandling(activarPostulante));
 router.put('/desactivar/:id', withErrorHandling(desactivarPostulacion));
 router.put('/contactado/:id', withErrorHandling(marcarContactado));
+router.put('/noContactado/:id', withErrorHandling(marcarNoContactado));
 router.delete('/:id', withErrorHandling(deletePostulacion));
 
 export default router;

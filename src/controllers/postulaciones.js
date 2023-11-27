@@ -195,7 +195,8 @@ export const postPostulaciones = async (req, res) => {
       fk_id_postulante: req.body.postulante,
       fk_id_oferta: req.body.oferta,
       fk_id_empresa: req.body.empresa,
-      contactado: "f",
+      estado_postulacion: null,
+      contactado: null,
     });
 
     res.status(201).send({ id: postulacion.id });
@@ -374,7 +375,36 @@ export const marcarContactado = async (req, res) => {
       onNotFound: () => res.sendStatus(404),
       onError: () => res.sendStatus(500),
     });
-  }
+};
+
+export const marcarNoContactado = async (req, res) => {
+  const onSuccess = (postulaciones) =>
+    postulaciones
+    .update(
+      {
+        contactado: false,
+      },
+      { fields: ["contactado"] }
+    )
+    .then(() => res.sendStatus(200))
+    .catch((error) => {
+      if (error == "SequelizeUniqueConstraintError: Validation error") {
+        res
+          .status(400)
+          .send("Bad request: Algun tipo de error de validacion de campos");
+      } else {
+        console.log(
+          `Error al intentar actualizar la base de datos: ${error}`
+        );
+        res.sendStatus(500);
+      }
+    });
+    findPostulaciones(req.params.id, {
+      onSuccess,
+      onNotFound: () => res.sendStatus(404),
+      onError: () => res.sendStatus(500),
+    });
+};
 
 export const postularseBaseUnahur = async (req, res) => {
   models.postulantes.findOne({
