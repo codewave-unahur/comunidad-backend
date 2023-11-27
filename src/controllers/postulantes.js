@@ -377,14 +377,21 @@ export const eliminarPreferencias = async (req, res) => {
 
 export const agregarAptitudes = async (req, res) => {
   const aptitudesNuevas = req.body.aptitudes;
-  aptitudesNuevas.forEach(aptitud => {
-    models.aptitudes_postulantes.create({
-      fk_id_usuario: req.params.id,
-      fk_id_aptitud: aptitud.id
-    });
-    })
+  
+  try {
+    for (const aptitud of aptitudesNuevas) {
+      await models.aptitudes_postulantes.create({
+        fk_id_usuario: req.params.id,
+        fk_id_aptitud: aptitud.id
+      });
+    }
+
     res.sendStatus(200);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
   }
+}
 
 export const eliminarAptitudes = async (req, res) => {
   try {
