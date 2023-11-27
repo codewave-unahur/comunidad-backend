@@ -426,14 +426,19 @@ export const agregarIdiomas = async (req, res) => {
 }
 
 export const eliminarIdioma = async (req, res) => {
- models.idiomas_postulantes.destroy({
-    where: {
-      id: req.params.id
-    }
- }).then(() => res.sendStatus(200))
-    .catch(() => res.sendStatus(500));
+  try {
+    await models.idiomas_postulantes.destroy({
+      where: {
+        id: req.params.id
+      }
+    });
+    
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
   }
-
+}
 
 export const updatePostulante = async (req, res) => {
   const onSuccess = (postulantes) =>
