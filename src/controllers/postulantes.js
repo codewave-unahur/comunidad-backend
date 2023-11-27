@@ -356,14 +356,21 @@ export const deletePostulante = async (req, res) => {
 
 export const agregarPreferencias = async (req, res) => {
   const preferenciasNuevas = req.body.preferencias;
-  preferenciasNuevas.forEach(preferencia => {
-    models.preferencias_postulantes.create({
-      fk_id_postulante: req.params.id,
-      fk_id_preferencia: preferencia.id
-    });
-    })
+
+  try {
+    for (const preferencia of preferenciasNuevas) {
+      await models.preferencias_postulantes.create({
+        fk_id_postulante: req.params.id,
+        fk_id_preferencia: preferencia.id
+      });
+    }
+
     res.sendStatus(200);
-  };
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+};
 
 export const eliminarPreferencias = async (req, res) => {
   try {
@@ -379,7 +386,7 @@ export const eliminarPreferencias = async (req, res) => {
     console.error(error);
     res.sendStatus(500);
   }
-}
+};
 
 export const agregarAptitudes = async (req, res) => {
   const aptitudesNuevas = req.body.aptitudes;
@@ -397,7 +404,7 @@ export const agregarAptitudes = async (req, res) => {
     console.error(error);
     res.sendStatus(500);
   }
-}
+};
 
 export const eliminarAptitudes = async (req, res) => {
   try {
@@ -413,7 +420,7 @@ export const eliminarAptitudes = async (req, res) => {
     console.error(error);
     res.sendStatus(500);
   }
-}
+};
 
 export const agregarIdiomas = async (req, res) => {
   const idiomasNuevos = req.body.idiomas;
@@ -442,7 +449,7 @@ export const agregarIdiomas = async (req, res) => {
   }
 
   res.sendStatus(200);
-}
+};
 
 export const eliminarIdioma = async (req, res) => {
   try {
@@ -457,7 +464,7 @@ export const eliminarIdioma = async (req, res) => {
     console.error(error);
     res.sendStatus(500);
   }
-}
+};
 
 export const updatePostulante = async (req, res) => {
   const onSuccess = (postulantes) =>
