@@ -304,7 +304,7 @@ export const postPostulante = async (req, res) => {
 
     if (user) {
       await sendEmail(
-      user.rows[0].Usuario.dataValues.usuario, 
+      user.rows[0]?.Usuario?.dataValues.usuario, 
       "Bienvenido a Comunidad UNAHUR",
       {
         nombre: postulante.nombre,
