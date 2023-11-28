@@ -190,6 +190,36 @@ export const getConFiltros = async (req, res) => {
     })).catch(() => res.sendStatus(500));
 };
 
+const findPostulacion = async (id) => {
+  try {
+    const postulacion = await models.postulaciones.findOne({
+      include: [
+        {
+          as: "Postulante",
+          model: models.postulantes,
+          attributes: ["id", "nombre", "apellido", "fk_id_usuario", "telefono"],
+        },
+        {
+          as: "Oferta",
+          model: models.ofertas,
+          attributes: ["id", "titulo_oferta"],
+        },
+        {
+          as: "Empresa",
+          model: models.empresas,
+          attributes: ["id", "nombre_empresa"],
+        },
+      ],
+      where: { id: id },
+    });
+
+    return postulacion || null;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
 export const postPostulaciones = async (req, res) => {
   try {
     const postulacion = await models.postulaciones.create({
@@ -200,7 +230,27 @@ export const postPostulaciones = async (req, res) => {
       contactado: null,
     });
 
+    const postulante = await findPostulacion(postulacion.dataValues.id);
+    const user = await findUsuarioPorDNI(postulacion.dataValues.fk_id_postulante);
+  
+    if (user && postulante) {
+      await sendEmail(
+        user.rows[0]?.Usuario?.dataValues?.usuario, 
+        "Informe de postulación ",
+        {
+          nombre: postulante.dataValues.Postulante.dataValues.nombre,
+          nombreDeOferta: postulante.dataValues.Oferta.dataValues.titulo_oferta,
+        },
+        '../../database/utils/template/postulacionAOferta.handlebars'
+      );
+    } else {
+      console.error(
+        "No se encontró el postulante o la oferta."
+      );
+    }
+    
     res.status(201).send({ id: postulacion.id });
+   
   } catch (error) {
     if (error.name === "SequelizeUniqueConstraintError") {
       res.status(400).send('Bad request: algún error de validación de campos');
@@ -334,6 +384,19 @@ export const findUsuarioPorDNI = async (dni) => {
     });
 
     return postulantes ? postulantes : false;
+  } catch (error) {
+    console.error(`Error al buscar usuario por DNI: ${error}`);
+    return ;
+  }
+};
+
+export const findOfertaPorId = async(idOferta) =>{
+  try {
+    const oferta = await models.ofertas.findAndCountAll({
+      where: { id: idOferta },
+    });
+
+    return oferta ? oferta : false;
   } catch (error) {
     console.error(`Error al buscar usuario por DNI: ${error}`);
     return ;
