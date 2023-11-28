@@ -273,6 +273,7 @@ export const postEmpresa = async (req, res) => {
       "Bienvenido a Comunidad UNAHUR",
       {
         nombre: empresa.nombre_representante,
+        nombreEmpresa: empresa.nombre_empresa,
       },
       '../../database/utils/template/welcomeEmpresa.handlebars'
       );
