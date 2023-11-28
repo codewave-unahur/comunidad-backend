@@ -198,6 +198,13 @@ const findPostulacion = async (id) => {
           as: "Postulante",
           model: models.postulantes,
           attributes: ["id", "nombre", "apellido", "fk_id_usuario", "telefono"],
+          include:[
+            {
+              as: "Usuario",
+              model: models.usuarios,
+              attributes: ["id", "usuario"],
+            },
+          ],
         },
         {
           as: "Oferta",
@@ -231,12 +238,11 @@ export const postPostulaciones = async (req, res) => {
     });
 
     const postulante = await findPostulacion(postulacion.dataValues.id);
-    const user = await findUsuarioPorDNI(postulacion.dataValues.fk_id_postulante);
-  
-    if (user && postulante) {
+    
+    if (postulante) {
       await sendEmail(
-        user.rows[0]?.Usuario?.dataValues?.usuario, 
-        "Informe de postulación ",
+        postulante.dataValues.Postulante.dataValues.Usuario.usuario, 
+        "Postulación",
         {
           nombre: postulante.dataValues.Postulante.dataValues.nombre,
           nombreDeOferta: postulante.dataValues.Oferta.dataValues.titulo_oferta,
@@ -250,7 +256,7 @@ export const postPostulaciones = async (req, res) => {
     }
     
     res.status(201).send({ id: postulacion.id });
-   
+
   } catch (error) {
     if (error.name === "SequelizeUniqueConstraintError") {
       res.status(400).send('Bad request: algún error de validación de campos');
