@@ -1,5 +1,6 @@
 const models = require("../../database/models");
 const { Op: sequelize } = require("sequelize");
+const sendEmail = require("../../database/utils/sendEmail.js");
 
 export const getPorIdPostulante = async (req, res) => {
   const paginaComoNumero = Number.parseInt(req.query.pagina);
@@ -316,37 +317,76 @@ export const activarPostulante = async (req, res) => {
       onNotFound: () => res.sendStatus(404),
       onError: () => res.sendStatus(500),
     });
-}
+};
+
+// esto esta re reduntante mal, pero bueno por temas de tiempo tuve que hacerlo asi u.u
+export const findUsuarioPorDNI = async (dni) => {
+  try {
+    const postulantes = await models.postulantes.findAndCountAll({
+      include: [
+        {
+          as: "Usuario",
+          model: models.usuarios,
+          attributes: ["id", "usuario"],
+        },
+      ],
+      where: { id: dni },
+    });
+
+    return postulantes ? postulantes : false;
+  } catch (error) {
+    console.error(`Error al buscar usuario por DNI: ${error}`);
+    return ;
+  }
+};
 
 export const desactivarPostulacion = async (req, res) => {
-  // Agregar el email de rechazo a la postulacion
-  const onSuccess = (postulaciones) =>
-    postulaciones
-    .update(
-      {
-        estado_postulacion: false,
-      },
-      { fields: ["estado_postulacion"] }
-    )
-    .then(() => res.sendStatus(200))
-    .catch((error) => {
-      if (error == "SequelizeUniqueConstraintError: Validation error") {
-        res
-          .status(400)
-          .send("Bad request: Algun tipo de error de validacion de campos");
-      } else {
-        console.log(
-          `Error al intentar actualizar la base de datos: ${error}`
+  const onSuccess = async (postulaciones) => {
+    try {
+      await postulaciones.update(
+        { estado_postulacion: false },
+        { fields: ["estado_postulacion"] }
+      );
+
+      const postulante = postulaciones.Postulante;
+      const oferta = postulaciones.Oferta;
+      const user = await findUsuarioPorDNI(postulante.id);
+
+      if (user && oferta) {
+        await sendEmail(
+          user.rows[0]?.Usuario?.dataValues?.usuario, 
+          "Informe de postulación ",
+          {
+            nombre: postulante.nombre,
+            nombreDeOferta: oferta.titulo_oferta,
+          },
+          '../../database/utils/template/rechazoDePostulacion.handlebars'
         );
+      } else {
+        console.error(
+          "No se encontró el postulante o la oferta."
+        );
+      }
+
+      res.sendStatus(200);
+
+    } catch (error) {
+      if (error == "SequelizeUniqueConstraintError: Validation error") {
+        res.status(400).send("Bad request: Algun tipo de error de validación de campos");
+      } else {
+        console.log(`Error al intentar actualizar la base de datos: ${error}`);
         res.sendStatus(500);
       }
-    });
-    findPostulaciones(req.params.id, {
-      onSuccess,
-      onNotFound: () => res.sendStatus(404),
-      onError: () => res.sendStatus(500),
-    });
-}
+    }
+  };
+
+  findPostulaciones(req.params.id, {
+    onSuccess,
+    onNotFound: () => res.sendStatus(404),
+    onError: () => res.sendStatus(500),
+  });
+};
+
 
 export const marcarContactado = async (req, res) => {
   const onSuccess = (postulaciones) =>
