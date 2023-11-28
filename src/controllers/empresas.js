@@ -1,5 +1,6 @@
 const models = require("../../database/models");
 const { Op: sequelize } = require("sequelize");
+const sendEmail = require("../../database/utils/sendEmail.js");
 
 export const getConFiltros = async (req, res) => {
   let paginaComoNumero = Number.parseInt(req.query.pagina);
@@ -226,8 +227,22 @@ export const deleteEmpresa = async (req, res) => {
   });
 };
 
+export const findUsuarioPorId = async (idUsuario) => {
+  try {
+    const user = await models.usuarios.findAndCountAll({
+      where: { id: idUsuario },
+    });
+
+    return user ? user : false;
+  } catch (error) {
+    console.error(`Error al buscar usuario: ${error}`);
+    return ;
+  }
+};
+
 export const postEmpresa = async (req, res) => {
-  models.empresas
+  try{
+  const empresa = await models.empresas
     .create({
       id:  req.body.cuit,
       fk_id_usuario: req.body.idUsuario,     
@@ -249,17 +264,32 @@ export const postEmpresa = async (req, res) => {
       email_representante: req.body.emailRepresentante,  
       logo: "logo.jpg" 
     })
-    .then(
-      (empresas) => res.status(201).send({ id: empresas.id }))
+  
+    const user = await findUsuarioPorId(empresa.fk_id_usuario);
 
-    .catch((error) => {
+    if (user) {
+      await sendEmail(
+      user.rows[0]?.dataValues?.usuario, 
+      "Bienvenido a Comunidad UNAHUR",
+      {
+        nombre: empresa.nombre_representante,
+      },
+      '../../database/utils/template/welcomeEmpresa.handlebars'
+      );
+    } else {
+      console.error("No se encontró el usuario o la propiedad 'usuario' está indefinida.");
+    }
+    
+    res.status(201).send({ id: empresa.id })
+
+    } catch(error) {
       if (error == "SequelizeUniqueConstraintError: Validation error") {
         res.status(401).send("Bad request: Algun tipo de error de validacion de campos");
       } else {
         console.log(`Error al intentar insertar en la base de datos: ${error}`);
         res.sendStatus(500);
       }
-    });
+    };
 };
 
 export const updateEmpresa = async (req, res) => {

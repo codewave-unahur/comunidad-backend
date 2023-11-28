@@ -265,7 +265,6 @@ export const findUsuarioPorDNI = async (dni) => {
   }
 };
 
-
 export const postPostulante = async (req, res) => {
   try{
     const postulante = await models.postulantes
