@@ -46,6 +46,12 @@ module.exports = (sequelize, DataTypes) => {
           as: 'Idiomas',
           foreignKey: 'fk_id_oferta',
       }// modelo al que pertenece
+      ),
+      ofertas.hasMany(models.preferencias_ofertas,
+        {
+          as: 'Preferencias',
+          foreignKey: 'fk_id_ofertas',
+      }// modelo al que pertenece
       )
             
    ///////////

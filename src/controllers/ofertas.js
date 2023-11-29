@@ -61,7 +61,6 @@ export const getOfertasPorFiltros = async (req, res) => {
           model: models.contratos,
           attributes: ["id", "nombre_contrato"],
         },
-        // Aca tambien ...
         {
           as: "Idiomas",
           model: models.idiomas_ofertas,
@@ -73,7 +72,32 @@ export const getOfertasPorFiltros = async (req, res) => {
             attributes: ["id", "nombre_idioma"],
             }
           ],
+        },
+        {
+          as: "Aptitudes",
+          model: models.aptitudes_ofertas,
+          attributes: ["id"],
+          include: [
+            {
+            as: "Aptitudes de oferta",
+            model: models.aptitudes,
+            attributes: ["id", "nombre_aptitud"],
+            }
+          ],
+        },
+        {
+          as: "Preferencias",
+          model: models.preferencias_ofertas,
+          attributes: ["id"],
+          include : [
+            {
+            as: "Preferencia de oferta",
+            model: models.preferencias,
+            attributes: ["id", "nombre_preferencia"],
+            }
+          ]
         }
+        
       ],
       where: {
         [sequelize.and]: [
@@ -139,7 +163,6 @@ export const getOfertas = async (req, res) => {
           model: models.contratos,
           attributes: ["id", "nombre_contrato"],
         },
-        // Aca Se rompe mal 
         {
           as: "Idiomas",
           model: models.idiomas_ofertas,
@@ -195,7 +218,6 @@ const findOferta = (id, { onSuccess, onNotFound, onError }) => {
           model: models.contratos,
           attributes: ["id", "nombre_contrato"],
         },
-        // Aca tambien... falla...
         {
           as: "Idiomas",
           model: models.idiomas_ofertas,
@@ -448,4 +470,202 @@ export const updateOfertas = async (req, res) => {
     onNotFound: () => res.sendStatus(404),
     onError: () => res.sendStatus(500),
   });
+};
+
+//get ofertas with the order of the amount of preferences or aptitudes matched
+export const getOfertasPorFiltrosRecomendado = async (req, res) => {
+  let paginaComoNumero = Number.parseInt(req.query.pagina);
+  let limiteComoNumero = Number.parseInt(req.query.limite);
+  let ordenarPor = req.query.ordenar;
+  let buscarTitulo = req.query.buscarTitulo;
+  let estado = req.query.estado;
+  
+  models.postulantes.findOne({
+    where: { fk_id_usuario: req.params.id },
+  }.then((post) => {
+    const postulante = models.postulantes.findOne({
+      include: [
+        {
+          as: "Preferencias",
+          model: models.preferencias_postulantes,
+          attributes: ["id"],
+          include: [
+            {
+            as: "Preferencias de postulante",
+            model: models.preferencias,
+            attributes: ["id", "nombre_preferencia"],
+            }
+          ],
+        },
+        {
+          as: "Aptitudes",
+          model: models.aptitudes_postulantes,
+          attributes: ["id"],
+          include: [
+            {
+            as: "Aptitudes de postulante",
+            model: models.aptitudes,
+            attributes: ["id", "nombre_aptitud"],
+            }
+          ],
+        }
+      ],
+      where: { id: post.id },
+    });
+  }));
+
+  let pagina = 0;
+  if (!Number.isNaN(paginaComoNumero) && paginaComoNumero > 0) {
+    pagina = paginaComoNumero;
+  }
+
+  let limite = 30;
+  if (!Number.isNaN(limiteComoNumero) && limiteComoNumero > 0) {
+    limite = limiteComoNumero;
+  }
+
+  if (typeof ordenarPor === "undefined") {
+    ordenarPor = "createdAt";
+  }
+
+  if (typeof buscarTitulo === "undefined") {
+    buscarTitulo = "_";
+  } else {
+    buscarTitulo = buscarTitulo.replace(/\s/g, "%");
+  }
+
+  if (typeof estado === "undefined") {
+    estado = "Activo";
+ }
+
+  cantidadPreferenciasPostulante = postulante.Preferencias.length;
+  cantidadAptitudesPostulante = postulante.Aptitudes.length;
+  cantidadTotalAtributos = cantidadPreferenciasPostulante + cantidadAptitudesPostulante;
+
+  const ofertasOrdenadas = [];
+  models.ofertas
+    .findAndCountAll({
+      limit: limite,
+      offset: pagina * limite,
+      include: [
+        {
+          as: "Empresa",
+          model: models.empresas,
+          attributes: ["id", "nombre_empresa", "descripcion", "logo"],
+        },
+        {
+          as: "Estudio",
+          model: models.estudios,
+          attributes: ["id", "nombre_estudio_estado"],
+        },
+        {
+          as: "Carrera",
+          model: models.carreras,
+          attributes: ["id", "nombre_carrera"],
+        },
+        {
+          as: "Jornada",
+          model: models.jornadas,
+          attributes: ["id", "nombre_jornada"],
+        },
+        {
+          as: "Contrato",
+          model: models.contratos,
+          attributes: ["id", "nombre_contrato"],
+        },
+        {
+          as: "Idiomas",
+          model: models.idiomas_ofertas,
+          attributes: ["id"],
+          include: [
+            {
+            as: "Idiomas de oferta",
+            model: models.idiomas,
+            attributes: ["id", "nombre_idioma"],
+            }
+          ],
+        },
+        {
+          as: "Aptitudes",
+          model: models.aptitudes_ofertas,
+          attributes: ["id"],
+          include: [
+            {
+            as: "Aptitudes de oferta",
+            model: models.aptitudes,
+            attributes: ["id", "nombre_aptitud"],
+            }
+          ],
+        },
+        {
+          as: "Preferencias",
+          model: models.preferencias_ofertas,
+          attributes: ["id"],
+          include: [
+            {
+            as: "Preferencias de oferta",
+            model: models.preferencias,
+            attributes: ["id", "nombre_preferencia"],
+            }
+          ],
+        }
+      ],
+      where: {
+        [sequelize.and]: [
+          {
+            titulo_oferta: {
+              [sequelize.iLike]: `%${buscarTitulo}%`,
+            },
+            estado: {
+              [sequelize.iLike]: `%${estado}%`
+            },
+            id: { [sequelize.gt]: 0 },
+          },
+        ],
+      },
+      order: [[ordenarPor, 'DESC'],],
+    })
+    .then((ofertas) =>
+      ofertas.rows.forEach((oferta) => {
+               
+        //calcular matchs de preferencias
+        let cantidadPreferenciasMatch = 0;
+        postulante.rows.Preferencias.forEach((preferenciaPostulante) => {
+          oferta.Preferencias.forEach((preferenciaOferta) => {
+            console.log(preferenciaPostulante["Preferencias de postulante"])
+            if (preferenciaPostulante["Preferencias del postulante"].id == preferenciaOferta["Preferecia de oferta"].id) {
+              cantidadPreferenciasMatch++;
+            }
+          });
+        });
+        let porcentajePreferenciasMatch = cantidadPreferenciasMatch / cantidadTotalAtributos;
+
+        //calcular matchs de aptitudes
+        let cantidadAptitudesMatch = 0;
+        postulante.rows.Aptitudes.forEach((aptitudPostulante) => {
+          oferta.Aptitudes.forEach((aptitudOferta) => {
+            if (aptitudPostulante["Aptitudes del postulante"].id == aptitudOferta["Aptitudes de oferta"].id) {
+              cantidadAptitudesMatch++;
+            }
+          });
+        });
+
+        let porcentajeAptitudesMatch = cantidadAptitudesMatch / cantidadTotalAtributos;
+
+        //calcular matchs totales
+        let porcentajeTotalMatch = porcentajePreferenciasMatch + porcentajeAptitudesMatch;
+
+        //agregar oferta a la lista de ofertas ordenadas
+        ofertasOrdenadas.push({
+          oferta,
+          porcentajeTotalMatch,
+        }); 
+
+      }),
+      res.send({
+        ofertas,
+        totalPaginas: Math.ceil(ofertas.count / limite),
+      })
+    )
+    .catch(() => res.sendStatus(500));
 };
