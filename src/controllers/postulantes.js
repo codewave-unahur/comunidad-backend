@@ -387,8 +387,7 @@ export const eliminarPreferencias = async (req, res) => {
   try {
     await models.preferencias_postulantes.destroy({
       where: {
-        fk_id_postulante: req.params.id,
-        fk_id_preferencia: req.body.id
+        id: req.params.id,
       }
     });
 
@@ -421,8 +420,7 @@ export const eliminarAptitudes = async (req, res) => {
   try {
     await models.aptitudes_postulantes.destroy({
       where: {
-        fk_id_usuario: req.params.id,
-        fk_id_aptitud: req.body.id
+        id: req.params.id,
       }
     });
     
