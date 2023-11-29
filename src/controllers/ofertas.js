@@ -648,14 +648,13 @@ export const getOfertasPorFiltrosRecomendado = async (req, res) => {
         oferta.Preferencias.forEach((preferenciaOferta) => {
           if (postulante.Preferencias.length > 0 ) {
             postulante.Preferencias.forEach((preferenciaPostulante) => {
-              if (preferenciaPostulante["Preferencias del postulante"].id == preferenciaOferta["Preferecia de oferta"].id) {
+              if (preferenciaPostulante["Preferencias del postulante"].id == preferenciaOferta["Preferencia de oferta"].id) {
                 cantidadPreferenciasMatch++;
               }
             });
           }
         });
       }
-      const porcentajePreferenciasMatch = cantidadPreferenciasMatch / cantidadTotalAtributos;
 
       //calcular matchs de aptitudes
       let cantidadAptitudesMatch = 0;
@@ -671,10 +670,8 @@ export const getOfertasPorFiltrosRecomendado = async (req, res) => {
       });
       }
 
-      const porcentajeAptitudesMatch = cantidadAptitudesMatch / cantidadTotalAtributos;
-
       //calcular matchs totales
-      const porcentajeTotalMatch = porcentajePreferenciasMatch + porcentajeAptitudesMatch;
+      const porcentajeTotalMatch = (cantidadAptitudesMatch + cantidadPreferenciasMatch) / cantidadTotalAtributos ;
 
       //agregar oferta a la lista de ofertas ordenadas
       oferta.porcentajeMatch = porcentajeTotalMatch ? (porcentajeTotalMatch !== null || porcentajeTotalMatch > 0) : 0;
