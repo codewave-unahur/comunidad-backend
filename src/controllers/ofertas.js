@@ -480,10 +480,13 @@ export const getOfertasPorFiltrosRecomendado = async (req, res) => {
   let buscarTitulo = req.query.buscarTitulo;
   let estado = req.query.estado;
   
-  models.postulantes.findOne({
-    where: { fk_id_usuario: req.params.id },
-  }.then((post) => {
-    const postulante = models.postulantes.findOne({
+  let postulante;
+  try {
+    const post = await models.postulantes.findOne({
+      where: { fk_id_usuario: req.query.id },
+    });
+  
+    postulante = await models.postulantes.findOne({
       include: [
         {
           as: "Preferencias",
@@ -491,9 +494,9 @@ export const getOfertasPorFiltrosRecomendado = async (req, res) => {
           attributes: ["id"],
           include: [
             {
-            as: "Preferencias de postulante",
-            model: models.preferencias,
-            attributes: ["id", "nombre_preferencia"],
+              as: "Preferencias del postulante",
+              model: models.preferencias,
+              attributes: ["id", "nombre_preferencia"],
             }
           ],
         },
@@ -503,16 +506,21 @@ export const getOfertasPorFiltrosRecomendado = async (req, res) => {
           attributes: ["id"],
           include: [
             {
-            as: "Aptitudes de postulante",
-            model: models.aptitudes,
-            attributes: ["id", "nombre_aptitud"],
+              as: "Aptitudes del postulante",
+              model: models.aptitudes,
+              attributes: ["id", "nombre_aptitud"],
             }
           ],
         }
       ],
       where: { id: post.id },
     });
-  }));
+  } catch (error) {
+    res.send({
+      error
+    });
+  }
+
 
   let pagina = 0;
   if (!Number.isNaN(paginaComoNumero) && paginaComoNumero > 0) {
@@ -538,13 +546,12 @@ export const getOfertasPorFiltrosRecomendado = async (req, res) => {
     estado = "Activo";
  }
 
-  cantidadPreferenciasPostulante = postulante.Preferencias.length;
-  cantidadAptitudesPostulante = postulante.Aptitudes.length;
-  cantidadTotalAtributos = cantidadPreferenciasPostulante + cantidadAptitudesPostulante;
-
-  const ofertasOrdenadas = [];
-  models.ofertas
-    .findAndCountAll({
+  const cantidadPreferenciasPostulante = postulante.Preferencias.length;
+  const cantidadAptitudesPostulante = postulante.Aptitudes.length;
+  const cantidadTotalAtributos = cantidadPreferenciasPostulante + cantidadAptitudesPostulante ? (cantidadPreferenciasPostulante + cantidadAptitudesPostulante > 0) : 1;
+  let ofertas;
+  try {
+    ofertas = await models.ofertas.findAndCountAll({
       limit: limite,
       offset: pagina * limite,
       include: [
@@ -603,7 +610,7 @@ export const getOfertasPorFiltrosRecomendado = async (req, res) => {
           attributes: ["id"],
           include: [
             {
-            as: "Preferencias de oferta",
+            as: "Preferencia de oferta",
             model: models.preferencias,
             attributes: ["id", "nombre_preferencia"],
             }
@@ -625,47 +632,64 @@ export const getOfertasPorFiltrosRecomendado = async (req, res) => {
       },
       order: [[ordenarPor, 'DESC'],],
     })
-    .then((ofertas) =>
-      ofertas.rows.forEach((oferta) => {
-               
-        //calcular matchs de preferencias
-        let cantidadPreferenciasMatch = 0;
-        postulante.rows.Preferencias.forEach((preferenciaPostulante) => {
-          oferta.Preferencias.forEach((preferenciaOferta) => {
-            console.log(preferenciaPostulante["Preferencias de postulante"])
-            if (preferenciaPostulante["Preferencias del postulante"].id == preferenciaOferta["Preferecia de oferta"].id) {
-              cantidadPreferenciasMatch++;
-            }
-          });
+  }
+  catch (error) {
+    res.send({
+      error
+    });
+  }
+  
+  try {
+    ofertas.rows.forEach(async (oferta) => {
+  
+      //calcular matchs de preferencias
+      let cantidadPreferenciasMatch = 0;
+      if (oferta.Preferencias.length > 0) {
+        oferta.Preferencias.forEach((preferenciaOferta) => {
+          if (postulante.Preferencias.length > 0 ) {
+            postulante.Preferencias.forEach((preferenciaPostulante) => {
+              if (preferenciaPostulante["Preferencias del postulante"].id == preferenciaOferta["Preferecia de oferta"].id) {
+                cantidadPreferenciasMatch++;
+              }
+            });
+          }
         });
-        let porcentajePreferenciasMatch = cantidadPreferenciasMatch / cantidadTotalAtributos;
+      }
+      const porcentajePreferenciasMatch = cantidadPreferenciasMatch / cantidadTotalAtributos;
 
-        //calcular matchs de aptitudes
-        let cantidadAptitudesMatch = 0;
-        postulante.rows.Aptitudes.forEach((aptitudPostulante) => {
-          oferta.Aptitudes.forEach((aptitudOferta) => {
-            if (aptitudPostulante["Aptitudes del postulante"].id == aptitudOferta["Aptitudes de oferta"].id) {
-              cantidadAptitudesMatch++;
-            }
+      //calcular matchs de aptitudes
+      let cantidadAptitudesMatch = 0;
+      if (oferta.Aptitudes.length > 0) {
+      oferta.Aptitudes.forEach((aptitudOferta) => {
+        if (postulante.Aptitudes.length > 0) {
+          postulante.Aptitudes.forEach((aptitudPostulante) => {
+          if (aptitudPostulante["Aptitudes del postulante"].id == aptitudOferta["Aptitudes de oferta"].id) {
+            cantidadAptitudesMatch++;
+           }
           });
-        });
+        }
+      });
+      }
 
-        let porcentajeAptitudesMatch = cantidadAptitudesMatch / cantidadTotalAtributos;
+      const porcentajeAptitudesMatch = cantidadAptitudesMatch / cantidadTotalAtributos;
 
-        //calcular matchs totales
-        let porcentajeTotalMatch = porcentajePreferenciasMatch + porcentajeAptitudesMatch;
+      //calcular matchs totales
+      const porcentajeTotalMatch = porcentajePreferenciasMatch + porcentajeAptitudesMatch;
 
-        //agregar oferta a la lista de ofertas ordenadas
-        ofertasOrdenadas.push({
-          oferta,
-          porcentajeTotalMatch,
-        }); 
-
-      }),
-      res.send({
-        ofertas,
-        totalPaginas: Math.ceil(ofertas.count / limite),
-      })
-    )
-    .catch(() => res.sendStatus(500));
+      //agregar oferta a la lista de ofertas ordenadas
+      oferta.porcentajeMatch = porcentajeTotalMatch ? (porcentajeTotalMatch !== null || porcentajeTotalMatch > 0) : 0;
+    })
+    // order by porcentajeMatch
+    ofertas.rows = ofertas.rows.sort((a, b) => (a.porcentajeMatch < b.porcentajeMatch) ? 1 : -1)
+  
+    res.send({
+      ofertas,
+      totalPaginas: Math.ceil(ofertas.count / limite),
+    })
+  }
+  catch (error) {
+    res.send({
+      error
+    });
+  }
 };
