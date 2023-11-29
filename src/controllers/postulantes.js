@@ -132,6 +132,17 @@ const findPostulantesPorIdUsuario = (
           ],
         },
         {
+          as: "Aptitudes",
+          model: models.aptitudes_postulantes,
+          include: [
+            {
+              as: "Aptitudes del postulante",
+              model: models.aptitudes,
+              attributes: ["id", "nombre_aptitud", "descripcion"],
+            }
+          ]
+        },
+        {
           as: "Preferencias",
           model: models.preferencias_postulantes,
           include: [
