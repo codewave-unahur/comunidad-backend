@@ -229,6 +229,30 @@ const findOferta = (id, { onSuccess, onNotFound, onError }) => {
             },
           ],
         },
+        {
+          as: "Preferencias",
+          model: models.preferencias_ofertas,
+          attributes: ["id"],
+          include: [
+            {
+              as: "Preferencia de oferta",
+              model: models.preferencias,
+              attributes: ["id", "nombre_preferencia"],
+            },
+          ],
+        },
+        {
+          as: "Aptitudes",
+          model: models.aptitudes_ofertas,
+          attributes: ["id"],
+          include: [
+            {
+              as: "Aptitudes de oferta",
+              model: models.aptitudes,
+              attributes: ["id", "nombre_aptitud"],
+            },
+          ],
+        },
       ],
       where: { id },
     })
