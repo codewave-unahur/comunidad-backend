@@ -69,7 +69,7 @@ export const getOfertasPorFiltros = async (req, res) => {
             {
               as: "Idiomas de oferta",
               model: models.idiomas,
-              attributes: ["id", "nombre_idioma"],
+              attributes: ["id", "nombre_idioma", "nivel_oral", "nivel_escrito"]
             },
           ],
         },
@@ -170,7 +170,7 @@ export const getOfertas = async (req, res) => {
             {
               as: "Idiomas de oferta",
               model: models.idiomas,
-              attributes: ["id", "nombre_idioma"],
+              attributes: ["id", "nombre_idioma", "nivel_oral", "nivel_escrito"]
             },
           ],
         },
@@ -225,7 +225,7 @@ const findOferta = (id, { onSuccess, onNotFound, onError }) => {
             {
               as: "Idiomas de oferta",
               model: models.idiomas,
-              attributes: ["id", "nombre_idioma"],
+              attributes: ["id", "nombre_idioma", "nivel_oral", "nivel_escrito"]
             },
           ],
         },
@@ -329,7 +329,7 @@ export const getOfertasPorIdEmpresa = async (req, res) => {
             {
               as: "Idiomas de oferta",
               model: models.idiomas,
-              attributes: ["id", "nombre_idioma"],
+              attributes: ["id", "nombre_idioma", "nivel_oral", "nivel_escrito"]
             },
           ],
         },
@@ -639,7 +639,7 @@ export const getOfertasPorFiltrosRecomendado = async (req, res) => {
             {
               as: "Idiomas de oferta",
               model: models.idiomas,
-              attributes: ["id", "nombre_idioma"],
+              attributes: ["id", "nombre_idioma", "nivel_oral", "nivel_escrito"]
             },
           ],
         },
