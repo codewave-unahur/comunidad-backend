@@ -30,6 +30,13 @@ module.exports = {
         updatedAt : '2022-06-05 12:00:00+00',
         fk_id_preferencia: 4,
         fk_id_postulante: 41232451,
+      },
+      {
+        id:6,
+        createdAt: '2022-06-05 12:00:00+00',
+        updatedAt : '2022-06-05 12:00:00+00',
+        fk_id_preferencia: 4,
+        fk_id_postulante: 12783917,
       }
     ], {});
   },
