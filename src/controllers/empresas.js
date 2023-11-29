@@ -342,19 +342,38 @@ export const updateEmpresa = async (req, res) => {
 
 //Con esto cambiamos el estado de una empresa desde administrador.
 export const patchEmpresa = async (req, res) => {
-  const onSuccess = (empresas) =>
-  empresas
-      .update(
-        {          
+  const onSuccess = async (empresas) => {
+    try {
+      await empresas.update(
+        {
           estado: "Activo",
         },
         { fields: ["estado"] }
-      ).then(() => res.sendStatus(200),
-      changeGroup(empresas.fk_id_usuario),
-      console.log(empresas.fk_id_usuario)
-      ).catch((error) => {res.status(400)});
+      );
 
-      findEmpresas(req.params.id, {
+      if (empresas) {
+        await sendEmail(
+        empresas.dataValues?.Usuario?.dataValues?.usuario, 
+        "Activación de cuenta",
+        {
+          nombre: empresas.dataValues?.nombre_representante ,
+        },
+        '../../database/utils/template/activacionDeLaEmpresa.handlebars'
+        );
+      } else {
+        console.error("No se encontró el usuario o la propiedad 'usuario' está indefinida.");
+      };
+
+      res.sendStatus(200);
+
+      changeGroup(empresas.fk_id_usuario);
+      console.log(empresas.fk_id_usuario);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  };
+
+  findEmpresas(req.params.id, {
     onSuccess,
     onNotFound: () => res.sendStatus(404),
     onError: () => res.sendStatus(500),
