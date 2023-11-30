@@ -379,10 +379,6 @@ export const createOferta = async (req, res) => {
       horario_laboral_desde: req.body.horarioLaboralDesde,
       horario_laboral_hasta: req.body.horarioLaboralHasta,
     })
-    
-      console.log("---------------------------------------------")
-      console.log(oferta)
-      console.log("---------------------------------------------")
 
     if (req.body.idiomas.length > 0) {
       req.body.idiomas.forEach((idioma) => {
