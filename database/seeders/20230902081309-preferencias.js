@@ -77,7 +77,7 @@ module.exports = {
       },
       {
         id: 13,
-        nombre_preferencia: "Metalúrgia",
+        nombre_preferencia: "Química",
         createdAt: "2022-06-05 12:00:00+00", 
         updatedAt: "2022-06-05 12:00:00+00",
       },

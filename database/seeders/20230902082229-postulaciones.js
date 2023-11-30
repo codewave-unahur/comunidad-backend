@@ -41,7 +41,7 @@ module.exports = {
         updatedAt: new Date('2022-12-08 00:00:55.037+00'),
         fk_id_empresa: 30182432120,
         contactado: 't',
-        estado_postulacion: 'f',
+        estado_postulacion: null,
       },
       {
         id: 168,
@@ -51,7 +51,7 @@ module.exports = {
         updatedAt: new Date('2022-12-08 18:01:00.024+00'),
         fk_id_empresa: 3010203041,
         contactado: 'f',
-        estado_postulacion: 'f',
+        estado_postulacion: null,
       },
       // Agregar más objetos aquí...
     ], {});
