@@ -4,7 +4,7 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.bulkInsert('tokens', [
       {
-        id:1,
+        id:600,
         userId: 518,
         token: 'postulanteasdasdasdas@asd//%$',
         createdAt: '2022-06-05 12:00:00+00',
