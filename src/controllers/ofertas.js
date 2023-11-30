@@ -351,7 +351,8 @@ export const getOfertasPorIdEmpresa = async (req, res) => {
 };
 
 export const createOferta = async (req, res) => {
-  models.ofertas
+  try {
+  const oferta = await models.ofertas
     .create({
       fk_id_empresa: req.body.idEmpresa,
       fk_id_jornada: req.body.idJornada,
@@ -378,9 +379,13 @@ export const createOferta = async (req, res) => {
       horario_laboral_desde: req.body.horarioLaboralDesde,
       horario_laboral_hasta: req.body.horarioLaboralHasta,
     })
-    .then((ofertas) => {
-      if (req.body.idiomas.length > 0) {
-        req.body.idiomas.forEach((idioma) => {
+    
+      console.log("---------------------------------------------")
+      console.log(oferta)
+      console.log("---------------------------------------------")
+
+    if (req.body.idiomas.length > 0) {
+      req.body.idiomas.forEach((idioma) => {
           models.idiomas
             .findOne({
               where: {
@@ -391,35 +396,35 @@ export const createOferta = async (req, res) => {
             })
             .then((idiomas) => {
               models.idiomas_ofertas.create({
-                fk_id_oferta: ofertas.id,
+                fk_id_oferta: oferta.id,
                 fk_id_idioma: idiomas.id,
               });
             });
         });
       }
-    })
-    .then((ofertas) => {
-      if (req.body.preferencias.length > 0) {
+    
+    
+    if (req.body.preferencias.length > 0) {
         req.body.preferencias.forEach((preferencia) => {
           models.preferencias_ofertas.create({
-            fk_id_oferta: ofertas.id,
+            fk_id_ofertas: oferta.id,
             fk_id_preferencia: preferencia.id,
           });
         });
       }
-    })
-    .then((ofertas) => {
-      if (req.body.aptitudes.length > 0) {
+    
+    
+    if (req.body.aptitudes.length > 0) {
         req.body.aptitudes.forEach((aptitud) => {
           models.aptitudes_ofertas.create({
-            fk_id_oferta: ofertas.id,
+            fk_id_oferta: oferta.id,
             fk_id_aptitud: aptitud.id,
           });
         });
       }
-    })
-    .then((ofertas) => res.status(201).send({ id: ofertas.id }))
-    .catch((error) => {
+    
+     res.status(201).send({ id: oferta.id })
+  } catch (error) {
       if (error == "SequelizeUniqueConstraintError: Validation error") {
         res
           .status(401)
@@ -428,7 +433,7 @@ export const createOferta = async (req, res) => {
         console.log(`Error al intentar insertar en la base de datos: ${error}`);
         res.sendStatus(500);
       }
-    });
+    };
 };
 
 export const deleteOferta = async (req, res) => {
