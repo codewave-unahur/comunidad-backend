@@ -98,7 +98,7 @@ module.exports = {
           alumno_unahur: "f",
           presentacion: "Fullstack Developer",
           cv: null,
-          foto: null,
+          foto: "https://fjjrxhcerjjthjglqptp.supabase.co/storage/v1/object/public/publicBucket/41744111/palito.png",
           linkedIn: "https://www.linkedin.com/in/jyturrieta/",
           portfolio: "https://github.com/jyturrieta",
           createdAt: new Date("2022-12-07 03:12:29.528+00"),
