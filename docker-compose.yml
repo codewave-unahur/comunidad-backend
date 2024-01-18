@@ -1,0 +1,19 @@
+version: '3.1'
+
+services:
+  bolsa_db:
+    image: postgres:15-alpine3.19
+    container_name: empleabilidad_backend
+    env_file:
+      - .env
+    ports:
+      - '5439:5432'
+    volumes:
+      - ./postgres_data:/var/lib/postgres/data/
+    networks:
+      - empleabilidad
+volumes:
+  postgres_data:
+
+networks:
+  empleabilidad:
