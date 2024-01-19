@@ -9,7 +9,8 @@
     "start": "node ./dist/app.js",
     "build": "babel src --out-dir dist --copy-files --source-maps",
     "DB": "npx sequelize db:migrate:undo:all && npx sequelize db:migrate && npx sequelize db:seed:all",
-    "test": "set NODE_OPTIONS=--experimental-vm-modules && npx jest"
+    "test": "set NODE_OPTIONS=--experimental-vm-modules && npx jest",
+    "migation:run": "npx sequelize db:migrate:undo:all && npx sequelize db:migrate"
   },
   "keywords": [],
   "author": "",
