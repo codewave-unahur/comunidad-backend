@@ -85,6 +85,9 @@ export const getCiudadesByProvinciaId = async (req, res) => {
       where: {
         fk_id_provincia: idProvincia,
       },
+      order: [
+          ['nombre', 'ASC']
+      ]
     });
 
     res.send({ ciudades });
