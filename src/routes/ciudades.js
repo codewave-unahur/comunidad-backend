@@ -2,9 +2,8 @@ import express from 'express';
 import {
   createCiudad,
   getAll,
-  getCiudadById,
   updateCiudadById,
-  deleteCiudadById
+  deleteCiudadById, getCiudadesByProvinciaId
 } from '../controllers/ciudades';
 import { withErrorHandling } from './utils';
 
@@ -12,7 +11,7 @@ const router = express.Router();
 
 router.post('/', withErrorHandling(createCiudad));
 router.get('/', withErrorHandling(getAll))
-      .get('/:id', withErrorHandling(getCiudadById));
+      .get('/:id', withErrorHandling(getCiudadesByProvinciaId));
 router.put('/:id', withErrorHandling(updateCiudadById));
 router.delete('/:id', withErrorHandling(deleteCiudadById));
 
