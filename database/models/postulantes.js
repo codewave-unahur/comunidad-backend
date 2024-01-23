@@ -81,9 +81,15 @@ module.exports = (sequelize, DataTypes) => {
       cp: DataTypes.STRING,
       telefono: DataTypes.INTEGER,
       segundoTelefono: DataTypes.INTEGER,
-      cant_materias: DataTypes.INTEGER,
+      cant_materias:{
+          type: DataTypes.INTEGER,
+          defaultValue: 0
+      },
       alumno_unahur: DataTypes.BOOLEAN,
-      presentacion: DataTypes.TEXT,
+      presentacion: {
+          type: DataTypes.TEXT,
+          defaultValue: ""
+      },
       cv: DataTypes.TEXT,
       foto: DataTypes.TEXT,
       linkedIn: DataTypes.TEXT,

@@ -15,5 +15,4 @@ router.get('/', withErrorHandling(getAll))
 router.put('/:id', withErrorHandling(updateCiudadById));
 router.delete('/:id', withErrorHandling(deleteCiudadById));
 
-
 export default router;

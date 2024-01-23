@@ -103,7 +103,7 @@ export const getUserId = (req, res) => {
 };
 
 
-export const signIn = async (res, req) => {
+export const signIn = async (req, res) => {
   try{
     const { usuario , password } = req.body;
 
