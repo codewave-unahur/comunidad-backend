@@ -284,7 +284,7 @@ export const postEmpresa = async (req, res) => {
     res.status(201).send({ id: empresa.id })
 
     } catch(error) {
-      if (error == "SequelizeUniqueConstraintError: Validation error") {
+      if (error === "SequelizeUniqueConstraintError: Validation error") {
         res.status(401).send("Bad request: Algun tipo de error de validacion de campos");
       } else {
         console.log(`Error al intentar insertar en la base de datos: ${error}`);
@@ -322,7 +322,7 @@ export const updateEmpresa = async (req, res) => {
       .then(() => res.sendStatus(200)
       )
       .catch((error) => {
-        if (error == "SequelizeUniqueConstraintError: Validation error") {
+        if (error === "SequelizeUniqueConstraintError: Validation error") {
           res
             .status(400)
             .send("Bad request: Algun tipo de error de validacion de campos");
