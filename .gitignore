@@ -69,8 +69,7 @@ typings/
 # next.js build output
 .next
 
-# Docker
-docker/postgres/data
+.idea
 
 # MacOS
 .DS_Store
