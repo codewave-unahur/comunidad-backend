@@ -1,3 +1,5 @@
+import {uploadCv} from "../services/supabase.service";
+
 const models = require("../../database/models");
 const { Op } = require("sequelize");
 const { Op: sequelize } = require("sequelize");
@@ -326,8 +328,9 @@ export const postPostulante = async (req, res) => {
       console.error("No se encontró el usuario o la propiedad 'usuario' está indefinida.");
     }
 
+    await uploadCv(process.env.SUPABASE_BUCKET, 'cv',`${req.params.id}`, req.body.cv)
     await enableUser(req.body.idUsuario); //Aca habilitamos el usuario
-
+    console.log(process.env.SUPABASE_BUCKET)
     res.status(201).send({ id: postulante.id });
 
     } catch (error) {
@@ -448,15 +451,12 @@ export const agregarIdiomas = async (req, res) => {
         fk_id_postulante: req.params.id,
         fk_id_idioma: idiomas.id
       });
-
       // Puedes hacer algo con idiomaPostulante si es necesario
-
     } catch (error) {
       console.error(error);
       return res.sendStatus(500);
     }
   }
-
   res.sendStatus(200);
 };
 
@@ -475,62 +475,67 @@ export const eliminarIdioma = async (req, res) => {
   }
 };
 
-export const updatePostulante = async (req, res) => {
-  const onSuccess = (postulantes) =>
-  postulantes
-      .update(
-        {
-          tipo_documento: req.body.tipoDocumento,
-          fk_id_usuario: req.body.idUsuario,
-          fk_id_estudios: req.body.estudios,
-          fk_id_carrera: req.body.carrera,
-          estado: req.body.estado,
-          nombre: req.body.nombre,
-          apellido: req.body.apellido,
-          genero: req.body.genero,
-          discapacidad: req.body.discapacidad,
-          nacionalidad: req.body.nacionalidad,
-          fecha_nac: req.body.fecha_nac,
-          pais: req.body.pais,
-          fk_id_provincia: req.body.provincia,
-          fk_id_ciudad: req.body.ciudad,
-          calle: req.body.calle,
-          nro: req.body.nro,
-          piso: req.body.piso,
-          depto: req.body.depto,
-          cp: req.body.cp,
-          telefono: req.body.telefono,
-          segundoTelefono: req.body.segundoTelefono,
-          cant_materias: req.body.cantMaterias,
-          alumno_unahur: req.body.alumnoUnahur,
-          presentacion: req.body.presentacion,
-          cv: req.body.cv,
-          foto: req.body.foto,
-          linkedIn: req.body.linkedIn,
-          portfolio: req.body.portfolio
-        },
-          { fields: ["tipo_documento", "fk_id_usuario","fk_id_estudios","fk_id_carrera","estado","nombre","apellido","nacionalidad","fecha_nac","pais","fk_id_provincia","fk_id_ciudad","calle","nro","piso","depto","cp","telefono", "segundoTelefono","cant_materias","alumno_unahur","presentacion","cv","foto", "linkedIn", "portfolio","genero", "discapacidad"] }
-      )
-      .then(() => res.sendStatus(200))
-      .catch((error) => {
-        if (error == "SequelizeUniqueConstraintError: Validation error") {
-          res
-            .status(400)
-            .send("Bad request: Algun tipo de error de validacion de campos");
-        } else {
-          console.log(
-            `Error al intentar actualizar la base de datos: ${error}`
-          );
-          res.sendStatus(500);
-        }
-      });
-      findPostulantesPorDNI(req.params.id, {
-    onSuccess,
-    onNotFound: () => res.sendStatus(404),
-    onError: () => res.sendStatus(500),
-  });
-};
 
+export const updatePostulante = async (req, res) => {
+  try {
+    const postulante = await models.postulantes.findByPk(req.params.id);
+
+    if (!postulante) {
+      return res.sendStatus(404);
+    }
+
+    // Actualiza los campos del postulante
+    await postulante.update({
+      tipo_documento: req.body.tipoDocumento,
+      fk_id_usuario: req.body.idUsuario,
+      fk_id_estudios: req.body.estudios,
+      fk_id_carrera: req.body.carrera,
+      estado: req.body.estado,
+      nombre: req.body.nombre,
+      apellido: req.body.apellido,
+      genero: req.body.genero,
+      discapacidad: req.body.discapacidad,
+      nacionalidad: req.body.nacionalidad,
+      fecha_nac: req.body.fecha_nac,
+      pais: req.body.pais,
+      fk_id_provincia: req.body.provincia,
+      fk_id_ciudad: req.body.ciudad,
+      calle: req.body.calle,
+      nro: req.body.nro,
+      piso: req.body.piso,
+      depto: req.body.depto,
+      cp: req.body.cp,
+      telefono: req.body.telefono,
+      segundoTelefono: req.body.segundoTelefono,
+      cant_materias: req.body.cantMaterias,
+      alumno_unahur: req.body.alumnoUnahur,
+      presentacion: req.body.presentacion,
+      cv: req.body.cv,
+      foto: req.body.foto,
+      linkedIn: req.body.linkedIn,
+      portfolio: req.body.portfolio
+
+    }, {
+      fields: ["tipo_documento", "fk_id_usuario", "fk_id_estudios", /* ... */],
+    });
+
+    // Si hay un nuevo CV, cárgalo a Supabase Storage utilizando el servicio
+    if (req.body.cv) {
+      await uploadCv(process.env.SUPABASE_BUCKET, 'cv', `${req.params.id}`, req.body.cv);
+    }
+
+    // Llamada a la función para encontrar postulantes por DNI
+    const updatedPostulante = await models.postulantes.findByPk(req.params.id);
+    res.status(200).json(updatedPostulante);
+  } catch (error) {
+    if (error.name === "SequelizeUniqueConstraintError") {
+      res.status(400).send("Bad request: Algun tipo de error de validacion de campos");
+    } else {
+      console.log(`Error al intentar actualizar la base de datos: ${error}`);
+      res.sendStatus(500);
+    }
+  }
+};
 
 export const postulantesBaseUnahur = async (req, res) => {
   try {

@@ -11,28 +11,28 @@ module.exports = (sequelize, DataTypes) => {
             as: "Usuario", // nombre de mi relacion
             foreignKey: "fk_id_usuario", // campo con el que voy a igualar
           }
-        ),
+        )
         postulantes.belongsTo(
           models.estudios, // modelo al que pertenece
           {
             as: "Estudios", // nombre de mi relacion
             foreignKey: "fk_id_estudios", // campo con el que voy a igualar
           }
-        ),
+        )
         postulantes.belongsTo(
           models.carreras, // modelo al que pertenece
           {
             as: "Carrera", // nombre de mi relacion
             foreignKey: "fk_id_carrera", // campo con el que voy a igualar
           }
-        ),
+        )
         postulantes.belongsTo(
           models.provincias, // modelo al que pertenece
           {
             as: "Provincia", // nombre de mi relacion
             foreignKey: "fk_id_provincia", // campo con el que voy a igualar
           }
-        ),
+        )
         postulantes.belongsTo(
           models.ciudades, // modelo al que pertenece
           {
