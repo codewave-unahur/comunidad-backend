@@ -14,17 +14,17 @@ module.exports = (sequelize, DataTypes) => {
       ,{
         as : 'Usuario',  // nombre de mi relacion
         foreignKey: 'fk_id_usuario'     // campo con el que voy a igualar
-      }),
+      })
       empresas.belongsTo(models.rubros// modelo al que pertenece
       ,{
         as : 'Rubro',  // nombre de mi relacion
         foreignKey: 'fk_id_rubro'     // campo con el que voy a igualar
-      }),
+      })
       empresas.belongsTo(models.provincias// modelo al que pertenece
       ,{
         as : 'Provincia',  // nombre de mi relacion
         foreignKey: 'fk_id_provincia'     // campo con el que voy a igualar
-      }),
+      })
       empresas.belongsTo(models.ciudades// modelo al que pertenece
       ,{
         as : 'Ciudad',  // nombre de mi relacion

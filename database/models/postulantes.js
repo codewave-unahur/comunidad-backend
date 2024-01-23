@@ -68,29 +68,51 @@ module.exports = (sequelize, DataTypes) => {
       nombre: DataTypes.STRING,
       apellido: DataTypes.STRING,
       genero: DataTypes.STRING,
-      discapacidad: DataTypes.STRING,
+      discapacidad:{
+          type: DataTypes.STRING,
+          defaultValue: 'Ninguna'
+      },
       nacionalidad: DataTypes.STRING,
       fecha_nac: DataTypes.DATE,
       pais: DataTypes.STRING,
       fk_id_provincia: DataTypes.INTEGER,
       fk_id_ciudad: DataTypes.INTEGER,
-      calle: DataTypes.STRING,
+      calle: {
+          type :DataTypes.STRING,
+          defaultValue: " "
+      },
       nro: DataTypes.INTEGER,
-      piso: DataTypes.INTEGER,
-      depto: DataTypes.STRING,
-      cp: DataTypes.STRING,
-      telefono: DataTypes.INTEGER,
-      segundoTelefono: DataTypes.INTEGER,
-      cant_materias:{
+      piso: {
           type: DataTypes.INTEGER,
+          defaultValue: 1
+      },
+      depto: {
+          type:DataTypes.STRING,
+          defaultValue:" "
+      },
+      cp: DataTypes.STRING,
+      telefono: {
+          type:DataTypes.INTEGER,
+          allowNull: true,
           defaultValue: 0
+      },
+      segundoTelefono: {
+         type: DataTypes.INTEGER,
+          allowNull: true
+      },
+      cant_materias:{
+          type: DataTypes.STRING,
+          defaultValue: '0'
       },
       alumno_unahur: DataTypes.BOOLEAN,
       presentacion: {
           type: DataTypes.TEXT,
-          defaultValue: ""
+          defaultValue: " "
       },
-      cv: DataTypes.TEXT,
+      cv:{
+          type: DataTypes.TEXT,
+          defaultValue: " "
+      },
       foto: DataTypes.TEXT,
       linkedIn: DataTypes.TEXT,
       portfolio: DataTypes.TEXT,
