@@ -1,5 +1,4 @@
 const models = require("../../database/models");
-const sendEmail = require("../../database/utils/sendEmail.js");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const bcryptSalt = process.env.BCRYPT_SALT;
@@ -50,15 +49,7 @@ export const requestPasswordReset = async (usuario, res) => {
 
   try {
     console.log("Esto es lo que se envia como token", resetToken)
-    sendEmail(
-      user.usuario,
-      "Solicitud de restablecimiento de contraseña",
-      {
-        //usuario: user.usuario,
-        token: resetToken,
-      },
-      '../../database/utils/template/requestResetPassword.handlebars'
-    );
+
   } catch (error) {
     console.error('Error al enviar el correo electrónico:', error);
     res.status(500).send("Error al enviar el correo electrónico.");
@@ -102,23 +93,15 @@ export const resetPassword = async (userId, token, password, res) => {
     await usuario.update({ password: hashPassword });
     console.log(`Contraseña actualizada para el usuario: ${usuario.usuario}`);
     
-    await sendEmail(
-      usuario.usuario,
-      "Restablecimiento de contraseña exitoso",
-      {
-        usuario: usuario.usuario,
-      },
-      '../../database/utils/template/resetPassword.handlebars',
-    );
 
     await passwordResetToken.destroy();
 
     res.send({ message: "El restablecimiento de contraseña fue exitoso" });
-    return;
+
   } catch (error) {
     console.error(`Error en resetPassword: ${error.message}`);
     res.status(500).send("Error en el restablecimiento de contraseña");
-    return;
+
   }
 };
 

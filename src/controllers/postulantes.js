@@ -3,7 +3,7 @@ import {uploadCv} from "../services/supabase.service";
 const models = require("../../database/models");
 const { Op } = require("sequelize");
 const { Op: sequelize } = require("sequelize");
-const sendEmail = require("../../database/utils/sendEmail.js");
+
 
 
 export const getConFiltros = async (req, res) => {
@@ -274,7 +274,6 @@ export const findUsuarioPorDNI = async (dni) => {
     return postulantes ? postulantes : false;
   } catch (error) {
     console.error(`Error al buscar usuario por DNI: ${error}`);
-    return ;
   }
 };
 
@@ -313,20 +312,6 @@ export const postPostulante = async (req, res) => {
       portfolio: req.body.portfolio
     });
 
-    const user = await findUsuarioPorDNI(postulante.fk_id_usuario);
-
-    if (user) {
-      await sendEmail(
-      user.rows[0]?.Usuario?.dataValues.usuario, 
-      "Bienvenido a Comunidad UNAHUR",
-      {
-        nombre: postulante.nombre,
-      },
-      '../../database/utils/template/welcome.handlebars'
-      );
-    } else {
-      console.error("No se encontró el usuario o la propiedad 'usuario' está indefinida.");
-    }
 
     await uploadCv(process.env.SUPABASE_BUCKET, 'cv',`${req.params.id}`, req.body.cv)
     await enableUser(req.body.idUsuario); //Aca habilitamos el usuario

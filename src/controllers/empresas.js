@@ -236,7 +236,6 @@ export const findUsuarioPorId = async (idUsuario) => {
     return user ? user : false;
   } catch (error) {
     console.error(`Error al buscar usuario: ${error}`);
-    return ;
   }
 };
 
@@ -265,8 +264,12 @@ export const postEmpresa = async (req, res) => {
         });
 
         const emailRepresentante = empresa.email_representante;
-        console.log(emailRepresentante)
-        await sendEmail.sendMail(emailRepresentante);
+        const datos = {
+            nombre: empresa.nombre_representante,
+            nombreEmpresa: empresa.nombre_empresa
+        }
+
+        await sendEmail.sendMail(emailRepresentante, datos);
 
         res.status(201).send({ id: empresa.id });
     } catch (error) {
@@ -337,19 +340,6 @@ export const patchEmpresa = async (req, res) => {
         },
         { fields: ["estado"] }
       );
-
-      if (empresas) {
-        await sendEmail(
-        empresas.dataValues?.Usuario?.dataValues?.usuario, 
-        "Activación de cuenta",
-        {
-          nombre: empresas.dataValues?.nombre_representante ,
-        },
-        '../../database/utils/template/activacionDeLaEmpresa.handlebars'
-        );
-      } else {
-        console.error("No se encontró el usuario o la propiedad 'usuario' está indefinida.");
-      };
 
       res.sendStatus(200);
 

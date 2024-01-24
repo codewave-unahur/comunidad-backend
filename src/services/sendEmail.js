@@ -1,5 +1,11 @@
 const nodemailer = require('nodemailer')
+const fs = require('fs');
+const handlebars = require('handlebars');
+const path = require('path');
 
+const templatePath = path.join(__dirname, '../util/template/welcomeEmpresa.handlebars')
+const templateSource = fs.readFileSync(templatePath, 'utf8')
+const template = handlebars.compile(templateSource);
 const createTrans = () => {
     return nodemailer.createTransport({
         host: "sandbox.smtp.mailtrap.io",
@@ -11,15 +17,16 @@ const createTrans = () => {
     });
 }
 
-const sendMail = async (email) =>{
+const sendMail = async (email, datos) =>{
     const transporter = createTrans()
+    const htmlContent = template(datos)
     const info = await transporter.sendMail({
         from: '<info@example.com>',
         to: email,
-        subject: `Bienvenido ${email}`,
-        html: '<b> Hello </b>',
+        subject: `Mail de bienvenida`,
+        html: htmlContent,
     });
     console.log(`Message sent %s`, info.messageId)
 }
 
-exports.sendMail = (email) => sendMail(email)
+exports.sendMail = (email, datos) => sendMail(email, datos)

@@ -1,6 +1,6 @@
 const models = require("../../database/models");
 const { Op: sequelize } = require("sequelize");
-const sendEmail = require("../../database/utils/sendEmail.js");
+
 
 export const getPorIdPostulante = async (req, res) => {
   const paginaComoNumero = Number.parseInt(req.query.pagina);
@@ -11,19 +11,19 @@ export const getPorIdPostulante = async (req, res) => {
   let pagina = 0;
   if (!Number.isNaN(paginaComoNumero) && paginaComoNumero > 0) {
     pagina = paginaComoNumero;
-  };
+  }
 
   let limite = 30;
   if (!Number.isNaN(limiteComoNumero) && limiteComoNumero > 0) {
     limite = limiteComoNumero;
-  };
+  }
 
   if (typeof nombre_postulacion === "undefined") {
     nombre_postulacion = "_";
   } else {
     nombre_postulacion = nombre_postulacion.replace(/\s/g, "%");
-  };
-    
+  }
+
   models.postulaciones
     .findAndCountAll({
       limit: limite,
@@ -237,24 +237,6 @@ export const postPostulaciones = async (req, res) => {
       contactado: null,
     });
 
-    const postulante = await findPostulacion(postulacion.dataValues.id);
-    
-    if (postulante) {
-      await sendEmail(
-        postulante.dataValues.Postulante.dataValues.Usuario.usuario, 
-        "Postulación",
-        {
-          nombre: postulante.dataValues.Postulante.dataValues.nombre,
-          nombreDeOferta: postulante.dataValues.Oferta.dataValues.titulo_oferta,
-        },
-        '../../database/utils/template/postulacionAOferta.handlebars'
-      );
-    } else {
-      console.error(
-        "No se encontró el postulante o la oferta."
-      );
-    }
-    
     res.status(201).send({ id: postulacion.id });
 
   } catch (error) {
