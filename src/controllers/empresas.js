@@ -1,6 +1,6 @@
 const models = require("../../database/models");
 const { Op: sequelize } = require("sequelize");
-const sendEmail = require("../../database/utils/sendEmail.js");
+const sendEmail = require("../services/sendEmail");
 
 export const getConFiltros = async (req, res) => {
   let paginaComoNumero = Number.parseInt(req.query.pagina);
@@ -241,57 +241,44 @@ export const findUsuarioPorId = async (idUsuario) => {
 };
 
 export const postEmpresa = async (req, res) => {
-  try{
-  const empresa = await models.empresas
-    .create({
-      id:  req.body.cuit,
-      fk_id_usuario: req.body.idUsuario,     
-      fk_id_rubro: req.body.idRubro,          
-      estado: "Observado",         
-      nombre_empresa: req.body.nombreEmpresa,       
-      descripcion: req.body.descripcion,          
-      pais: req.body.pais,                
-      fk_id_provincia: req.body.provincia,            
-      fk_id_ciudad: req.body.ciudad,               
-      calle: req.body.calle,                
-      nro: req.body.nro,                  
-      piso: req.body.piso,                 
-      depto: req.body.depto,                
-      cp: req.body.cp,                   
-      telefono: req.body.telefono,             
-      web: req.body.web,                  
-      nombre_representante: req.body.nombreRepresentante, 
-      email_representante: req.body.emailRepresentante,  
-      logo: "logo.jpg" 
-    })
-  
-    const user = await findUsuarioPorId(empresa.fk_id_usuario);
+    try {
+        const empresa = await models.empresas.create({
+            id: req.body.cuit,
+            fk_id_usuario: req.body.idUsuario,
+            fk_id_rubro: req.body.idRubro,
+            estado: "Observado",
+            nombre_empresa: req.body.nombreEmpresa,
+            descripcion: req.body.descripcion,
+            pais: req.body.pais,
+            fk_id_provincia: req.body.provincia,
+            fk_id_ciudad: req.body.ciudad,
+            calle: req.body.calle,
+            nro: req.body.nro,
+            piso: req.body.piso,
+            depto: req.body.depto,
+            cp: req.body.cp,
+            telefono: req.body.telefono,
+            web: req.body.web,
+            nombre_representante: req.body.nombreRepresentante,
+            email_representante: req.body.emailRepresentante,
+            logo: "logo.jpg",
+        });
 
-    if (user) {
-      await sendEmail(
-      user.rows[0]?.dataValues?.usuario, 
-      "Bienvenido a Comunidad UNAHUR",
-      {
-        nombre: empresa.nombre_representante,
-        nombreEmpresa: empresa.nombre_empresa,
-      },
-      '../../database/utils/template/welcomeEmpresa.handlebars'
-      );
-    } else {
-      console.error("No se encontró el usuario o la propiedad 'usuario' está indefinida.");
+        const emailRepresentante = empresa.email_representante;
+        console.log(emailRepresentante)
+        await sendEmail.sendMail(emailRepresentante);
+
+        res.status(201).send({ id: empresa.id });
+    } catch (error) {
+        if (error === "SequelizeUniqueConstraintError: Validation error") {
+            res.status(401).send("Bad request: Algun tipo de error de validacion de campos");
+        } else {
+            console.log(`Error al intentar insertar en la base de datos: ${error}`);
+            res.sendStatus(500);
+        }
     }
-    
-    res.status(201).send({ id: empresa.id })
-
-    } catch(error) {
-      if (error === "SequelizeUniqueConstraintError: Validation error") {
-        res.status(401).send("Bad request: Algun tipo de error de validacion de campos");
-      } else {
-        console.log(`Error al intentar insertar en la base de datos: ${error}`);
-        res.sendStatus(500);
-      }
-    };
 };
+
 
 export const updateEmpresa = async (req, res) => {
   const onSuccess = (empresas) =>

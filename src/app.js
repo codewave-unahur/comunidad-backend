@@ -12,6 +12,7 @@ app.use('/', routes);
 app.listen(app.get('port'), () => {
   console.log('Servidor conectado al puerto', app.get('port'),'🚀🚀🚀'),
   sequelize.authenticate();
+
  });
 
  module.exports = app;
