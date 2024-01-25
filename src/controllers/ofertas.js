@@ -1,5 +1,6 @@
 const models = require("../../database/models");
 const { Op: sequelize } = require("sequelize");
+import {sendMail} from "../services/sendEmail";
 
 export const getOfertasPorFiltros = async (req, res) => {
   let paginaComoNumero = Number.parseInt(req.query.pagina);
@@ -418,7 +419,17 @@ export const createOferta = async (req, res) => {
           });
         });
       }
-    
+
+      const correoAdmin = process.env.EMAIL_ADMIN;
+
+      // Construye los datos que quieres enviar en el correo al administrador
+      const datosCorreoAdmin = {
+          // información relevante sobre la nueva oferta
+          // Por ejemplo: tituloOferta, descripción, etc.
+          tituloOferta: oferta.titulo_oferta
+      };
+      await sendMail(correoAdmin, datosCorreoAdmin, 'nuevaOfertaAdmin');
+
      res.status(201).send({ id: oferta.id })
   } catch (error) {
       if (error == "SequelizeUniqueConstraintError: Validation error") {
@@ -713,7 +724,7 @@ export const getOfertasPorFiltrosRecomendado = async (req, res) => {
           if (postulante.Aptitudes.length > 0) {
             postulante.Aptitudes.forEach((aptitudPostulante) => {
               if (
-                aptitudPostulante["Aptitudes del postulante"].id ==
+                aptitudPostulante["Aptitudes del postulante"].id ===
                 aptitudOferta["Aptitudes de oferta"].id
               ) {
                 cantidadAptitudesMatch++;
