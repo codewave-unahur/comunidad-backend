@@ -1,3 +1,5 @@
+import {sendMail} from "../services/sendEmail";
+
 const models = require("../../database/models");
 const { Op: sequelize } = require("sequelize");
 const sendEmail = require("../services/sendEmail");
@@ -264,12 +266,20 @@ export const postEmpresa = async (req, res) => {
         });
 
         const emailRepresentante = empresa.email_representante;
-        const datos = {
+        const datosEmpresa = {
             nombre: empresa.nombre_representante,
             nombreEmpresa: empresa.nombre_empresa
         }
 
-        await sendEmail.sendMail(emailRepresentante, datos);
+        await sendEmail.sendMail(emailRepresentante, datosEmpresa, 'welcomeEmpresa');
+
+        const datosEmailAdmin = {
+            nombreEmpresa: empresa.nombre_empresa
+        }
+        const emailAdmin = process.env.EMAIL_ADMIN
+        console.log(emailAdmin)
+
+        await sendMail(emailAdmin, datosEmailAdmin, 'registroEmpresa')
 
         res.status(201).send({ id: empresa.id });
     } catch (error) {
