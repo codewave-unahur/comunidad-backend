@@ -15,46 +15,45 @@ module.exports = (sequelize, DataTypes) => {
       ,{
         as : 'Empresa',  // nombre de mi relacion
         foreignKey: 'fk_id_empresa'     // campo con el que voy a igualar
-      }),
+      })
       ofertas.belongsTo(models.estudios// modelo al que pertenece
       ,{
         as : 'Estudio',  // nombre de mi relacion
         foreignKey: 'fk_id_estudio'     // campo con el que voy a igualar
-      }),
-      ofertas.belongsTo(models.carreras// modelo al que pertenece
-      ,{
-        as : 'Carrera',  // nombre de mi relacion
-        foreignKey: 'fk_id_carrera'     // campo con el que voy a igualar
-      }),
+      })
+     // ofertas.belongsTo(models.carreras// modelo al que pertenece
+      //,{
+       // as : 'Carrera',  // nombre de mi relacion
+        //foreignKey: 'fk_id_carrera'     // campo con el que voy a igualar
+      //}),
       ofertas.belongsTo(models.jornadas// modelo al que pertenece
       ,{
         as : 'Jornada',  // nombre de mi relacion
         foreignKey: 'fk_id_jornada'     // campo con el que voy a igualar
-      }),
+      })
       ofertas.belongsTo(models.contratos// modelo al que pertenece
       ,{
         as : 'Contrato',  // nombre de mi relacion
         foreignKey: 'fk_id_contrato'     // campo con el que voy a igualar
-      }),
+      })
       ofertas.hasMany(models.aptitudes_ofertas// modelo al que pertenece
       ,{
         as : 'Aptitudes',  // nombre de mi relacion
         foreignKey: 'fk_id_oferta'     // campo con el que voy a igualar
-      }),
+      })
       ofertas.hasMany(models.idiomas_ofertas,
          {
           as: 'Idiomas',
           foreignKey: 'fk_id_oferta',
       }// modelo al que pertenece
-      ),
+      )
       ofertas.hasMany(models.preferencias_ofertas,
         {
           as: 'Preferencias',
           foreignKey: 'fk_id_ofertas',
       }// modelo al que pertenece
       )
-            
-   ///////////
+
     }
   }
   ofertas.init({
