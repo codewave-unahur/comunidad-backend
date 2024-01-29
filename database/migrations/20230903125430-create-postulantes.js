@@ -41,18 +41,6 @@ module.exports = {
       fk_id_ciudad: {
         type: Sequelize.INTEGER,
       },
-      calle: {
-        type: Sequelize.STRING,
-      },
-      nro: {
-        type: Sequelize.INTEGER,
-      },
-      piso: {
-        type: Sequelize.INTEGER,
-      },
-      depto: {
-        type: Sequelize.STRING,
-      },
       cp: {
         type: Sequelize.STRING,
       },
