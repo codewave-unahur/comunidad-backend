@@ -9,7 +9,7 @@ export const createAptitud = async (req, res) => {
         (aptitudes) => res.status(201).send({ id: aptitudes.id }))
   
       .catch((error) => {
-        if (error == "SequelizeUniqueConstraintError: Validation error") {
+        if (error === "SequelizeUniqueConstraintError: Validation error") {
           res.status(401).send("Bad request: Algun tipo de error de validacion de campos");
         } else {
           console.log(`Error al intentar insertar en la base de datos: ${error}`);

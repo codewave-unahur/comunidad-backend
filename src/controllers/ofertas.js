@@ -432,7 +432,7 @@ export const createOferta = async (req, res) => {
 
      res.status(201).send({ id: oferta.id })
   } catch (error) {
-      if (error == "SequelizeUniqueConstraintError: Validation error") {
+      if (error === "SequelizeUniqueConstraintError: Validation error") {
         res
           .status(401)
           .send("Bad request: Algun tipo de error de validacion de campos");

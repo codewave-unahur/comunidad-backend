@@ -1,10 +1,9 @@
 import {uploadCv} from "../services/supabase.service";
+import {sendMail} from "../services/sendEmail";
 
 const models = require("../../database/models");
 const { Op } = require("sequelize");
 const { Op: sequelize } = require("sequelize");
-
-
 
 export const getConFiltros = async (req, res) => {
   try {
@@ -88,7 +87,6 @@ export const getConFiltros = async (req, res) => {
     res.sendStatus(400);
   }
 };
-
 const findPostulantesPorIdUsuario = (
   fk_id_usuario,
   { onSuccess, onNotFound, onError }
@@ -167,7 +165,6 @@ const findPostulantesPorIdUsuario = (
       onError();
     });
 };
-
 export const getPorIdUsuario = async (req, res) => {
   findPostulantesPorIdUsuario(req.params.id, {
     onSuccess: (postulantes) => res.send(postulantes),
@@ -175,7 +172,6 @@ export const getPorIdUsuario = async (req, res) => {
     onError: () => res.sendStatus(500),
   });
 };
-
 const findPostulantesPorDNI = (id,{ onSuccess, onNotFound, onError }) => {
   models.postulantes
     .findOne({
@@ -249,7 +245,6 @@ const findPostulantesPorDNI = (id,{ onSuccess, onNotFound, onError }) => {
     )
     .catch(() => onError());
 };
-
 export const getPorId = async (req, res) => {
   findPostulantesPorDNI(req.params.id, {
     onSuccess: (postulantes) => res.send(postulantes),
@@ -257,7 +252,6 @@ export const getPorId = async (req, res) => {
     onError: (error) => res.sendStatus(400, error),
   });
 };
-
 export const findUsuarioPorDNI = async (dni) => {
   try {
     const postulantes = await models.postulantes.findAndCountAll({
@@ -276,7 +270,6 @@ export const findUsuarioPorDNI = async (dni) => {
     console.error(`Error al buscar usuario por DNI: ${error}`);
   }
 };
-
 export const postPostulante = async (req, res) => {
   try{
     const postulante = await models.postulantes
@@ -318,6 +311,13 @@ export const postPostulante = async (req, res) => {
     console.log(process.env.SUPABASE_BUCKET)
     res.status(201).send({ id: postulante.id });
 
+    const datosPosutlante = {
+      nombre: postulante.nombre,
+      apellido: postulante.apellido
+    }
+
+    await sendMail(process.env.EMAIL_ADMIN, datosPosutlante, 'nuevoPostulante')
+
     } catch (error) {
       if (error.name === "SequelizeUniqueConstraintError") {
         res.status(401).send("Bad request: este dni ya se dio de alta");
@@ -327,7 +327,6 @@ export const postPostulante = async (req, res) => {
       }
     }
 };
-
 //Con esto habilitamos el usuario cuando de el alta en postulantes
 const enableUser = async (id_usuario) => {
   models.usuarios.update(
@@ -339,7 +338,6 @@ const enableUser = async (id_usuario) => {
     }
   );
 };
-
 export const deletePostulante = async (req, res) => {
   const onSuccess = postulantes =>
   postulantes
@@ -352,7 +350,6 @@ export const deletePostulante = async (req, res) => {
     onError: () => res.sendStatus(500)
   });
 };
-
 export const agregarPreferencias = async (req, res) => {
   const preferenciasNuevas = req.body.preferencias;
 
@@ -370,7 +367,6 @@ export const agregarPreferencias = async (req, res) => {
     res.sendStatus(500);
   }
 };
-
 export const eliminarPreferencias = async (req, res) => {
   try {
     await models.preferencias_postulantes.destroy({
@@ -385,7 +381,6 @@ export const eliminarPreferencias = async (req, res) => {
     res.sendStatus(500);
   }
 };
-
 export const agregarAptitudes = async (req, res) => {
   const aptitudesNuevas = req.body.aptitudes;
 
@@ -403,7 +398,6 @@ export const agregarAptitudes = async (req, res) => {
     res.sendStatus(500);
   }
 };
-
 export const eliminarAptitudes = async (req, res) => {
   try {
     await models.aptitudes_postulantes.destroy({
@@ -418,7 +412,6 @@ export const eliminarAptitudes = async (req, res) => {
     res.sendStatus(500);
   }
 };
-
 export const agregarIdiomas = async (req, res) => {
   const idiomasNuevos = req.body.idiomas;
 
@@ -444,7 +437,6 @@ export const agregarIdiomas = async (req, res) => {
   }
   res.sendStatus(200);
 };
-
 export const eliminarIdioma = async (req, res) => {
   try {
     await models.idiomas_postulantes.destroy({
@@ -459,8 +451,6 @@ export const eliminarIdioma = async (req, res) => {
     res.sendStatus(500);
   }
 };
-
-
 export const updatePostulante = async (req, res) => {
   try {
     const postulante = await models.postulantes.findByPk(req.params.id);
@@ -521,7 +511,6 @@ export const updatePostulante = async (req, res) => {
     }
   }
 };
-
 export const postulantesBaseUnahur = async (req, res) => {
   try {
     const paginaComoNumero = Number.parseInt(req.query.pagina);

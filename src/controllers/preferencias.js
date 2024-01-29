@@ -1,6 +1,5 @@
 const models = require("../../database/models");
 const { Op } = require("sequelize");
-
 export const getAll = async (req, res) => {
     try {
       const preferencias = await models.preferencias.findAll({

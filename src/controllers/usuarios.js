@@ -61,8 +61,6 @@ export const signUp = async (req, res) => {
     return res.status(500).send("Internal Server Error");
   }
 };
-
-
 export const getAll = async (req, res) => {
   models.usuarios
     .findAll({
@@ -102,7 +100,6 @@ export const getUserId = (req, res) => {
   });
 };
 
-
 export const signIn = async (req, res) => {
   try{
     const { usuario , password } = req.body;
@@ -138,10 +135,8 @@ export const signIn = async (req, res) => {
   catch (error) {
     console.error('Error en signIn:', error);
     return res.status(500).send('Internal Server Error')
-
   }
 }
-
 export const deleteUsuario = async (req, res) => {
   const onSuccess = usuarios =>
   usuarios
@@ -154,7 +149,6 @@ export const deleteUsuario = async (req, res) => {
     onError: () => res.sendStatus(500)
   });
 };
-
 
 export const updateUsuariobyId = async (req, res) => {
   const onSuccess = (usuario) =>

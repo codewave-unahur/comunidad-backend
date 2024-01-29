@@ -1,6 +1,7 @@
+import {sendMail} from "../services/sendEmail";
+
 const models = require("../../database/models");
 const { Op: sequelize } = require("sequelize");
-
 
 export const getPorIdPostulante = async (req, res) => {
   const paginaComoNumero = Number.parseInt(req.query.pagina);
@@ -239,6 +240,11 @@ export const postPostulaciones = async (req, res) => {
 
     res.status(201).send({ id: postulacion.id });
 
+    const datoPostulaciones = {
+    }
+
+    await sendMail(process.env.EMAIL_ADMIN, datoPostulaciones,'nuevaPostulacionAdmin.handlebars');
+
   } catch (error) {
     if (error.name === "SequelizeUniqueConstraintError") {
       res.status(400).send('Bad request: algún error de validación de campos');
@@ -310,7 +316,7 @@ export const updatePostulaciones = async (req, res) => {
         )
         .then(() => res.sendStatus(200))
         .catch((error) => {
-          if (error == "SequelizeUniqueConstraintError: Validation error") {
+          if (error === "SequelizeUniqueConstraintError: Validation error") {
             res
               .status(400)
               .send("Bad request: Algun tipo de error de validacion de campos");
@@ -337,9 +343,11 @@ export const activarPostulante = async (req, res) => {
       },
       { fields: ["estado_postulacion"] }
     )
-    .then(() => res.sendStatus(200))
+    .then(() => {
+      res.sendStatus(200)
+    })
     .catch((error) => {
-      if (error == "SequelizeUniqueConstraintError: Validation error") {
+      if (error === "SequelizeUniqueConstraintError: Validation error") {
         res
           .status(400)
           .send("Bad request: Algun tipo de error de validacion de campos");
@@ -374,7 +382,6 @@ export const findUsuarioPorDNI = async (dni) => {
     return postulantes ? postulantes : false;
   } catch (error) {
     console.error(`Error al buscar usuario por DNI: ${error}`);
-    return ;
   }
 };
 
@@ -387,7 +394,7 @@ export const findOfertaPorId = async(idOferta) =>{
     return oferta ? oferta : false;
   } catch (error) {
     console.error(`Error al buscar usuario por DNI: ${error}`);
-    return ;
+
   }
 };
 
@@ -422,7 +429,7 @@ export const desactivarPostulacion = async (req, res) => {
       res.sendStatus(200);
 
     } catch (error) {
-      if (error == "SequelizeUniqueConstraintError: Validation error") {
+      if (error === "SequelizeUniqueConstraintError: Validation error") {
         res.status(400).send("Bad request: Algun tipo de error de validación de campos");
       } else {
         console.log(`Error al intentar actualizar la base de datos: ${error}`);
@@ -450,7 +457,7 @@ export const marcarContactado = async (req, res) => {
     )
     .then(() => res.sendStatus(200))
     .catch((error) => {
-      if (error == "SequelizeUniqueConstraintError: Validation error") {
+      if (error === "SequelizeUniqueConstraintError: Validation error") {
         res
           .status(400)
           .send("Bad request: Algun tipo de error de validacion de campos");
@@ -479,7 +486,7 @@ export const marcarNoContactado = async (req, res) => {
     )
     .then(() => res.sendStatus(200))
     .catch((error) => {
-      if (error == "SequelizeUniqueConstraintError: Validation error") {
+      if (error === "SequelizeUniqueConstraintError: Validation error") {
         res
           .status(400)
           .send("Bad request: Algun tipo de error de validacion de campos");

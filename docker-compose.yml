@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
   bolsa_db:
-    image: postgres:15-alpine3.19
+    image: postgres:15-alpine
     container_name: empleabilidad_backend
     env_file:
       - .env
