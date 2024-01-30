@@ -47,11 +47,11 @@ export const getOfertasPorFiltros = async (req, res) => {
           model: models.estudios,
           attributes: ["id", "nombre_estudio_estado"],
         },
-        {
-          as: "Carrera",
-          model: models.carreras,
-          attributes: ["id", "nombre_carrera"],
-        },
+        //{
+          //as: "Carrera",
+          //model: models.carreras,
+          //attributes: ["id", "nombre_carrera"],
+        //},
         {
           as: "Jornada",
           model: models.jornadas,
@@ -148,11 +148,11 @@ export const getOfertas = async (req, res) => {
           model: models.estudios,
           attributes: ["id", "nombre_estudio_estado"],
         },
-        {
-          as: "Carrera",
-          model: models.carreras,
-          attributes: ["id", "nombre_carrera"],
-        },
+        //{
+          //as: "Carrera",
+          //model: models.carreras,
+          //attributes: ["id", "nombre_carrera"],
+        //},
         {
           as: "Jornada",
           model: models.jornadas,
@@ -203,11 +203,11 @@ const findOferta = (id, { onSuccess, onNotFound, onError }) => {
           model: models.estudios,
           attributes: ["id", "nombre_estudio_estado"],
         },
-        {
-          as: "Carrera",
-          model: models.carreras,
-          attributes: ["id", "nombre_carrera"],
-        },
+        //{
+          //as: "Carrera",
+          //model: models.carreras,
+          //attributes: ["id", "nombre_carrera"],
+        //,
         {
           as: "Jornada",
           model: models.jornadas,
@@ -307,11 +307,11 @@ export const getOfertasPorIdEmpresa = async (req, res) => {
           model: models.estudios,
           attributes: ["id", "nombre_estudio_estado"],
         },
-        {
-          as: "Carrera",
-          model: models.carreras,
-          attributes: ["id", "nombre_carrera"],
-        },
+        //{
+          //as: "Carrera",
+          //model: models.carreras,
+          //attributes: ["id", "nombre_carrera"],
+        //},
         {
           as: "Jornada",
           model: models.jornadas,
@@ -359,7 +359,7 @@ export const createOferta = async (req, res) => {
       fk_id_jornada: req.body.idJornada,
       fk_id_contrato: req.body.idContrato,
       fk_id_estudio: req.body.idEstudio,
-      fk_id_carrera: req.body.idCarrera,
+      //fk_id_carrera: req.body.idCarrera,
       estado: "Pendiente",
       cierre: null,
       check: null,
@@ -464,7 +464,7 @@ export const updateOfertas = async (req, res) => {
           fk_id_jornada: req.body.idJornada,
           fk_id_contrato: req.body.idContrato,
           fk_id_estudio: req.body.idEstudio,
-          fk_id_carrera: req.body.idCarrera,
+          //fk_id_carrera: req.body.idCarrera,
           estado: req.body.estado,
           cierre: req.body.cierre,
           check: req.body.check,
@@ -490,7 +490,7 @@ export const updateOfertas = async (req, res) => {
             "fk_id_jornada",
             "fk_id_contrato",
             "fk_id_estudio",
-            "fk_id_carrera",
+            //"fk_id_carrera",
             "estado",
             "cierre",
             "check",
@@ -628,11 +628,11 @@ export const getOfertasPorFiltrosRecomendado = async (req, res) => {
           model: models.estudios,
           attributes: ["id", "nombre_estudio_estado"],
         },
-        {
-          as: "Carrera",
-          model: models.carreras,
-          attributes: ["id", "nombre_carrera"],
-        },
+        //{
+          //as: "Carrera",
+          //model: models.carreras,
+          //attributes: ["id", "nombre_carrera"],
+        //},
         {
           as: "Jornada",
           model: models.jornadas,

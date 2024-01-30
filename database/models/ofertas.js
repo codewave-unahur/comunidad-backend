@@ -61,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
     fk_id_jornada: DataTypes.INTEGER,
     fk_id_contrato: DataTypes.INTEGER,
     fk_id_estudio: DataTypes.INTEGER,
-    fk_id_carrera: DataTypes.INTEGER,
+    //fk_id_carrera: DataTypes.INTEGER,
     estado: DataTypes.STRING,
     cierre: DataTypes.TEXT,
     check: DataTypes.TEXT,

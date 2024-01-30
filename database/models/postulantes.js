@@ -19,13 +19,13 @@ module.exports = (sequelize, DataTypes) => {
                         foreignKey: "fk_id_estudios", // campo con el que voy a igualar
                     }
                 ),
-                postulantes.belongsTo(
-                    models.carreras, // modelo al que pertenece
-                    {
-                        as: "Carrera", // nombre de mi relacion
-                        foreignKey: "fk_id_carrera", // campo con el que voy a igualar
-                    }
-                ),
+               // postulantes.belongsTo(
+                 //   models.carreras, // modelo al que pertenece
+                   // {
+                     //   as: "Carrera", // nombre de mi relacion
+                       // foreignKey: "fk_id_carrera", // campo con el que voy a igualar
+                    //}
+                //),
                 postulantes.belongsTo(
                     models.provincias, // modelo al que pertenece
                     {
@@ -63,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
             tipo_documento: DataTypes.STRING,
             fk_id_usuario: DataTypes.INTEGER,
             fk_id_estudios: DataTypes.INTEGER,
-            fk_id_carrera: DataTypes.INTEGER,
+            //fk_id_carrera: DataTypes.INTEGER,
             estado: DataTypes.STRING,
             nombre: DataTypes.STRING,
             apellido: DataTypes.STRING,
