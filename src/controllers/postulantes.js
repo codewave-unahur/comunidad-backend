@@ -306,7 +306,7 @@ export const postPostulante = async (req, res) => {
     });
 
 
-    await uploadCv(process.env.SUPABASE_BUCKET, 'cv',`${req.params.id}`, req.body.cv)
+    //await uploadCv(process.env.SUPABASE_BUCKET, 'cv',`${req.params.id}`, req.body.cv)
     await enableUser(req.body.idUsuario); //Aca habilitamos el usuario
     console.log(process.env.SUPABASE_BUCKET)
     res.status(201).send({ id: postulante.id });
