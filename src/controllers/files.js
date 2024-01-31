@@ -1,8 +1,8 @@
 const models = require("../../database/models");
 import { createClient } from '@supabase/supabase-js'
-const supabaseUrl = 'https://fjjrxhcerjjthjglqptp.supabase.co'
+const supabaseUrl = 'https://noxvyrvmoadbvaykqdrc.supabase.co'
 //la key de supa para que no haga bardo tiene que ser la de service key o secret
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqanJ4aGNlcmpqdGhqZ2xxcHRwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY5MzUyNjQ2NywiZXhwIjoyMDA5MTAyNDY3fQ.aJ54McCK2fK2Oac-hmGkXWfXZHYy5AiQ4GC_-W5ze8Y'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5veHZ5cnZtb2FkYnZheWtxZHJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDUwNjM5OTAsImV4cCI6MjAyMDYzOTk5MH0.3MPon4vgKw1nM8SwqcoBgxIaPO1Iw_qXFGEaelOh1WA'
 const supabase = createClient(supabaseUrl, supabaseKey)
 
 

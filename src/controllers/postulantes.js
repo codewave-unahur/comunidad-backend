@@ -453,64 +453,23 @@ export const eliminarIdioma = async (req, res) => {
 };
 export const updatePostulante = async (req, res) => {
   try {
-    const postulante = await models.postulantes.findByPk(req.params.id);
-
-    if (!postulante) {
-      return res.sendStatus(404);
-    }
-
-    // Actualiza los campos del postulante
-    await postulante.update({
-      tipo_documento: req.body.tipoDocumento,
-      fk_id_usuario: req.body.idUsuario,
-      fk_id_estudios: req.body.estudios,
-      fk_id_carrera: req.body.carrera,
-      estado: req.body.estado,
-      nombre: req.body.nombre,
-      apellido: req.body.apellido,
-      genero: req.body.genero,
-      discapacidad: req.body.discapacidad,
-      nacionalidad: req.body.nacionalidad,
-      fecha_nac: req.body.fecha_nac,
-      pais: req.body.pais,
-      fk_id_provincia: req.body.provincia,
-      fk_id_ciudad: req.body.ciudad,
-      calle: req.body.calle,
-      nro: req.body.nro,
-      piso: req.body.piso,
-      depto: req.body.depto,
-      cp: req.body.cp,
-      telefono: req.body.telefono,
-      segundoTelefono: req.body.segundoTelefono,
-      cant_materias: req.body.cantMaterias,
-      alumno_unahur: req.body.alumnoUnahur,
-      presentacion: req.body.presentacion,
-      cv: req.body.cv,
-      foto: req.body.foto,
-      linkedIn: req.body.linkedIn,
-      portfolio: req.body.portfolio
-
-    }, {
-      fields: ["tipo_documento", "fk_id_usuario", "fk_id_estudios", /* ... */],
+    const postulante = await models.postulantes.findOne({
+      where: {
+        id: req.params.id,
+      },
     });
 
-    // Si hay un nuevo CV, cárgalo a Supabase Storage utilizando el servicio
-    if (req.body.cv) {
-      await uploadCv(process.env.SUPABASE_BUCKET, 'cv', `${req.params.id}`, req.body.cv);
-    }
-
-    // Llamada a la función para encontrar postulantes por DNI
-    const updatedPostulante = await models.postulantes.findByPk(req.params.id);
-    res.status(200).json(updatedPostulante);
-  } catch (error) {
-    if (error.name === "SequelizeUniqueConstraintError") {
-      res.status(400).send("Bad request: Algun tipo de error de validacion de campos");
+    if (postulante) {
+      await postulante.update(req.body);
+      res.sendStatus(200);
     } else {
-      console.log(`Error al intentar actualizar la base de datos: ${error}`);
-      res.sendStatus(500);
+      res.sendStatus(404);
     }
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
   }
-};
+}
 export const postulantesBaseUnahur = async (req, res) => {
   try {
     const paginaComoNumero = Number.parseInt(req.query.pagina);
