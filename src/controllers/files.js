@@ -32,6 +32,7 @@ export const uploadCV = async (req, res) => {
   updateCv(id, publicUrl);
   if (error) {
     console.log(error)
+    console.log(data)
     res.status(500).send(error);
   } else {
     console.log(data)

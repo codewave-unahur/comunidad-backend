@@ -46,3 +46,4 @@ export const uploadCv = async (bucketName, folder, fileName, file) => {
     }
 };
 
+
