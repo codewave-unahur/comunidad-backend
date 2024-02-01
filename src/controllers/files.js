@@ -1,7 +1,9 @@
 const models = require("../../database/models");
 import { createClient } from '@supabase/supabase-js'
+
+require('dotenv').config();
+
 const supabaseUrl = process.env.SUPABASE_URL
-//la key de supa para que no haga bardo tiene que ser la de service key o secret
 const supabaseKey = process.env.SUPABASE_KEY
 const supabase = createClient(supabaseUrl, supabaseKey)
 
