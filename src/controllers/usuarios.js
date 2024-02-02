@@ -126,6 +126,7 @@ export const signIn = async (req, res) => {
           id: findUsuario.id,
           grupo: findUsuario.fk_id_grupo,
           estado: findUsuario.estado,
+          token: accessToken
         };
         return res.header('Authorization', accessToken).json(response);
       }

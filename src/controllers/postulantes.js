@@ -278,38 +278,36 @@ export const findUsuarioPorDNI = async (dni) => {
 export const postPostulante = async (req, res) => {
   try{
     const postulante = await models.postulantes
-        .create({
-          id: req.body.documento,
-          tipo_documento: req.body.tipoDocumento,
-          fk_id_usuario: req.body.idUsuario,
-          fk_id_estudios: req.body.estudios,
-          fk_id_carrera: req.body.carrera,
-          estado: "Activo",
-          nombre: req.body.nombre,
-          apellido: req.body.apellido,
-          genero: req.body.genero,
-          discapacidad: req.body.discapacidad,
-          nacionalidad: req.body.nacionalidad,
-          fecha_nac: req.body.fecha_nac,
-          pais: req.body.pais,
-          fk_id_provincia: req.body.provincia,
-          fk_id_ciudad: req.body.ciudad,
-          cp: req.body.cp,
-          telefono: req.body.telefono,
-          segundoTelefono: req.body.segundoTelefono,
-          cant_materias: req.body.cantMaterias,
-          alumno_unahur: req.body.alumnoUnahur,
-          presentacion: req.body.presentacion,
-          cv: req.body.cv,
-          foto: req.body.foto,
-          linkedIn: req.body.linkedIn,
-          portfolio: req.body.portfolio
-        });
-
-    const user = await findUsuarioPorDNI(postulante.fk_id_usuario);
+    .create({
+      id: req.body.documento,
+      tipo_documento: req.body.tipoDocumento,
+      fk_id_usuario: req.body.idUsuario,
+      fk_id_estudios: req.body.estudios,
+      fk_id_carrera: req.body.carrera,
+      estado: "Activo",
+      nombre: req.body.nombre,
+      apellido: req.body.apellido,
+      genero: req.body.genero,
+      discapacidad: req.body.discapacidad,
+      nacionalidad: req.body.nacionalidad,
+      fecha_nac: req.body.fecha_nac,
+      pais: req.body.pais,
+      fk_id_provincia: req.body.provincia,
+      fk_id_ciudad: req.body.ciudad,
+      cp: req.body.cp,
+      telefono: req.body.telefono,
+      segundoTelefono: req.body.segundoTelefono,
+      cant_materias: req.body.cantMaterias,
+      alumno_unahur: req.body.alumnoUnahur,
+      presentacion: req.body.presentacion,
+      cv: req.body.cv,
+      foto: req.body.foto,
+      linkedIn: req.body.linkedIn,
+      portfolio: req.body.portfolio
+    });
 
 
-
+    //await uploadCv(process.env.SUPABASE_BUCKET, 'cv',`${req.params.id}`, req.body.cv)
     await enableUser(req.body.idUsuario); //Aca habilitamos el usuario
 
     res.status(201).send({ id: postulante.id });
@@ -460,58 +458,43 @@ export const eliminarIdioma = async (req, res) => {
 };
 
 export const updatePostulante = async (req, res) => {
-  const onSuccess = (postulantes) =>
-      postulantes
-          .update(
-              {
-                tipo_documento: req.body.tipoDocumento,
-                fk_id_usuario: req.body.idUsuario,
-                fk_id_estudios: req.body.estudios,
-                fk_id_carrera: req.body.carrera,
-                estado: req.body.estado,
-                nombre: req.body.nombre,
-                apellido: req.body.apellido,
-                genero: req.body.genero,
-                discapacidad: req.body.discapacidad,
-                nacionalidad: req.body.nacionalidad,
-                fecha_nac: req.body.fecha_nac,
-                pais: req.body.pais,
-                fk_id_provincia: req.body.provincia,
-                fk_id_ciudad: req.body.ciudad,
-                cp: req.body.cp,
-                telefono: req.body.telefono,
-                segundoTelefono: req.body.segundoTelefono,
-                cant_materias: req.body.cantMaterias,
-                alumno_unahur: req.body.alumnoUnahur,
-                presentacion: req.body.presentacion,
-                cv: req.body.cv,
-                foto: req.body.foto,
-                linkedIn: req.body.linkedIn,
-                portfolio: req.body.portfolio
-              },
-              { fields: ["tipo_documento", "fk_id_usuario","fk_id_estudios","fk_id_carrera","estado","nombre","apellido","nacionalidad","fecha_nac","pais","fk_id_provincia","fk_id_ciudad","calle","nro","piso","depto","cp","telefono", "segundoTelefono","cant_materias","alumno_unahur","presentacion","cv","foto", "linkedIn", "portfolio","genero", "discapacidad"] }
-          )
-          .then(() => res.sendStatus(200))
-          .catch((error) => {
-            if (error === "SequelizeUniqueConstraintError: Validation error") {
-              res
-                  .status(400)
-                  .send("Bad request: Algun tipo de error de validacion de campos");
-            } else {
-              console.log(
-                  `Error al intentar actualizar la base de datos: ${error}`
-              );
-              res.sendStatus(500);
-            }
-          });
-  findPostulantesPorDNI(req.params.id, {
+  const onSuccess = postulantes =>
+    postulantes
+      .update({
+        id: req.body.documento,
+        tipo_documento: req.body.tipoDocumento,
+        fk_id_usuario: req.body.idUsuario,
+        fk_id_estudios: req.body.estudios,
+        fk_id_carrera: req.body.carrera,
+        estado: "Activo",
+        nombre: req.body.nombre,
+        apellido: req.body.apellido,
+        genero: req.body.genero,
+        discapacidad: req.body.discapacidad,
+        nacionalidad: req.body.nacionalidad,
+        fecha_nac: req.body.fecha_nac,
+        pais: req.body.pais,
+        fk_id_provincia: req.body.provincia,
+        fk_id_ciudad: req.body.ciudad,
+        cp: req.body.cp,
+        telefono: req.body.telefono,
+        segundoTelefono: req.body.segundoTelefono,
+        cant_materias: req.body.cantMaterias,
+        alumno_unahur: req.body.alumnoUnahur,
+        presentacion: req.body.presentacion,
+        cv: req.body.cv,
+        foto: req.body.foto,
+        linkedIn: req.body.linkedIn,
+        portfolio: req.body.portfolio
+      })
+      .then(() => res.sendStatus(200))
+      .catch(() => res.sendStatus(500));
+    findPostulantesPorDNI(req.params.id, {
     onSuccess,
     onNotFound: () => res.sendStatus(404),
-    onError: () => res.sendStatus(500),
+    onError: () => res.sendStatus(500)
   });
-};
-
-
+}
 export const postulantesBaseUnahur = async (req, res) => {
   try {
     const paginaComoNumero = Number.parseInt(req.query.pagina);

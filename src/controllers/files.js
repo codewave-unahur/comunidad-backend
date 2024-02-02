@@ -1,8 +1,10 @@
 const models = require("../../database/models");
 import { createClient } from '@supabase/supabase-js'
-const supabaseUrl = 'https://fjjrxhcerjjthjglqptp.supabase.co'
-//la key de supa para que no haga bardo tiene que ser la de service key o secret
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZqanJ4aGNlcmpqdGhqZ2xxcHRwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY5MzUyNjQ2NywiZXhwIjoyMDA5MTAyNDY3fQ.aJ54McCK2fK2Oac-hmGkXWfXZHYy5AiQ4GC_-W5ze8Y'
+
+require('dotenv').config();
+
+const supabaseUrl = process.env.SUPABASE_URL
+const supabaseKey = process.env.SUPABASE_KEY
 const supabase = createClient(supabaseUrl, supabaseKey)
 
 
@@ -14,22 +16,23 @@ async function renameFile(srcFileName, destFileName) {
   console.log(
     `${srcFileName} renamed to ${destFileName}`
   )
-};
+}
 
 export const uploadCV = async (req, res) => {
   const id = req.headers.id
   const nombre_almacenamiento = String(id + "/" + req.file.originalname)
 
-  const {data, error} =  await supabase.storage.from('publicBucket').upload( nombre_almacenamiento, req.file.buffer, {
+  const {data, error} =  await supabase.storage.from(process.env.SUPABASE_BUCKET_CV).upload( nombre_almacenamiento, req.file.buffer, {
     contentType: req.file.mimetype,
     cacheControl: '3600',
     upsert: true
     })
-  const publicUrl = supabase.storage.from('publicBucket').getPublicUrl(nombre_almacenamiento)['data']['publicUrl']
+  const publicUrl = supabase.storage.from(process.env.SUPABASE_BUCKET_CV).getPublicUrl(nombre_almacenamiento)['data']['publicUrl']
 
   updateCv(id, publicUrl);
   if (error) {
     console.log(error)
+    console.log(data)
     res.status(500).send(error);
   } else {
     console.log(data)
@@ -47,12 +50,12 @@ export const uploadLogo = async (req, res) => {
   //los errores de supa no necesitan try, no fallan sino que devuelven el error
   const id = req.headers.id
   const nombre_almacenamiento = String(id + "/" + req.file.originalname)
-  const {data, error} =  await supabase.storage.from('publicBucket').upload( nombre_almacenamiento, req.file.buffer, {
+  const {data, error} =  await supabase.storage.from(process.env.SUPABASE_BUCKET_IMAGEN).upload( nombre_almacenamiento, req.file.buffer, {
     contentType: req.file.mimetype,
     cacheControl: '3600',
     upsert: true
     })
-  const publicUrl = supabase.storage.from('publicBucket').getPublicUrl(nombre_almacenamiento)['data']['publicUrl']
+  const publicUrl = supabase.storage.from(process.env.SUPABASE_BUCKET_IMAGEN).getPublicUrl(nombre_almacenamiento)['data']['publicUrl']
 
   updateLogo(id, publicUrl);
   if (error) {
@@ -75,12 +78,12 @@ export const uploadFoto = async (req, res) => {
   const id = req.headers.id
   const nombre_almacenamiento = String(id + "/" + req.file.originalname)
 
-  const {data, error} =  await supabase.storage.from('publicBucket').upload( nombre_almacenamiento, req.file.buffer, {
+  const {data, error} =  await supabase.storage.from(process.env.SUPABASE_BUCKET_IMAGEN).upload( nombre_almacenamiento, req.file.buffer, {
     contentType: req.file.mimetype,
     cacheControl: '3600',
     upsert: true
     })
-  const publicUrl = supabase.storage.from('publicBucket').getPublicUrl(nombre_almacenamiento)['data']['publicUrl']
+  const publicUrl = supabase.storage.from(process.env.SUPABASE_BUCKET_IMAGEN).getPublicUrl(nombre_almacenamiento)['data']['publicUrl']
 
   updateFoto(id, publicUrl);
   if (error) {
