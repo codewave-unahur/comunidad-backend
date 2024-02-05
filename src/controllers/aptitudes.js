@@ -21,7 +21,10 @@ export const createAptitud = async (req, res) => {
 export const getAll = async (req, res) => {
     try {
       const aptitudes = await models.aptitudes.findAll({
-        attributes: ["id", "nombre_aptitud", "descripcion"]
+        attributes: ["id", "nombre_aptitud", "descripcion"],
+        order: [
+          ['nombre_aptitud', 'ASC'],
+        ],
       });
       res.send({ aptitudes });
     } catch (error) {

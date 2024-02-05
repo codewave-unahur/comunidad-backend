@@ -5,6 +5,9 @@ export const getAll = async (req, res) => {
   try {
     const ciudades = await models.ciudades.findAll({
       attributes: ["id", "nombre", "fk_id_provincia"],
+      order: [
+        ['nombre', 'ASC'],
+      ],
     });
     res.send({ ciudades });
   } catch (error) {
