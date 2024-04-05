@@ -38,7 +38,7 @@ app.use((err, req, res, next) => {
 
 
 app.listen(app.get('port'), () => {
-    console.log('Servidor conectado al puerto', app.get('port')),
+    console.log('Servidor conectado al puerto', app.get('port'))
         sequelize.authenticate();
 });
 
