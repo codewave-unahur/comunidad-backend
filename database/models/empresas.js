@@ -11,33 +11,38 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       empresas.belongsTo(models.usuarios// modelo al que pertenece
-      ,{
-        as : 'Usuario',  // nombre de mi relacion
-        foreignKey: 'fk_id_usuario'     // campo con el que voy a igualar
-      })
-      empresas.belongsTo(models.rubros// modelo al que pertenece
-      ,{
-        as : 'Rubro',  // nombre de mi relacion
-        foreignKey: 'fk_id_rubro'     // campo con el que voy a igualar
-      })
-      empresas.belongsTo(models.provincias// modelo al que pertenece
-      ,{
-        as : 'Provincia',  // nombre de mi relacion
-        foreignKey: 'fk_id_provincia'     // campo con el que voy a igualar
-      })
-      empresas.belongsTo(models.ciudades// modelo al que pertenece
-      ,{
-        as : 'Ciudad',  // nombre de mi relacion
-        foreignKey: 'fk_id_ciudad'     // campo con el que voy a igualar
-      })
+          ,{
+            as : 'Usuario',  // nombre de mi relacion
+            foreignKey: 'fk_id_usuario'     // campo con el que voy a igualar
+          }),
+          empresas.belongsTo(models.rubros// modelo al que pertenece
+              ,{
+                as : 'Rubro',  // nombre de mi relacion
+                foreignKey: 'fk_id_rubro'     // campo con el que voy a igualar
+              }),
+          empresas.belongsTo(models.estado_empresas// modelo al que pertenece
+              ,{
+                as : 'Estado',  // nombre de mi relacion
+                foreignKey: 'fk_id_estado'     // campo con el que voy a igualar
+              }),
+          empresas.belongsTo(models.provincias// modelo al que pertenece
+              ,{
+                as : 'Provincia',  // nombre de mi relacion
+                foreignKey: 'fk_id_provincia'     // campo con el que voy a igualar
+              }),
+          empresas.belongsTo(models.ciudades// modelo al que pertenece
+              ,{
+                as : 'Ciudad',  // nombre de mi relacion
+                foreignKey: 'fk_id_ciudad'     // campo con el que voy a igualar
+              })
     }
   }
   empresas.init({
     fk_id_usuario: DataTypes.INTEGER,
     fk_id_rubro: DataTypes.INTEGER,
-    estado: DataTypes.STRING,
+    fk_id_estado: DataTypes.INTEGER,
     nombre_empresa: DataTypes.STRING,
-    descripcion: DataTypes.TEXT,
+    descripcion: DataTypes.STRING,
     pais: DataTypes.STRING,
     fk_id_provincia: DataTypes.INTEGER,
     fk_id_ciudad: DataTypes.INTEGER,
@@ -50,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
     web: DataTypes.STRING,
     nombre_representante: DataTypes.STRING,
     email_representante: DataTypes.STRING,
-    logo: DataTypes.TEXT
+    logo: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'empresas',

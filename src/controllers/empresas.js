@@ -1,15 +1,14 @@
-import {sendMail} from "../services/sendEmail";
-
 const models = require("../../database/models");
-const { Op: sequelize } = require("sequelize");
-const sendEmail = require("../services/sendEmail");
+const { Op } = require("sequelize");
 
+
+//get de empresas
 export const getConFiltros = async (req, res) => {
   let paginaComoNumero = Number.parseInt(req.query.pagina);
   let limiteComoNumero = Number.parseInt(req.query.limite);
   let ordenarPor = req.query.ordenar;
   let nombreEmpresa = req.query.nombreEmpresa;
-  let estado = req.query.estado;
+  let idEstado = req.query.idEstado;
 
   let pagina = 0;
   if (!Number.isNaN(paginaComoNumero) && paginaComoNumero > 0) {
@@ -30,8 +29,8 @@ export const getConFiltros = async (req, res) => {
     nombreEmpresa = req.query.nombreEmpresa.replace(/\s/g, "%");
   }
 
-  if (typeof estado === "undefined") {
-    estado = "Activo";
+  if (typeof idEstado === "undefined") {
+    idEstado = 1;
  }
 
   models.empresas
@@ -50,6 +49,11 @@ export const getConFiltros = async (req, res) => {
           attributes: ["id", "nombre_rubro"],
         },
         {
+          as: "Estado",
+          model: models.estado_empresas,
+          attributes: ["id", "nombre_estado"],
+        },
+        {
           as: "Provincia",
           model: models.provincias,
           attributes: ["id", "nombre"],
@@ -61,13 +65,13 @@ export const getConFiltros = async (req, res) => {
         },
       ],
       where: {
-        [sequelize.and]: [
+        [Op.and]: [
           {
             nombre_empresa: {
-              [sequelize.iLike]: `%${nombreEmpresa}%`,
+              [Op.iLike]: `%${nombreEmpresa}%`,
             },
-            estado: {
-              [sequelize.eq]: estado
+            fk_id_estado: {
+              [Op.eq]: idEstado
             },
           },
         ],
@@ -80,21 +84,12 @@ export const getConFiltros = async (req, res) => {
         totalPaginas: Math.ceil(empresas.count / limite),
       })
     )
-    .catch((error) => res.status(500).send(error));
+    .catch(() => res.sendStatus(500));
 };
 
-export const getEmpresas = async (req, res) => {
-  let pagina = Number.parseInt(req.query.pagina);
-  let limite = Number.parseInt(req.query.limite);
-
-  if (!pagina) {
-    pagina = 0;
-  }
-
-  if (!limite) {
-    // Si limite no se proporciona, traer todas las empresas
-    limite = 1000;
-  }
+export const getPeladas = async (req, res) => {
+  let pagina = 0;
+  let limite = 1000;
 
   models.empresas
     .findAndCountAll({
@@ -110,6 +105,11 @@ export const getEmpresas = async (req, res) => {
           as: "Rubro",
           model: models.rubros,
           attributes: ["id", "nombre_rubro"],
+        },
+        {
+          as: "Estado",
+          model: models.estado_empresas,
+          attributes: ["id", "nombre_estado"],
         },
         {
           as: "Provincia",
@@ -147,6 +147,11 @@ const findEmpresas= (id, { onSuccess, onNotFound, onError }) => {
           attributes: ["id", "nombre_rubro"],
         },
         {
+          as: "Estado",
+          model: models.estado_empresas,
+          attributes: ["id", "nombre_estado"],
+        },
+        {
           as: "Provincia",
           model: models.provincias,
           attributes: ["id", "nombre"],
@@ -158,9 +163,6 @@ const findEmpresas= (id, { onSuccess, onNotFound, onError }) => {
         },
       ],
       where: { id },
-      attributes: {
-        exclude: ["createdAt", "updatedAt"], // Excluir createdAt y updatedAt
-      },
     })
     .then((empresas) => (empresas ? onSuccess(empresas) : onNotFound()))
     .catch(() => onError());
@@ -189,6 +191,11 @@ const findEmpresasPorIdUsuario = (fk_id_usuario, { onSuccess, onNotFound, onErro
           attributes: ["id", "nombre_rubro"],
         },
         {
+          as: "Estado",
+          model: models.estado_empresas,
+          attributes: ["id", "nombre_estado"],
+        },
+        {
           as: "Provincia",
           model: models.provincias,
           attributes: ["id", "nombre"],
@@ -200,9 +207,6 @@ const findEmpresasPorIdUsuario = (fk_id_usuario, { onSuccess, onNotFound, onErro
         },
       ],
       where: { fk_id_usuario },
-      attributes: {
-        exclude: ["createdAt", "updatedAt"], // Excluir createdAt y updatedAt
-      },
     })
     .then((empresas) => (empresas ? onSuccess(empresas) : onNotFound()))
     .catch(() => onError());
@@ -229,69 +233,41 @@ export const deleteEmpresa = async (req, res) => {
   });
 };
 
-export const findUsuarioPorId = async (idUsuario) => {
-  try {
-    const user = await models.usuarios.findAndCountAll({
-      where: { id: idUsuario },
-    });
-
-    return user ? user : false;
-  } catch (error) {
-    console.error(`Error al buscar usuario: ${error}`);
-  }
-};
-
 export const postEmpresa = async (req, res) => {
-    try {
-        const empresa = await models.empresas.create({
-            id: req.body.cuit,
-            fk_id_usuario: req.body.idUsuario,
-            fk_id_rubro: req.body.idRubro,
-            estado: "Observado",
-            nombre_empresa: req.body.nombreEmpresa,
-            descripcion: req.body.descripcion,
-            pais: req.body.pais,
-            fk_id_provincia: req.body.provincia,
-            fk_id_ciudad: req.body.ciudad,
-            calle: req.body.calle,
-            nro: req.body.nro,
-            piso: req.body.piso,
-            depto: req.body.depto,
-            cp: req.body.cp,
-            telefono: req.body.telefono,
-            web: req.body.web,
-            nombre_representante: req.body.nombreRepresentante,
-            email_representante: req.body.emailRepresentante,
-            logo: "logo.jpg",
-        });
+  models.empresas
+    .create({
+      id:  req.body.cuit,
+      fk_id_usuario: req.body.idUsuario,     
+      fk_id_rubro: req.body.idRubro,          
+      fk_id_estado: 2,         
+      nombre_empresa: req.body.nombreEmpresa,       
+      descripcion: req.body.descripcion,          
+      pais: req.body.pais,                
+      fk_id_provincia: req.body.provincia,            
+      fk_id_ciudad: req.body.ciudad,               
+      calle: req.body.calle,                
+      nro: req.body.nro,                  
+      piso: req.body.piso,                 
+      depto: req.body.depto,                
+      cp: req.body.cp,                   
+      telefono: req.body.telefono,             
+      web: req.body.web,                  
+      nombre_representante: req.body.nombreRepresentante, 
+      email_representante: req.body.emailRepresentante,  
+      logo: "logo.jpg" 
+    })
+    .then(
+      (empresas) => res.status(201).send({ id: empresas.id }))
 
-        const emailRepresentante = empresa.email_representante;
-        const datosEmpresa = {
-            nombre: empresa.nombre_representante,
-            nombreEmpresa: empresa.nombre_empresa
-        }
-
-        await sendEmail.sendMail(emailRepresentante, datosEmpresa, 'welcomeEmpresa');
-
-        const datosEmailAdmin = {
-            nombreEmpresa: empresa.nombre_empresa
-        }
-        const emailAdmin = process.env.EMAIL_ADMIN
-        console.log(emailAdmin)
-
-        await sendMail(emailAdmin, datosEmailAdmin, 'registroEmpresa')
-
-        res.status(201).send({ id: empresa.id });
-    } catch (error) {
-        if (error === "SequelizeUniqueConstraintError: Validation error") {
-            res.status(401).send("Bad request: Algun tipo de error de validacion de campos");
-        } else {
-            console.log(`Error al intentar insertar en la base de datos: ${error}`);
-            res.sendStatus(500);
-        }
-    }
+    .catch((error) => {
+      if (error == "SequelizeUniqueConstraintError: Validation error") {
+        res.status(401).send("Bad request: Algun tipo de error de validacion de campos");
+      } else {
+        console.log(`Error al intentar insertar en la base de datos: ${error}`);
+        res.sendStatus(500);
+      }
+    });
 };
-
 
 export const updateEmpresa = async (req, res) => {
   const onSuccess = (empresas) =>
@@ -300,7 +276,7 @@ export const updateEmpresa = async (req, res) => {
         {
           fk_id_usuario: req.body.idUsuario,     
           fk_id_rubro: req.body.idRubro,          
-          estado: req.body.estado,         
+          fk_id_estado: req.body.idEstado,         
           nombre_empresa: req.body.nombreEmpresa,       
           descripcion: req.body.descripcion,          
           pais: req.body.pais,                
@@ -314,15 +290,14 @@ export const updateEmpresa = async (req, res) => {
           telefono: req.body.telefono,             
           web: req.body.web,                  
           nombre_representante: req.body.nombreRepresentante, 
-          email_representante: req.body.emailRepresentante,
-          logo: req.body.logo, 
+          email_representante: req.body.emailRepresentante, 
         },
-        { fields: ["fk_id_usuario", "fk_id_rubro", "estado","nombre_empresa","descripcion","pais","fk_id_provincia","descripcion","fk_id_ciudad","calle","nro","piso","depto","cp","telefono","web","nombre_representante","email_representante","logo"] }
+        { fields: ["fk_id_usuario", "fk_id_rubro", "fk_id_estado","nombre_empresa","descripcion","pais","fk_id_provincia","descripcion","fk_id_ciudad","calle","nro","piso","depto","cp","telefono","web","nombre_representante","email_representante"] }
       )
       .then(() => res.sendStatus(200)
       )
       .catch((error) => {
-        if (error === "SequelizeUniqueConstraintError: Validation error") {
+        if (error == "SequelizeUniqueConstraintError: Validation error") {
           res
             .status(400)
             .send("Bad request: Algun tipo de error de validacion de campos");
@@ -342,25 +317,19 @@ export const updateEmpresa = async (req, res) => {
 
 //Con esto cambiamos el estado de una empresa desde administrador.
 export const patchEmpresa = async (req, res) => {
-  const onSuccess = async (empresas) => {
-    try {
-      await empresas.update(
-        {
-          estado: "Activo",
+  const onSuccess = (empresas) =>
+  empresas
+      .update(
+        {          
+          fk_id_estado: 1,
         },
-        { fields: ["estado"] }
-      );
+        { fields: ["fk_id_estado"] }
+      ).then(() => res.sendStatus(200),
+      changeGroup(empresas.fk_id_usuario),
+      console.log(empresas.fk_id_usuario)
+      ).catch((error) => {res.status(400)});
 
-      res.sendStatus(200);
-
-      changeGroup(empresas.fk_id_usuario);
-      console.log(empresas.fk_id_usuario);
-    } catch (error) {
-      res.status(400).send(error);
-    }
-  };
-
-  findEmpresas(req.params.id, {
+      findEmpresas(req.params.id, {
     onSuccess,
     onNotFound: () => res.sendStatus(404),
     onError: () => res.sendStatus(500),

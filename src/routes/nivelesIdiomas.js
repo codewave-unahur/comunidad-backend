@@ -1,19 +1,35 @@
 import express from 'express';
 import {
-  createNivelIdioma,
-  getAll,
-  getNivelIdiomaById,
-  updateNivelIdioma,
-  deleteNivelIdioma
+  getAll
 } from '../controllers/nivelesIdiomas';
 import { withErrorHandling } from './utils';
 
 const router = express.Router();
 
-router.post('/', withErrorHandling(createNivelIdioma));
-router.get('/', withErrorHandling(getAll))
-      .get("/:id", withErrorHandling(getNivelIdiomaById));
-router.put('/:id', withErrorHandling(updateNivelIdioma));
-router.delete('/:id', withErrorHandling(deleteNivelIdioma));
+/**
+ * @swagger
+ * tags:
+ *   - name: NivelesIdiomas
+ * /nivelesIdiomas:
+ *   get:
+ *     tags:
+ *       - NivelesIdiomas
+ *     summary: Obtiene todos los niveles de idiomas.
+ *     responses:
+ *       200:
+ *         description: Retorna la lista de niveles de idiomas.
+ *         content:
+ *           application/json:
+ *             example:
+ *               niveles_idiomas:
+ *                 - id: 1
+ *                   nivel: "Principiante"
+ *                 - id: 2
+ *                   nivel: "Intermedio"
+ *       500:
+ *         description: Error del servidor.
+ */
+
+router.get('/', withErrorHandling(getAll));
 
 export default router;

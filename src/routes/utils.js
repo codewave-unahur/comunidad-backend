@@ -1,13 +1,24 @@
 import express from 'express';
 
 export const withErrorHandling = (fn) => (req, res, next) =>
-  Promise.resolve(fn(req, res, next)).catch(next);
+  Promise.resolve(fn(req, res, next)).catch((error) => {
+    const statusCode = error.statusCode || 500;
+    
+    res.status(statusCode).json({
+      error: {
+        message: error.message,
+        status: statusCode,
+      },
+    });
+  });
 
 export function errorAwareRouter() {
   const basicRouter = express.Router();
+
   function newRouter(...params) {
     basicRouter(...params);
   }
+
   newRouter.get = function (path, controller) {
     basicRouter.get(path, withErrorHandling(controller));
   };
@@ -23,5 +34,6 @@ export function errorAwareRouter() {
   newRouter.put = function (path, controller) {
     basicRouter.put(path, withErrorHandling(controller));
   };
+
   return newRouter;
 }

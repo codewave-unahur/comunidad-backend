@@ -1,130 +1,64 @@
 const models = require("../../database/models");
-import { createClient } from '@supabase/supabase-js'
-
-require('dotenv').config();
-
-const supabaseUrl = process.env.SUPABASE_URL
-const supabaseKey = process.env.SUPABASE_KEY
-const supabase = createClient(supabaseUrl, supabaseKey)
-
-
-async function renameFile(srcFileName, destFileName) {
-  await supabase
-    .storage
-    .from('files')
-    .move(srcFileName, destFileName)
-  console.log(
-    `${srcFileName} renamed to ${destFileName}`
-  )
-}
-
-export const uploadCV = async (req, res) => {
-  const id = req.headers.id
-  const nombre_almacenamiento = String(id + "/" + req.file.originalname)
-
-  const {data, error} =  await supabase.storage.from(process.env.SUPABASE_BUCKET_CV).upload( nombre_almacenamiento, req.file.buffer, {
-    contentType: req.file.mimetype,
-    cacheControl: '3600',
-    upsert: true
-    })
-  const publicUrl = supabase.storage.from(process.env.SUPABASE_BUCKET_CV).getPublicUrl(nombre_almacenamiento)['data']['publicUrl']
-
-  updateCv(id, publicUrl);
-  if (error) {
-    console.log(error)
-    console.log(data)
-    res.status(500).send(error);
-  } else {
-    console.log(data)
-    res.status(200).send(
-      {
-        url: publicUrl,
-        id: id,
-        status: "success"
-      }
-    );
-  }
-};
+const fs = require("fs");
 
 export const uploadLogo = async (req, res) => {
-  //los errores de supa no necesitan try, no fallan sino que devuelven el error
-  const id = req.headers.id
-  const nombre_almacenamiento = String(id + "/" + req.file.originalname)
-  const {data, error} =  await supabase.storage.from(process.env.SUPABASE_BUCKET_IMAGEN).upload( nombre_almacenamiento, req.file.buffer, {
-    contentType: req.file.mimetype,
-    cacheControl: '3600',
-    upsert: true
-    })
-  const publicUrl = supabase.storage.from(process.env.SUPABASE_BUCKET_IMAGEN).getPublicUrl(nombre_almacenamiento)['data']['publicUrl']
-
-  updateLogo(id, publicUrl);
-  if (error) {
-    console.log(error)
+  try {
+    if (req.file) {
+      const fileName = req.file.filename;
+      const id = req.headers.id
+      updateLogo(id,fileName);
+      res.status(200).send("Success");
+    } else throw "algun error con la subida de archivo";
+  }catch (error) {
     res.status(500).send(error);
-  } else {
-    console.log(data)
-    res.status(200).send(
-      {
-        url: publicUrl,
-        id: id,
-        status: "success"
-      }
-    );
   }
 };
 
 export const uploadFoto = async (req, res) => {
-  //los errores de supa no necesitan try, no fallan sino que devuelven el error
-  const id = req.headers.id
-  const nombre_almacenamiento = String(id + "/" + req.file.originalname)
-
-  const {data, error} =  await supabase.storage.from(process.env.SUPABASE_BUCKET_IMAGEN).upload( nombre_almacenamiento, req.file.buffer, {
-    contentType: req.file.mimetype,
-    cacheControl: '3600',
-    upsert: true
-    })
-  const publicUrl = supabase.storage.from(process.env.SUPABASE_BUCKET_IMAGEN).getPublicUrl(nombre_almacenamiento)['data']['publicUrl']
-
-  updateFoto(id, publicUrl);
-  if (error) {
-    console.log(error)
+  try {
+    if (req.file) {
+      const fileName = req.file.filename;
+      const id = req.headers.id
+      updateFoto(id,fileName);
+      res.status(200).send("Success");
+    } else throw "algun error con la subida de archivo";
+  }catch (error) {
     res.status(500).send(error);
-  } else {
-    console.log(data)
-    res.status(200).send(
-      {
-        url: publicUrl,
-        id: id,
-        status: "success"
-      }
-    );
   }
 };
 
-
-async function fetchFileFromGoogleStorage(fileName) {
-  const fileObject = bucket.file(fileName);
-  const fileContents = await fileObject.download();
-  return fileContents[0];
+export const uploadCV = async (req, res) => {
+  try {
+    if (req.file) {
+      const fileName = req.file.filename;
+      const id = req.headers.id
+      updateCV(id,fileName);
+      res.status(200).send("Success");
+    } else throw "algun error con la subida de archivo";
+  }catch (error) {
+    res.status(500).send(error);
+  }
 };
 
 export const getFiles = async (req, res) => {
-  let fileName = req.headers.file;
-  let type = req.headers.type;
-  console.log("este es el file", fileName);
-  console.log("este es el type", type);
-  const downloadedImageFile = await fetchFileFromGoogleStorage(fileName);
-  res.status(200);
-  res.type(type);
-  res.send(downloadedImageFile);
+  try {
+    let fileName = req.headers.file;
+    console.log("este es el file", fileName);
+    const downloadedImageFile = fs.createReadStream(
+      `./files/${fileName}`,
+    );
+    res.status(200);
+    res.attachment(fileName);
+    downloadedImageFile.pipe(res);
+  } catch (error) {
+    res.status(500).send(error);
+  }
 };
 
 //Con esto actualizamos la foto 
-const updateFoto = (id, url) => {
-  const foto = url
-
+const updateFoto = (id, nombreFoto) => {
   models.postulantes.update(
-    { foto: foto },
+    { foto: nombreFoto },
     {
       where: {
         id: id,
@@ -134,11 +68,10 @@ const updateFoto = (id, url) => {
 };
 
 //Con esto actualizamos el CV
-const updateCv = (id, url) => {
-  const cv = url
+const updateCV = (id, nombreCv) => {
 
   models.postulantes.update(
-    { cv: cv },
+    { cv: nombreCv },
     {
       where: {
         id: id,
@@ -148,11 +81,10 @@ const updateCv = (id, url) => {
 };
 
 //Con esto actualizamos el Logo
-const updateLogo = (id, url) => {
-  const logo = url;
+const updateLogo = (id, nombreLogo) => {
 
   models.empresas.update(
-    { logo: logo },
+    { logo: nombreLogo },
     {
       where: {
         id: id,

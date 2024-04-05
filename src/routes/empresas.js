@@ -6,21 +6,20 @@ import {
   deleteEmpresa,
   postEmpresa,
   updateEmpresa,
-  getEmpresas,
+  getPeladas,
   patchEmpresa
 
 } from '../controllers/empresas';
 import { withErrorHandling } from './utils';
-
 const router = express.Router();
 
+router.get('/', withErrorHandling(getConFiltros));
+router.get('/all/', withErrorHandling(getPeladas));
+router.get('/cuit/:id', withErrorHandling(getPorId));
+router.get('/idUsuario/:id', withErrorHandling(getPorIdUsuario));
+router.delete('/cuit/:id', withErrorHandling(deleteEmpresa));
 router.post('/', withErrorHandling(postEmpresa));
-router.get('/', withErrorHandling(getConFiltros))
-      .get('/all/', withErrorHandling(getEmpresas))
-      .get('/cuit/:id', withErrorHandling(getPorId))
-      .get('/idUsuario/:id', withErrorHandling(getPorIdUsuario));
 router.put('/cuit/:id', withErrorHandling(updateEmpresa));
 router.patch('/cuit/:id', withErrorHandling(patchEmpresa));
-router.delete('/cuit/:id', withErrorHandling(deleteEmpresa));
 
 export default router;

@@ -1,34 +1,22 @@
 import express from 'express';
 import {
-  getOfertasPorFiltros,
-  getIdOferta,
+  getConFiltros,
+  getPorId,
   getOfertasPorIdEmpresa,
-  createOferta,
+  postOfertas,
   deleteOferta,
   updateOfertas,
-  getOfertas,
-  getOfertasPorFiltrosRecomendado
+  getPeladas
 } from '../controllers/ofertas';
 import { withErrorHandling } from './utils';
 
 const router = express.Router();
 
-// Obtener todas las ofertas
-
-router.get('/all/', withErrorHandling(getOfertas));
-// Obtener una oferta por ID
-router.get('/individual/:id', withErrorHandling(getIdOferta))
-      .get('/recomendado/', withErrorHandling(getOfertasPorFiltrosRecomendado));
-// Obtener ofertas filtradas
-router.get('/', withErrorHandling(getOfertasPorFiltros));
-// Obtener ofertas por ID de empresa
+router.get('/', withErrorHandling(getConFiltros));
+router.get('/all/', withErrorHandling(getPeladas));
+router.get('/idOferta/:id', withErrorHandling(getPorId));
 router.get('/cuit/:id', withErrorHandling(getOfertasPorIdEmpresa));
-
-// Crear una nueva oferta
-router.post('/', withErrorHandling(createOferta));
-// Actualizar una oferta por ID
-router.put('/idOferta/:id', withErrorHandling(updateOfertas));
-// Eliminar una oferta por ID
+router.post('/', withErrorHandling(postOfertas));
 router.delete('/idOferta/:id', withErrorHandling(deleteOferta));
-
+router.put('/idOferta/:id', withErrorHandling(updateOfertas));
 export default router;
