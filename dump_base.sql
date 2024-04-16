@@ -1040,13 +1040,13 @@ COPY public."SequelizeMeta" (name) FROM stdin;
 20220602164659-create-estudios.js
 20220602164659-create-tipos-documentos.js
 20220602164700-create-carreras.js
-20220602164700-create-usuarios.js
+20220602164700-create-usuario.js
 20220602164701-create-abm.js
 20220602164701-create-grupos.js
 20220602164702-create-estado-postulantes.js
 20220602164702-create-postulaciones.js
 20220602164703-create-estado-ofertas.js
-addConstrait-abm-usuarios.js
+addConstrait-abm-usuario.js
 addConstrait-aptitudes_ofertas-aptitudes.js
 addConstrait-aptitudes_ofertas-ofertas.js
 addConstrait-aptitudes_postulantes-aptitudes.js
@@ -1071,7 +1071,7 @@ addConstrait-postulantes-carreras.js
 addConstrait-postulantes-estado_postulantes.js
 addConstrait-postulantes-estudios.js
 addConstrait-postulantes-tipos_documentos.js
-addConstrait-postulantes-usuarios.js
+addConstrait-postulantes-usuario.js
 addConstrait-usuarios-grupos.js
 20220809231126-create-provincias.js
 20220809231202-create-departamentos.js
@@ -1826,23 +1826,6 @@ COPY public.niveles_idiomas (id, nivel, "createdAt", "updatedAt") FROM stdin;
 -- Data for Name: ofertas; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.ofertas (id, fk_id_empresa, fk_id_jornada, fk_id_contrato, fk_id_estudio, fk_id_carrera, fk_id_estado, fecha_vigencia, titulo_oferta, descripcion, edad_desde, edad_hasta, experiencia_previa_desc, zona_trabajo, areas_estudio, otros_detalles, beneficios, remuneracion, "createdAt", "updatedAt", horario_laboral_desde, horario_laboral_hasta) FROM stdin;
-61	3010203041	2	3	7	4	5	2022-12-23 00:00:00+00	Laboratorista - Industria Petrolera	El puesto de Laboratorista requiere de una persona responsable, prolija y activa. \n\nEs requisito excluyente tener título 'técnico químico' o conocimientos relacionados.\nSus tareas serán:\n\nControl de calidad\n\nControl y registro de documentación de análisis.\n\nControl de materias primas e insumos.\n\nOrden, limpieza, conocimiento de normas de seguridad del laboratorio.\n\nControl de muestras y contra muestra.\n	22	23	1 año de experiencia	La Matanza	Quimica, Biotecnología	Conocimientos en tratamientos de agua\n\nRequerimientos- Educación mínima: Técnico\n	Varios	100000	2022-12-07 03:46:16.745+00	2022-12-07 14:46:23.797+00	4	12
-60	3010203041	2	3	7	4	4	2022-12-31 00:00:00+00	Ingeniero de Operaciones - Industria Petrolera	Nuestro cliente, una multinacionaldd  de servicios ambientales y gestión integral de residuos industriales, para asignar en un cliente petrolero en la zona de La Plata, nos ha encargado la búsqueda de un:  INGENIERO PARA EL ÁREA DE OPERACIONES  Debe residir o tener fácil acceso a la zona de Ringuelet y Ensenada, la empresa explorará las opciones de otorgar un vehículo compañía, o asumir los gastos de traslado del ingresante  Reportará en forma directa al Directorio  Se valorará especialmente conocimientos y experiencia en refinación y en la industria petrolera	22	33	3 a 5 años de experiencia en las tareas y en la industria	La Plata	Ingeniería en Petróleo, Biotecnología	Se valorarán conocimientos en Excel y PPT	Comedor en planta	300000	2022-12-07 03:25:56.411+00	2022-12-07 17:12:29.025+00	12	22
-64	30182432120	2	3	8	2	5	2023-01-14 00:00:00+00	Diseñador de redes	Telefónica se encuentra en la búsqueda de estudiantes o recientemente graduados de ARQUITECTURA/INGENIERÍA o carreras afines para DISEÑO DE REDES FIBRA ÓPTICA.\n\nRequisitos:\n• Estudiante universitario de Arquitectura o Ingeniería.\n• Manejo de AUTOCAD avanzado.\n• Idioma: Inglés.\n• Disponibilidad Full Time.\n	23	33	Sin experiencia	Martínez	Informática, Redes, Telecomunicaciones	Residir en Zona Norte Bs.As. (Excluyente)\n	Varios	400000	2022-12-07 17:21:23.772+00	2022-12-07 18:21:54.999+00	10	22
-65	30182432120	2	3	7	14	1	2022-12-30 00:00:00+00	Jefe de mantenimiento eléctrico	\nNos encontramos en búsqueda de un Jefe de mantenimiento eléctrico, para sumarse a nuestro equipo.\n\nSerá tu objetivo garantizar el buen funcionamiento eléctrico / electronico de la planta\n\n¿Qué desafíos te esperan?\n\n1.Liderar y capacitar al equipo de mantenimiento eléctrico, para lograr el mejor resultado operativo de todos los equipos eléctricos, dando instrucciones claras, previendo eventos nocivos, planificando y previniendo preventivamente cualquier accion que afecte la productividad de la planta en terminos elctricos electrónicos.\n\n2. Analisis de predictivos y preventivos sobre equipos electricos, electronicos.\n\n3.Preever stock de repuestos.\n\n4.Liderar el equipo de trabajo trabajar sobre mejoras continuas y ssyhh.\n\n5.Optimizar y mejorar los indicadores del sector	24	24	5 años de experiencia en puestos similares.	Haedo	Ingeniería eléctrica	no	Varios	220300	2022-12-07 18:19:53.756+00	2022-12-07 18:23:30.587+00	10	22
-62	30182432120	2	3	6	2	2	2022-12-30 00:00:00+00	Ingeniero en Telecomunicaciones	Somos una empresa en crecimiento constante y estamos ampliando nuestro equipo de trabajo.\n\nBuscamos profesionales que tengan muchas ganas de aprender nuevas tecnologías ,apasionados, que quieran desarrollarse y agregarle valor a la compañía!\n\nEn esta posición será parte de un grupo de profesionales de amplia trayectoria responsables de desarrollar y mantener diferentes plataformas y soluciones utilizando múltiples tecnologías.\n\nResponsabilidades\n\n• Brindar soporte sobre las diferentes soluciones de software OSS desarrolladas por Stechs.\n\n• Participar del soporte a los clientes de las soluciones/equipamiento de terceros comercializadas por Stechs (Equipamiento de acceso DOCSIS/GPON, CPE (CM, ONT, STB), equipamientos de VIDEO, router, etc).\n\n• Colaborar con los especialistas de las diferentes áreas en la evolución y desarrollo de las soluciones OSS propias.	20	23	Sin experiencia	CABA	Telecomunicaciones, Electrónica, Informática	Requisitos mínimos\n\n• Conocimiento general sobre las redes y servicios de proveedores de CATV e Internet.\n\n• Conocimiento de diseño, operación y gestión capacidad de redes de datos en sus distintos componentes, capas y tecnologías tales como: DOCSIS, GPON/EPON, Ethernet, IP.\n\n• Conocimiento general y experiencia en administración de sistemas Unix.\n\n• Conocimientos generales de programación y scripting.\n	Varios	2020000	2022-12-07 12:28:00.488+00	2022-12-07 22:50:24.068+00	10	18
-63	30182432120	2	3	8	2	1	2022-12-23 00:00:00+00	Administrador de Redes - SSR	Buscamos un especialista para integrarse a un equipo de trabajo de infraestrutcura.\n\nInstalar, asegurar el funcionamiento y maximizar el rendimiento de la RED WAN/LAN\n\nAdministrar las soluciones de seguridad y las buenas prácticas.-\n\nAdministracion de usuarios y documentación.\n\nDiagnóstico de problemas y diseño de soluciones.\n\nPERFIL\n\nExperiencia en arquitectura de redes LAN y WAN\n\nConocimiento de sistemas operativos y ambientes de virtualización.\n\nConocimiento en servicios SaaS, O365, Azure.\n\nConocimiento en Bases de datos. MS SQL\n\nCapacidades analíticas y de resolución de problemas de las funciones de la red (seguridad, servidores, enrutamiento)\n\nHabilidades en Organización y documentación.\n\nCapacidad de trabajo en equipo\n	22	33	3 años de experiencia	Ciudad Evita	Informática, Redes	No	Varios	1235534	2022-12-07 17:18:26.558+00	2022-12-07 18:23:33.811+00	10	14
-67	3010203041	2	3	8	2	1	2022-12-30 00:00:00+00	Desarrollador Haskell SR	Buscamos un desarrollador Haskell para nuestra empresa	25	33	5 años de experiencia en desarrollo Haskell	San Martin	Informática, Sistemas	no	Varios	432122	2022-12-07 18:33:29.543+00	2022-12-07 18:33:51.7+00	10	22
-66	3010203041	2	3	8	4	1	2022-12-31 00:00:00+00	Ingeniero reservorios	\n¿Qué buscamos?\n\n• Formación académica: Ingeniería o afines\n\n• Experiencia profesional: mínimo 3 años en la industria y posición (no excluyente)\n\n• Actitud / personalidad: adaptabilidad y flexibilidad, trabajo en equipo, iniciativa, proactividad.\n\n• Conocimientos informáticos: Sahara; manejo paquete office; PowerBi (no excluyente)\n\n	20	24	3 años en la industria (no excluyente)	San Isidro	Ingeniería en Petróleo, Biotecnología	no	Varios	125222	2022-12-07 18:31:17.318+00	2022-12-07 18:33:54.973+00	10	18
-69	3012837892	2	3	7	4	2	2022-12-30 00:00:00+00	Supervisor de Laboratorio	Seleccionaremos\n\nSupervisor de Laboratorio\n\nPerfil:\n\n•Nivel de Educación Técnico químico o similar.\n\n•Experiencia Previa Técnico de laboratorio 4 años\n\n•Nivel de Informática Nivel office medio\n\n•Nivel de Idioma Ingles Medio. No excluyente\n\nTareas:\n\n•Supervisar a los técnicos de laboratorio y los técnicos de Recepción Calidad\n\n•Generar la información para todas las reuniones en los clientes, participar según requerimiento.\n\n•Verificar la correcta ejecución de los ensayos y sus registros de acuerdo con el Plan de Control y las necesidades de los procesos\n\n•Gestionar los indicadores del sector\n\n•Recepción de componentes, materias Primas y las pinturas, gestionar reclamo ante los proveedores.\n\n•Confeccionar las polivalencias de su sector.\n\n•Aplicación de TPM\n\nPolivalencias:\n\n•Conocimientos IATF 16949.\n\n•Conocimientos ISO 14001.\n\n•Conocimiento de 5S /TPM\n\n	30	35	No necesita experiencia previa 	Hurlingham	Biotecnología	no	Muchos	40000	2022-12-07 21:43:14.063+00	2022-12-07 21:43:14.063+00	14	19
-71	3012837892	2	3	5	4	1	2023-12-31 00:00:00+00	Soporte Técnico de Laboratorio	Buscamos perfiles de Soporte Técnico de Laboratorio para formar parte de nuestro equipo.\n\nLos principales desafíos del puesto son:\n\nInstalación y configuración de sistemas operativos (Windows)\n\nAnálisis y asignación de activos, en base a la demanda de la bandeja de tickets\n\nPreparación y configuración de hardware para derivar a demanda\n\nParticipación activa en el control de inventario\n\nReuniones con dirección para analizar casos, oportunidades y desvíos.\n\nOrden, control y distrubución del HW en el depósito.\n\nGestión y seguimiento de reparaciones por entidades externas\n\nControl, verificación y asignación de estado final del HW ingresante	24	30	No necesita experiencia previa 	Caseros	Biotecnología	No	Muchos	39999	2022-12-07 21:46:00.922+00	2022-12-07 21:47:49.507+00	14	22
-70	3012837892	2	3	7	4	1	2023-12-23 00:00:00+00	Analista de control de calidad físico químico	Nos encontramos en búsqueda de un Analista de control de calidad físico químico para formar parte de nuestro staff\n\nSerán sus funciones principales:\n\n-Análisis de producto terminado y semieleborado según técnicas analíticas y Farmacopeas.\n\n-Análisis de materias primas\n\n-Gestión de contramuestras\n\n-Estabilidades\n\n	20	31	No necesita experiencia previa 	Quilmes	Biotecnología	No	Muchos	303030	2022-12-07 21:44:41.271+00	2022-12-07 21:52:45.444+00	10	21
-68	3012837892	2	3	7	4	1	2023-12-30 00:00:00+00	Analista de Laboratorio	Importante industria alimenticia se encuentra en la búsqueda de un Analista de Laboratorio.\n\nSus principales tareas serán:\n\nCumplimiento de Instructivos de trabajo del área.\n Efectúa análisis físico – químicos y bacteriológicos de producto final, elaborados, semi\nelaborados y efluentes\n Efectúa calibraciones de equipos de medición y ensayo en planta y laboratorio.\n Efectúa análisis de materias primas, bienes de cambio y productos de empaque.\n Efectúa tomas de muestras de producto final, elaborados y semi elaborados.\n Prepara y valida soluciones analíticas y medios de cultivo\n Realiza el asiento y registro de resultados que surgen de los controles y autocontroles de\nlos procedimientos del área.\n Incorpora al sistema de laboratorio los resultados que surgen de los controles y\nautocontroles de los procedimientos del área.\n Participa en el desarrollo y mejora de procedimientos para el área.\n Informa a sus superiores sobre las desviaciones.\n Informa a sus superiores sobre detecciones de anomalías.\n Reporta a sus superiores de cualquier tipo de anomalía detectada en los procesos y en los\nlaboratorios.\n Responsable del cumplimiento de las normas calidad, de seguridad e higiene,\nprocedimientos de accidentes, reglamento interno etc.\n Ordenamiento y limpieza del material de laboratorio y del sector\n Responsable de cumplimiento de Normas de Calidad e Inocuidad\n\n	20	22	No necesita experiencia previa 	Merlo	Biotecnología	no	Muchos	300000	2022-12-07 21:40:36.948+00	2022-12-07 21:52:49.035+00	10	19
-72	30182432120	2	3	3	4	1	2022-12-30 00:00:00+00	Desarrollador Python	Necesitamos un desarrollador Python 	20	24	No	Hurlingham	Informatica	no	Varios	300000	2022-12-08 00:02:13.532+00	2022-12-08 00:02:48.36+00	13	21
-\.
-
-
 --
 -- Data for Name: postulaciones; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -1864,10 +1847,6 @@ COPY public.postulantes (id, fk_id_tipo_documento, fk_id_usuario, fk_id_estudios
 41232451	1	514	5	2	1	Juan Roman	Riquelme	Argentina	2000-11-23 00:00:00+00	Argentina	34	34028	Mate	3310	0	0		122341823	12	t				2022-12-07 22:37:42.178+00	2022-12-07 22:37:42.178+00
 41722111	1	469	7	2	1	Joel	Perez	Argentina	1997-12-23 00:00:00+00	Argentina	6	6408	Vidt	2165	0	0		123242580	12	f		application/pdf|5ee9a8e2-5f28-48e8-9fa7-6dff1910435a.pdf	image/png|c362eb31-1a72-4cf5-8ae3-e7bed2634a37.png	2022-12-07 03:12:29.528+00	2022-12-07 23:55:55.858+00
 12783917	1	516	8	2	1	Carlos	Lomas	Argentina	1995-01-10 00:00:00+00	Argentina	38	38056	Rancho	4095	0	0		1140667933	231	t				2022-12-08 00:38:20.577+00	2022-12-08 00:38:20.577+00
-25647333	1	472	7	2	1	Sebastian	Gomez	Argentino	1977-03-17 00:00:00+00	Argentina	6	6410	Defilippi	1862	0	0		1132349584	19	f		application/pdf|72679a88-70b0-4f0f-bd06-f583e03a77fe.pdf	image/jpeg|76553d63-29ff-4335-b8cd-0773ccba6841.jpg	2022-12-07 14:09:03.896+00	2022-12-07 14:11:21.058+00
-42781999	1	473	7	2	1	Agustin	Coto	Argentina	2000-07-31 00:00:00+00	Argentina	6	6410	Ranchos	4095	0	0		1140667933	22	f		application/pdf|07666d4a-7443-41aa-8aea-ad2f7de6a83a.pdf	image/jpeg|4bf6612b-0ba2-47a1-8c80-37392c06139d.jpg	2022-12-07 16:26:06.364+00	2022-12-07 16:32:37.523+00
-12341234	1	511	6	4	1	Pablo	Perez	Argentina	1997-07-18 00:00:00+00	Argentina	6	6408	Origone	151	0	0		1124083782	12	t				2022-12-07 19:11:48.515+00	2022-12-07 19:11:48.515+00
-41744112	1	513	1	2	1	Hannah	Baker	Argentina	1988-12-23 00:00:00+00	Argentina	42	42070	Dante	3510	0	0		123212232	\N	t				2022-12-07 19:20:02.47+00	2022-12-07 19:20:02.47+00
 \.
 
 
@@ -1932,24 +1911,7 @@ COPY public.tipos_documentos (id, tipo_documento, "createdAt", "updatedAt") FROM
 --
 
 COPY public.usuarios (id, fk_id_grupo, usuario, password, estado, "createdAt", "updatedAt") FROM stdin;
-467	1	redbull@redbull.com	$2b$10$0T6Ne6.sC0HOzhgStBGe.uESCx15RE5ituNPNgSv.fs3LcW5M3e.q	f	2022-12-07 03:05:01.222+00	2022-12-07 03:05:01.222+00
-465	2	shell@shell.com	$2b$10$eRrpoSWNMe7QbgNIPrVUvOl/KXYkADNXpYeXp6MFb1Yn4DwIjJtBm	t	2022-12-07 02:56:29.044+00	2022-12-07 03:09:50.616+00
-469	1	joelperez@gmail.com	$2b$10$pe6NURnRkf8uRtBZd7o2Ve0M2hg/mHtO1CqBFQrA4p6NIyZ7pHI6S	t	2022-12-07 03:11:21.855+00	2022-12-07 03:12:29.529+00
-472	1	sebastian.Gomez@gmail.com	$2b$10$Z9JGGftIu6awh61Scjj5.uNZBRURTNIp.wYJxY9A43ENAFqcblqzK	t	2022-12-07 14:07:17.479+00	2022-12-07 14:09:03.896+00
-510	1	aysa@aysa.com	$2b$10$RukRvqdc9wIXxWnNXu386OCX1ihL8OhSfUZxJvTFzNA.mo/MnW80.	f	2022-12-07 19:09:07.294+00	2022-12-07 19:09:07.294+00
-512	1	curryhaskell@gmail.com	$2b$10$T3eEA9909umTlLjimURiX.A4MNoJ3RQ9Q05Xk/Dhx8unNWnoyX/0.	f	2022-12-07 19:15:09.618+00	2022-12-07 19:15:09.618+00
-514	1	pizza@pizza.com	$2b$10$93vog5pRS9l/0so0r9NDcepyBKFH9oPmHQ5xD6j6bWgfoCln9cs2S	t	2022-12-07 22:36:47.402+00	2022-12-07 22:37:42.179+00
-516	1	clomas@gmail.com	$2b$10$/aGV1SOjD4E.sIlMcm4auOrXnvtNGa1dgP0L9qXPq22/Q0tfTkC.2	t	2022-12-08 00:37:17.8+00	2022-12-08 00:38:20.577+00
 1	3	admin@unahur.edu.ar	$2b$10$0w5QCKjGuwAXmNBCNGXjD.dm3Hx6/B4tmwGQbe2mdufpocRnkRASG	t	2022-08-23 00:52:55.693+00	2022-08-23 00:52:55.693+00
-468	2	bayer@bayer.com	$2b$10$PMZLd/oMi18nHLQ9SjG0M.hD7JbdX6hZPXpmhekd3FmMlRUvh3pZu	t	2022-12-07 03:07:00.113+00	2022-12-07 03:10:03.714+00
-466	2	telefonica@telefonica.com	$2b$10$/Ch96TdnRiqBw3/NBeOQsOZzYAWHjCmlqJor567HId1SI/6GerjQK	t	2022-12-07 03:02:41.984+00	2022-12-07 03:10:14.631+00
-470	1	empresa1@empresa.com	$2b$10$my431b3HlKxPuHoRcCrP9Oje9pCWUo9M8C.k26fcUQU1iLMgwvbAi	f	2022-12-07 04:19:54.58+00	2022-12-07 04:19:54.58+00
-471	1	perroloco@gmail.com	$2b$10$9quG6za2EGGhYZm2zWRPs.tv19S1J3cASS4BTOF4EBn5tR//Msb6u	t	2022-12-07 13:52:12.366+00	2022-12-07 13:56:08.265+00
-473	1	cotoagustin168@gmail.com	$2b$10$tW0BvMgE6BISMNPzHhNT/utpnXaSweqdDuFSJZmJ3BV4iWu7PFYwq	t	2022-12-07 16:24:34.019+00	2022-12-07 16:26:06.367+00
-511	1	pabloperez@gmail.com	$2b$10$xWgMopGO0qz.iglD/OqZnO3JEd9uCiuE0meuerOeI1i6.2DSHpfhW	t	2022-12-07 19:10:26.991+00	2022-12-07 19:11:48.516+00
-513	1	queso@queso.com	$2b$10$gzOLxQPi66fSZ5spwV3jvOn.pi4scIJn9FZ0fH1A/lfO0hglZCks2	t	2022-12-07 19:19:30.001+00	2022-12-07 19:20:02.47+00
-515	1	apple@apple.com	$2b$10$nwh/1LqsDSYmLxHLLQLmx.bbI6RxPu1Zjd1WPEnur2AMq0t5IJqYG	f	2022-12-07 22:46:13.558+00	2022-12-07 22:46:13.558+00
-518	1	nivea@nivea.com	$2b$10$FkccNNOSly6A8nxq0ToPqOuzc4WgoCGhujr/Lx4azEuT8WV7Dq8wG	f	2022-12-26 01:27:35.585+00	2022-12-26 01:27:35.585+00
 \.
 
 
@@ -1958,7 +1920,6 @@ COPY public.usuarios (id, fk_id_grupo, usuario, password, estado, "createdAt", "
 --
 
 SELECT pg_catalog.setval('public.abm_id_abm_usuario_seq', 1, false);
-
 
 --
 -- Name: aptitudes_id_aptitud_seq; Type: SEQUENCE SET; Schema: public; Owner: -

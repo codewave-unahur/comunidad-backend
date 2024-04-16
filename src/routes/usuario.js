@@ -10,7 +10,7 @@ import { withErrorHandling } from './utils';
 const router = express.Router();
 
 router.get('/',withErrorHandling(getAll));
-router.post('/signin', withErrorHandling(signIn));
-router.post('/signup', withErrorHandling(signUp));
+router.post('/login', withErrorHandling(signIn));
+router.post('/register', withErrorHandling(signUp));
 
 export default router;

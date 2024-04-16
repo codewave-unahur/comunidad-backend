@@ -4,16 +4,11 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class usuarios extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      usuarios.belongsTo(models.grupos// modelo al que pertenece
+      usuarios.belongsTo(models.grupos
       ,{
-        as : 'Grupos',  // nombre de mi relacion
-        foreignKey: 'fk_id_grupo'     // campo con el que voy a igualar
+        as : 'Grupos',
+        foreignKey: 'fk_id_grupo'
       })
     }
   }

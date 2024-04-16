@@ -3,6 +3,7 @@ services:
   db:
     image: postgres:12.5-alpine
     restart: always
+    container_name: db_empleabilidad
     env_file:
       - .env
     ports:
@@ -20,6 +21,7 @@ services:
     image: quay.io/keycloak/keycloak:22.0
     command: ["start-dev","--import-realm"]
     restart: unless-stopped
+    container_name: kc_empleabilidad
     volumes:
       - ./.keycloak/dev-realm.json:/opt/keycloak/data/import/dev-realm.json
     ports:

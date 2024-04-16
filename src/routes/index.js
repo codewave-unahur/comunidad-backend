@@ -1,6 +1,6 @@
 import express from 'express';
 
-import usuarios from './usuarios';
+import usuarios from './usuario';
 import postulantes from './postulantes'
 import ofertas from './ofertas'
 import empresas from './empresas'
@@ -22,7 +22,7 @@ import tiposDocumentos from './tiposDocumentos';
 const router = express.Router();
 
 
-router.use('/usuarios', usuarios);
+router.use('/usuario', usuarios);
 router.use('/postulantes', postulantes);
 router.use('/ofertas', ofertas);
 router.use('/empresas', empresas);
