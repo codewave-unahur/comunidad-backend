@@ -8,10 +8,14 @@
     "dev": "nodemon --exec npm run babel-node src/app.js",
     "start": "node ./dist/app.js",
     "build": "babel src --out-dir dist --copy-files --source-maps",
+    "migration:create": "npx sequelize migration:create --name",
+    "migration:run": "npx sequelize db:migrate",
+    "migration:undo": "npx sequelize db:migrate:undo",
+    "seed:create": "npx sequelize seed:generate --name",
+    "seed:run": "npx sequelize db:seed:all",
+    "seed:undo": "npx sequelize db:seed:undo",
     "DB": "npx sequelize db:migrate:undo:all && npx sequelize db:migrate && npx sequelize db:seed:all",
-    "test": "set NODE_OPTIONS=--experimental-vm-modules && npx jest",
-    "migation:run": "npx sequelize db:migrate:undo:all && npx sequelize db:migrate",
-    "seed:run": "npx sequelize db:seed:all"
+    "test": "set NODE_OPTIONS=--experimental-vm-modules && npx jest"
   },
   "keywords": [],
   "author": "",

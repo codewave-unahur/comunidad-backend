@@ -18,6 +18,8 @@ import idiomasPostulantes from './idiomasPostulantes';
 import idiomasOfertas from './idiomasOfertas';
 import files  from './files';
 import tiposDocumentos from './tiposDocumentos';
+import habilidades from "./habilidades";
+import preferencias from "./preferencias";
 
 const router = express.Router();
 
@@ -40,5 +42,7 @@ router.use('/idiomasPostulantes', idiomasPostulantes);
 router.use('/idiomasOfertas', idiomasOfertas);
 router.use('/files', files);
 router.use('/tiposDocumento', tiposDocumentos);
+router.use('/habilidades', habilidades);
+router.use('/preferencias', preferencias);
 
 export default router;

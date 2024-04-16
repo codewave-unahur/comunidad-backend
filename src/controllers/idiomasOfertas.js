@@ -22,7 +22,7 @@ export const postIdiomasOfertas = async (req, res) => {
       (idiomas_ofertas) => res.status(201).send({ id: idiomas_ofertas.id }))
 
     .catch((error) => {
-      if (error == "SequelizeUniqueConstraintError: Validation error") {
+      if (error === "SequelizeUniqueConstraintError: Validation error") {
         res.status(401).send("Bad request: Algun tipo de error de validacion de campos");
       } else {
         console.log(`Error al intentar insertar en la base de datos: ${error}`);
