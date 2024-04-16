@@ -5,3 +5,5 @@ import {getAll} from "../controllers/preferencias";
 const router = express.Router();
 
 router.get('/', withErrorHandling(getAll))
+
+export default router;
