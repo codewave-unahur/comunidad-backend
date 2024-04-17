@@ -26,11 +26,6 @@ module.exports = (sequelize, DataTypes) => {
         ,{
           as : 'Empresa',  // nombre de mi relacion
           foreignKey: 'fk_id_empresa'     // campo con el que voy a igualar
-        }),
-        postulaciones.belongsTo(models.estado_postulaciones// modelo al que pertenece
-        ,{
-          as : 'Estado',  // nombre de mi relacion
-          foreignKey: 'fk_id_estado'     // campo con el que voy a igualar
         })
     }
   }
@@ -38,7 +33,8 @@ module.exports = (sequelize, DataTypes) => {
     fk_id_postulante: DataTypes.INTEGER,
     fk_id_oferta: DataTypes.INTEGER,
     fk_id_empresa: DataTypes.BIGINT,
-    contactado: DataTypes.BOOLEAN
+    contactado: DataTypes.BOOLEAN,
+    estado_postulacion: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'postulaciones',

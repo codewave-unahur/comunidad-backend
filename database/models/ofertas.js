@@ -36,13 +36,23 @@ module.exports = (sequelize, DataTypes) => {
         as : 'Contrato',  // nombre de mi relacion
         foreignKey: 'fk_id_contrato'     // campo con el que voy a igualar
       }),
-      ofertas.belongsTo(models.estado_ofertas// modelo al que pertenece
+      ofertas.hasMany(models.aptitudes_ofertas// modelo al que pertenece
       ,{
-        as : 'Estado',  // nombre de mi relacion
-        foreignKey: 'fk_id_estado'     // campo con el que voy a igualar
-      })
-
-        
+        as : 'Aptitudes',  // nombre de mi relacion
+        foreignKey: 'fk_id_oferta'     // campo con el que voy a igualar
+      }),
+      ofertas.hasMany(models.idiomas_ofertas,
+         {
+          as: 'Idiomas',
+          foreignKey: 'fk_id_oferta',
+      }// modelo al que pertenece
+      ),
+      ofertas.hasMany(models.preferencias_ofertas,
+        {
+          as: 'Preferencias',
+          foreignKey: 'fk_id_ofertas',
+      }// modelo al que pertenece
+      )
             
    ///////////
     }
@@ -53,7 +63,12 @@ module.exports = (sequelize, DataTypes) => {
     fk_id_contrato: DataTypes.INTEGER,
     fk_id_estudio: DataTypes.INTEGER,
     fk_id_carrera: DataTypes.INTEGER,
-    fk_id_estado: DataTypes.INTEGER,
+    estado: DataTypes.STRING,
+    cierre: DataTypes.TEXT,
+    check: DataTypes.TEXT,
+    modalidadDeTrabajo: DataTypes.STRING,
+    tareasARealizar: DataTypes.TEXT,
+    genero: DataTypes.STRING,
     fecha_vigencia: DataTypes.DATE,
     titulo_oferta: DataTypes.STRING,
     descripcion: DataTypes.STRING,

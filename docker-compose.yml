@@ -10,7 +10,7 @@ services:
       - "5432:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
-      - ./dump_base.sql:/docker-entrypoint-initdb.d/dump_base.sql
+     # - ./dump_base.sql:/docker-entrypoint-initdb.d/dump_base.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
