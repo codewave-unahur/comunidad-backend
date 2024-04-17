@@ -1,35 +1,41 @@
-const nodemailer = require('nodemailer')
-const fs = require('fs');
-const handlebars = require('handlebars');
-const path = require('path');
+const nodemailer = require('nodemailer');
 
-const templateDir = path.join(__dirname, '../util/template/');
-const createTrans = () => {
+export const sendEmail = async (email, subject, templeteName) => {
+    let transporter
+
+    if (process.env.NODE_ENV === 'production') {
+        transporter = createSendGridTransporter();
+    } else {
+        transporter = createTestTransporter();
+    }
+
+    await transporter.sendMail({
+        from: 'norepy@example.com',
+        to: email,
+        subject: subject,
+        html: templeteName
+    });
+
+    console.log('Email sent');
+}
+
+const createSendGridTransporter = () => {
     return nodemailer.createTransport({
-        host: "sandbox.smtp.mailtrap.io",
-        port: 2525,
+        service: 'SendGrid',
         auth: {
-            user:"6183b92000ae38",
-            pass:"574b49c88da1e0"
+            user: process.env.SENDGRID_USERNAME,
+            pass: process.env.SENDGRID_PASSWORD
         }
     });
 }
-const loadTemplate = (templateName) =>{
-    const templatePath = path.join(templateDir, `${templateName}.handlebars`)
-    const templateSource = fs.readFileSync(templatePath, 'utf8');
-    return handlebars.compile(templateSource)
-}
-const sendMail = async (email, datos, templateName) =>{
-    const transporter = createTrans();
-    const loadTemple = loadTemplate(templateName)
-    const htmlContent = loadTemple(datos)
-    const info = await transporter.sendMail({
-        from: '<info@example.com>',
-        to: email,
-        subject: `Mail de bienvenida`,
-        html: htmlContent,
-    });
-    console.log(`Message sent %s`, info.messageId)
-}
 
-exports.sendMail = (email, datos, templateName) => sendMail(email, datos, templateName)
+const createTestTransporter = () => {
+    return nodemailer.createTransport({
+        host: 'smtp.mailtrap.io',
+        port: 587,
+        auth: {
+            user: process.env.MAILTRAP_USER,
+            pass: process.env.MAILTRAP_PASSWORD
+        }
+    });
+}

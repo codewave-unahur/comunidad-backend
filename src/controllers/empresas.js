@@ -271,15 +271,6 @@ export const postEmpresa = async (req, res) => {
             nombreEmpresa: empresa.nombre_empresa
         }
 
-        await sendEmail.sendMail(emailRepresentante, datosEmpresa, 'welcomeEmpresa');
-
-        const datosEmailAdmin = {
-            nombreEmpresa: empresa.nombre_empresa
-        }
-        const emailAdmin = process.env.EMAIL_ADMIN
-        console.log(emailAdmin)
-
-        await sendMail(emailAdmin, datosEmailAdmin, 'registroEmpresa')
 
         res.status(201).send({ id: empresa.id });
     } catch (error) {
