@@ -1,35 +1,42 @@
-const nodemailer = require('nodemailer')
-const fs = require('fs');
-const handlebars = require('handlebars');
-const path = require('path');
+const nodemailer = require('nodemailer');
 
-const templateDir = path.join(__dirname, '../util/template/');
-const createTrans = () => {
-    return nodemailer.createTransport({
-        host: "sandbox.smtp.mailtrap.io",
-        port: 2525,
-        auth: {
-            user:"6183b92000ae38",
-            pass:"574b49c88da1e0"
-        }
-    });
-}
-const loadTemplate = (templateName) =>{
-    const templatePath = path.join(templateDir, `${templateName}.handlebars`)
-    const templateSource = fs.readFileSync(templatePath, 'utf8');
-    return handlebars.compile(templateSource)
-}
-const sendMail = async (email, datos, templateName) =>{
-    const transporter = createTrans();
-    const loadTemple = loadTemplate(templateName)
-    const htmlContent = loadTemple(datos)
-    const info = await transporter.sendMail({
-        from: '<info@example.com>',
+export const sendMail = async (email, userData, templateName) => {
+    let transporter;
+
+    // Verificar el entorno
+    if(process.env.NODE_ENV === 'production'){
+        transporter = createSendGridTransporter();
+    } else {
+        transporter = createTestTransporter();
+    }
+
+    // Contenido HTML del correo electrónico (ejemplo)
+    const htmlContent = `<p>Bienvenido ${userData.name} a la plataforma.</p>`;
+
+    // Envío del correo electrónico
+    await transporter.sendMail({
+        from: 'noreply@example.com', // Dirección de correo electrónico del remitente
         to: email,
-        subject: `Mail de bienvenida`,
+        subject: 'Bienvenido a la plataforma',
         html: htmlContent,
     });
-    console.log(`Message sent %s`, info.messageId)
-}
 
-exports.sendMail = (email, datos, templateName) => sendMail(email, datos, templateName)
+    console.log('Correo electrónico enviado exitosamente');
+};
+
+const createTestTransporter = nodemailer.createTransport({
+    host: 'smtp.mailtrap.io',
+    port: 2525,
+    auth: {
+        user: process.env.MAILTRAP_USER,
+        pass: process.env.MAILTRAP_PASSWORD
+    }
+})
+
+const createSendGridTransporter = nodemailer.createTransport({
+    service: 'SendGrid',
+    auth: {
+        user: process.env.SENDGRID_USER,
+        pass: process.env.SENDGRID_PASSWORD
+    }
+})
